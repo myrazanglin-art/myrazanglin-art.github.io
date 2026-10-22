@@ -3,302 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yiming | Product & Tech</title>
+    <title>Yiming | Product Creator</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
         :root {
-            --bg: #FBFBFD;
-            --text-main: #1D1D1F;
-            --text-sub: #515154;
-            --border: #E5E5EA;
-            --accent: #FF1493;
-            --card-bg: #FFFFFF;
-        }
-
-        [data-theme="dark"] {
-            --bg: #0A0A0A;
-            --text-main: #F5F5F7;
-            --text-sub: #A1A1A6;
-            --border: #333336;
-            --accent: #FF69B4;
-            --card-bg: #1C1C1E;
+            --bg: #050508;
+            --panel: #121216;
+            --text-main: #FFFFFF;
+            --text-sub: #8E8E93;
+            --accent: #007AFF;
+            --accent-glow: rgba(0, 122, 255, 0.2);
+            --border: rgba(255, 255, 255, 0.08);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             line-height: 1.6;
-            transition: background 0.3s, color 0.3s;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 120px 20px 80px;
-        }
-
-        /* 顶部导航 */
         .nav {
             position: fixed;
             top: 0; left: 0; right: 0;
-            height: 60px;
+            height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
-            background: var(--bg);
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
-            z-index: 100;
+            z-index: 1000;
         }
 
-        .nav-logo { font-weight: 800; font-size: 1.2em; letter-spacing: -1px; color: var(--accent);}
+        .nav-logo { font-weight: 800; font-size: 1.2em; display: flex; align-items: center; gap: 10px; cursor: pointer;}
+        .nav-logo::before { content: ''; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent);}
         
-        .theme-btn {
-            background: none; border: none; cursor: pointer;
-            font-size: 1.2em; color: var(--text-main);
-            transition: transform 0.2s;
-        }
-        .theme-btn:hover { transform: scale(1.1); }
+        .nav-links { display: flex; gap: 30px; font-size: 0.9em; font-weight: 600; color: var(--text-sub); }
+        .nav-links a { color: var(--text-sub); text-decoration: none; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px;}
+        .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
 
-        /* 头部 */
-        .hero h1 {
-            font-size: 3.5em;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            margin-bottom: 10px;
-            line-height: 1.1;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding: 160px 20px 100px; }
 
-        .hero h2 {
-            font-size: 1.5em;
-            font-weight: 400;
-            color: var(--text-sub);
-            margin-bottom: 20px;
-        }
+        .hero { margin-bottom: 100px; }
+        .hero-location { color: var(--accent); font-weight: 600; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;}
+        .hero h1 { font-size: 5.5em; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; line-height: 1.05;}
+        .hero h2 { font-size: 2em; font-weight: 400; color: var(--text-sub); margin-bottom: 20px; }
+        .hero p { font-size: 1.2em; color: var(--text-sub); max-width: 600px; margin-bottom: 40px; }
 
-        .hero p {
-            font-size: 1.1em;
-            color: var(--text-sub);
-            max-width: 650px;
-            margin-bottom: 30px;
-        }
-
-        .links {
-            display: flex;
-            gap: 15px;
-            font-size: 0.9em;
+        .hero-buttons { display: flex; gap: 15px; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 30px;
             font-weight: 600;
-        }
-
-        .links a {
-            color: var(--text-main);
+            font-size: 1em;
             text-decoration: none;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 2px;
-            transition: color 0.2s;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-        .links a:hover { color: var(--accent); }
+        .btn-primary { background: var(--accent); color: #FFF; border: 1px solid var(--accent); }
+        .btn-primary:hover { background: #0062cc; box-shadow: 0 0 20px var(--accent-glow); }
+        .btn-secondary { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-main); }
 
-        /* 区域通用 */
-        .section { margin-top: 80px; }
-        .section-title {
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-sub);
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-        }
-
-        /* 经历卡片 */
-        .exp-item { margin-bottom: 30px; }
-        .exp-header {
+        .section-header {
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 10px;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
         }
-        .exp-title { font-size: 1.2em; font-weight: 600; }
-        .exp-company { font-size: 1em; color: var(--accent); font-weight: 600; margin-bottom: 5px;}
-        .exp-date { font-size: 0.9em; color: var(--text-sub); }
-        .exp-desc { font-size: 0.95em; color: var(--text-sub); }
+        .section-number { color: var(--accent); font-family: monospace; font-weight: bold; }
+        .section-title { font-size: 2.5em; font-weight: 700; letter-spacing: -0.03em; }
+        .section-line { flex: 1; height: 1px; background: var(--border); }
 
-        .exp-desc ul { padding-left: 20px; margin-top: 10px; }
+        .about-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 100px;
+        }
+        .profile-img {
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border);
+            box-shadow: 0 0 30px rgba(255,255,255,0.05);
+            flex-shrink: 0;
+        }
+        .about-text { flex: 1; }
+        .about-text p { font-size: 1.1em; color: #ccc; margin-bottom: 20px; }
+        .about-details { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-sub); font-size: 0.9em; margin-bottom: 20px; }
+        .about-details span { display: flex; align-items: center; gap: 6px; }
+        
+        .experience-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 100px; }
+        .exp-item {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .exp-item:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .exp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+        .exp-title { font-size: 1.3em; font-weight: 700; }
+        .exp-company { color: var(--accent); font-weight: 600; font-size: 0.95em; margin-bottom: 15px; }
+        .exp-date { color: var(--text-sub); font-family: monospace; font-size: 0.9em; }
+        .exp-desc { color: var(--text-sub); font-size: 0.95em; }
+        .exp-desc ul { padding-left: 20px; }
         .exp-desc li { margin-bottom: 8px; }
 
-        /* 项目卡片 */
+        .projects-grid { display: flex; flex-direction: column; gap: 30px; margin-bottom: 100px; }
         .project-card {
-            display: block;
-            background: var(--card-bg);
-            padding: 24px;
+            background: var(--panel);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 16px;
+            border-radius: 20px;
+            overflow: hidden;
             text-decoration: none;
             color: inherit;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: 0.3s;
         }
-        .project-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
-        .project-card h3 {
-            font-size: 1.2em;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .project-card h3 span { color: var(--accent); font-size: 0.9em; font-weight: 400; }
-        .project-card p { font-size: 0.95em; color: var(--text-sub); }
+        .project-card:hover { border-color: var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .project-img { width: 100%; height: 350px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000;}
+        .project-info { padding: 30px; }
+        .project-title { font-size: 1.5em; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between;}
+        .project-title span { color: var(--accent); font-size: 0.6em; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; align-self: center;}
+        .project-desc { color: var(--text-sub); font-size: 1em; }
 
-        /* 技能标签 */
-        .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .skill-tag {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
+        .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; }
 
-        /* 个人爱好 */
-        .hobbies {
-            font-size: 1em;
-            color: var(--text-sub);
-            line-height: 1.8;
-        }
-        .hobbies span {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        /* 底部 */
-        .footer {
-            margin-top: 80px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            font-size: 0.85em;
-            color: var(--text-sub);
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.5em; }
+            .about-card { flex-direction: column; text-align: center; padding: 30px; }
+            .about-details { justify-content: center; }
+            .nav-links { display: none; }
+            .project-img { height: 200px; }
         }
     </style>
 </head>
-<body data-theme="light">
+<body>
 
-    <div class="nav">
-        <div class="nav-logo">YIMING.</div>
-        <button class="theme-btn" onclick="toggleTheme()">🌙</button>
-    </div>
+    <nav class="nav">
+        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming</div>
+        <div class="nav-links">
+            <a href="#about">ABOUT</a>
+            <a href="#projects">PROJECTS</a>
+            <a href="#experience">RESUME</a>
+        </div>
+    </nav>
 
     <div class="container">
         
-        <!-- HERO -->
         <div class="hero">
+            <div class="hero-location">Hong Kong</div>
             <h1>Yiming</h1>
             <h2>Product Creator & Tech Explorer</h2>
-            <p>Based in Hong Kong. Passionate about the intersection of AI, EdTech, and creative audio. Currently studying Learning Design and Technology at CUHK.</p>
-            <div class="links">
-                <a href="mailto:1155224388@link.cuhk.edu.hk">Email</a>
-                <a href="https://github.com/myrazanglin-art" target="_blank">GitHub</a>
-                <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank">Live App</a>
+            <p>I build cool stuff at the intersection of AI, EdTech, and sound.</p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">See my work</a>
+                <a href="https://github.com/myrazanglin-art" target="_blank" class="btn btn-secondary">GitHub</a>
             </div>
         </div>
 
-        <!-- 经历 -->
-        <div class="section">
-            <div class="section-title">Professional Experience</div>
+        <div id="about" style="margin-bottom: 100px;">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <div class="section-title">About</div>
+                <div class="section-line"></div>
+            </div>
             
-            <div class="exp-item">
-                <div class="exp-header">
-                    <div class="exp-title">Research Intern</div>
-                    <div class="exp-date">Expected 2024 - Present</div>
-                </div>
-                <div class="exp-company">Centre for Learning Enhancement and Research (CLEAR), CUHK</div>
-                <div class="exp-desc">
-                    <ul>
-                        <li>Audited CLEAR website using Python scripts and Excel automation to de-duplicate and classify page resources; identified 20+ outdated resources and delivered a redesign that cut redundant navigation paths by ~30%.</li>
-                        <li>Benchmarked Advance HE provisions across 5+ international institutions; built a 12-dimension matrix and extracted 5 actionable recommendations.</li>
-                        <li>Researched TA professional development courses; coded learning outcomes into a competency framework and identified training gaps.</li>
-                        <li>Leveraged ChatGPT, Claude, and Notion AI to accelerate literature review and document drafting.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="exp-item">
-                <div class="exp-header">
-                    <div class="exp-title">Technical Department Intern</div>
-                    <div class="exp-date">May - Aug 2025</div>
-                </div>
-                <div class="exp-company">Guangdong Zhongsen Construction Engineering Co., Ltd.</div>
-                <div class="exp-desc">
-                    <ul>
-                        <li>Standardized documentation workflows for 10+ key engineering projects, reducing pre-audit preparation time by ~15%.</li>
-                        <li>Translated complex technical reports into actionable checklists, eliminating communication gaps between teams.</li>
-                    </ul>
+            <div class="about-card">
+                <img src="avatar.jpg" alt="Yiming" class="profile-img">
+                <div class="about-text">
+                    <p>Hellooooo! I'm Yiming 🧑‍💻, a product manager and full-stack developer based in Hong Kong.</p>
+                    <p>This website isn't only about work, tho. I'm deeply into experimental electronic music, indie rock, and creative coding. I believe the best products come from cross-disciplinary inspiration.</p>
+                    <div class="about-details">
+                        <span>📧 1155224388@link.cuhk.edu.hk</span>
+                        <span>📍 Hong Kong</span>
+                        <span>🎓 CUHK</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 项目 -->
-        <div class="section">
-            <div class="section-title">Leadership & Projects</div>
+        <div id="projects">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <div class="section-title">Projects</div>
+                <div class="section-line"></div>
+            </div>
             
-            <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank" class="project-card">
-                <h3>Hometree: Privacy-First Social App <span>Team Captain ↗</span></h3>
-                <p>Independently designed MySQL database and built backend with Python Flask, implementing collaborative filtering. Led 4-person team through full-cycle development (market research, Figma prototyping, user testing). Built a live interactive MVP.</p>
-            </a>
+            <div class="projects-grid">
+                <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank" class="project-card">
+                    <img src="hometree.png" alt="Hometree" class="project-img">
+                    <div class="project-info">
+                        <div class="project-title">Hometree: Privacy-First Social App <span>Live App ↗</span></div>
+                        <div class="project-desc">Independently designed the MySQL database and built the backend with Python Flask. Led a 4-person team to build a live interactive MVP featuring Tinder-style swiping and real-time chat.</div>
+                    </div>
+                </a>
 
-            <a href="https://myrazanglin-art.github.io/Rhythm-Runner-Game/" target="_blank" class="project-card">
-                <h3>Rhythm Runner: Audio-Driven Game <span>Developer ↗</span></h3>
-                <p>Developed a 2D rhythm game driven by multi-layer audio analysis. Extracted 15+ DSP descriptors (HPSS, RMS, Onset) using Python & Librosa to generate dynamic beatmaps for the Godot engine.</p>
-            </a>
-        </div>
-
-        <!-- 技能与爱好 -->
-        <div class="section">
-            <div class="section-title">Skills & Interests</div>
-            <div class="skills-grid" style="margin-bottom: 30px;">
-                <div class="skill-tag">Python</div>
-                <div class="skill-tag">Java</div>
-                <div class="skill-tag">C</div>
-                <div class="skill-tag">SQL (MySQL)</div>
-                <div class="skill-tag">Figma</div>
-                <div class="skill-tag">OpenAI API</div>
-                <div class="skill-tag">Prompt Engineering</div>
-                <div class="skill-tag">Godot Engine</div>
-            </div>
-            <div class="hobbies">
-                Beyond code and product management, I am a <span>creative subculture enthusiast</span>. When I'm not prototyping, you'll find me diving deep into <span>experimental electronic music</span>, playing indie rock on my guitar, or exploring the intersection of <span>DSP (Digital Signal Processing)</span> and creative coding in Max/MSP and Pure Data.
+                <a href="https://myrazanglin-art.github.io/Rhythm-Runner-Game/" target="_blank" class="project-card">
+                    <img src="rhythm.png" alt="Rhythm Runner" class="project-img">
+                    <div class="project-info">
+                        <div class="project-title">Rhythm Runner: Audio-Driven Game <span>Website ↗</span></div>
+                        <div class="project-desc">Developed a 2D rhythm game driven by multi-layer audio analysis. Extracted 15+ DSP descriptors (HPSS, RMS) using Python to generate dynamic beatmaps for the Godot engine.</div>
+                    </div>
+                </a>
             </div>
         </div>
 
-        <!-- 语言 & 底部 -->
+        <div id="experience">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <div class="section-title">Experience</div>
+                <div class="section-line"></div>
+            </div>
+            
+            <div class="experience-grid">
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <div class="exp-title">Research Intern</div>
+                        <div class="exp-date">Expected 2024 - Present</div>
+                    </div>
+                    <div class="exp-company">CLEAR, The Chinese University of Hong Kong</div>
+                    <div class="exp-desc">
+                        <ul>
+                            <li>Audited website using Python & Excel automation; identified 20+ outdated resources and cut redundant navigation paths by ~30%.</li>
+                            <li>Built a 12-dimension comparative matrix for Advance HE provisions across 5+ international institutions.</li>
+                            <li>Leveraged ChatGPT, Claude, and Notion AI to accelerate literature review and document drafting.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <div class="exp-title">Technical Department Intern</div>
+                        <div class="exp-date">May - Aug 2025</div>
+                    </div>
+                    <div class="exp-company">Guangdong Zhongsen Construction Engineering Co., Ltd.</div>
+                    <div class="exp-desc">
+                        <ul>
+                            <li>Standardized documentation workflows for 10+ key engineering projects, reducing pre-audit preparation time by ~15%.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="footer">
-            Languages: Native Mandarin | Proficient English (IELTS 7) | Intermediate Cantonese<br><br>
-            © 2025 Yiming. All Rights Reserved.
+            © 2025 Yiming. Built with pure HTML/CSS. Hosted on GitHub Pages.
         </div>
 
     </div>
-
-    <script>
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.querySelector('.theme-btn');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                btn.innerText = '🌙';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                btn.innerText = '☀️';
-            }
-        }
-    </script>
 </body>
 </html>
