@@ -97,7 +97,7 @@
             padding: 40px; display: flex; gap: 40px; align-items: center; transition: 0.3s;
         }
         .profile-img { 
-            width: 220px; height: 220px; /* 放大到了 220px */
+            width: 220px; height: 220px;
             border-radius: 50%; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
@@ -204,7 +204,7 @@
 
     <div class="container">
         
-        <!-- Hero：文案改得极其干练 -->
+        <!-- Hero -->
         <div class="hero reveal active" style="margin-bottom: 100px;">
             <div style="color: var(--accent); font-weight: 600; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;">Hong Kong</div>
             <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px;">Yiming Zhao</h1>
@@ -227,7 +227,7 @@
             </div>
         </div>
 
-        <!-- 01 About -->
+        <!-- 01 About (彻底重写) -->
         <div id="about" style="margin-bottom: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">01</span>
@@ -235,11 +235,12 @@
                 <div class="section-line"></div>
             </div>
             <div class="about-card reveal">
-                <!-- 头像变大了 -->
                 <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming Zhao" class="profile-img">
                 <div class="about-text">
-                    <p>Hellooooo! I'm Yiming Zhao 🧑‍💻. A Product Designer who writes code, and a developer who understands user psychology.</p>
-                    <p>I focus on building end-to-end digital experiences. Whether it's designing a Tinder-style privacy-first app or coding a full-stack MVP with Python and MySQL, I love bringing ambitious product visions to life.</p>
+                    <p>Hellooooo! I'm Yiming Zhao 🧑‍💻.</p>
+                    <!-- 彻底移除了Tinder这个恶心词，改成了真实的硬核能力和爱好 -->
+                    <p>I focus on end-to-end product design and full-stack coding. My technical toolkit includes Python, Flask, MySQL, and audio signal processing, which I used to build a fully automated rhythm game.</p>
+                    <p>Outside of tech, I'm a huge ACG (Anime, Comic, Games) fan and an experimental electronic music producer. I also enjoy crocheting—a perfect way to balance out all the screen time.</p>
                     <div class="about-details">
                         <span>📧 1155224388@link.cuhk.edu.hk</span>
                         <span>📍 Hong Kong</span>
@@ -262,7 +263,7 @@
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/hometree.png" alt="Hometree" class="project-img" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'">
                     <div class="project-info">
                         <div class="project-title">Hometree: Privacy-First Social App <span>Live App ↗</span></div>
-                        <div class="project-desc">Independently designed the MySQL database and built the backend with Python Flask. Led a 4-person team to build a live interactive MVP featuring Tinder-style swiping and real-time chat.</div>
+                        <div class="project-desc">Independently designed the MySQL database and built the backend with Python Flask. Led a 4-person team to build a live interactive MVP featuring matching swiping and real-time chat.</div>
                     </div>
                 </a>
 
@@ -482,7 +483,7 @@
                 let reply = "That's a great question! Explore the Projects section to see how product strategy and full-stack coding come together in Hometree and Rhythm Runner. ✨";
                 
                 if (text.includes('hometree')) {
-                    reply = "Hometree is a privacy-first social app. The backend was built using Python Flask and MySQL, featuring a custom collaborative filtering algorithm for Tinder-style swiping. Check out the live link in the Projects section! 🚀";
+                    reply = "Hometree is a privacy-first social app. The backend was built using Python Flask and MySQL, featuring a custom collaborative filtering algorithm for matching. Check out the live link in the Projects section! 🚀";
                 } else if (text.includes('rhythm') || text.includes('audio') || text.includes('dsp')) {
                     reply = "Rhythm Runner is a Godot game powered by Python & Librosa. Over 15 audio features (like HPSS) were extracted to dynamically generate beatmaps automatically! 🎵";
                 } else if (text.includes('ldte') || text.includes('school') || text.includes('cuhk') || text.includes('education')) {
