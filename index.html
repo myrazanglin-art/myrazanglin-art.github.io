@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yiming Zhao | Designer & Creator</title>
+    <title>Yiming Zhao | Product Designer & Creator</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
-        /* 默认（暗色）变量 */
         :root {
             --bg: #050508;
             --card: #111115;
@@ -18,13 +17,12 @@
             --timeline: rgba(255, 255, 255, 0.15);
         }
 
-        /* 亮色模式变量 */
         [data-theme="light"] {
             --bg: #FBFBFD;
             --card: #FFFFFF;
             --text-main: #1D1D1F;
             --text-sub: #515154;
-            --accent: #FF1493; /* 白天用樱花粉 */
+            --accent: #FF1493;
             --border: rgba(0, 0, 0, 0.08);
             --timeline: rgba(0, 0, 0, 0.15);
         }
@@ -44,7 +42,6 @@
             background-attachment: fixed;
         }
 
-        /* 顶部导航 */
         .nav {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
             display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
@@ -80,7 +77,6 @@
         .section-title { font-size: 2.5em; font-weight: 700; letter-spacing: -0.03em; }
         .section-line { flex: 1; height: 1px; background: var(--border); }
 
-        /* About */
         .about-card {
             background: var(--card); border: 1px solid var(--border); border-radius: 16px;
             padding: 40px; display: flex; gap: 40px; align-items: center; transition: 0.3s;
@@ -89,7 +85,6 @@
         .about-text p { font-size: 1.1em; color: var(--text-sub); margin-bottom: 20px; line-height: 1.8;}
         .about-details { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-sub); font-size: 0.9em; font-family: monospace;}
 
-        /* Timeline */
         .timeline {
             position: relative; border-left: 1px solid var(--timeline);
             margin-left: 10px; padding-left: 30px; display: flex; flex-direction: column; gap: 30px;
@@ -104,7 +99,6 @@
             width: 9px; height: 9px; border-radius: 50%;
             background: var(--bg); border: 2px solid var(--accent);
         }
-        /* 学院图片渐变 */
         .faculty-bg {
             position: absolute; right: 0; top: 0; bottom: 0; width: 50%;
             background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg');
@@ -123,7 +117,6 @@
         .tl-list li::marker { color: var(--accent); }
         .sub-heading { color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; }
 
-        /* Projects */
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
         .project-card {
             background: var(--card); border: 1px solid var(--border); border-radius: 16px;
@@ -136,7 +129,6 @@
         .project-title span { color: var(--accent); font-size: 0.6em; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; align-self: center; border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;}
         .project-desc { color: var(--text-sub); font-size: 1em; line-height: 1.7;}
 
-        /* Skills */
         .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; }
         .skill-icon { width: 40px; height: 40px; background: rgba(0, 168, 255, 0.1); border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: 20px; }
@@ -145,7 +137,6 @@
         .tags { display: flex; flex-wrap: wrap; gap: 10px; }
         .tag { background: rgba(128, 128, 128, 0.1); border: 1px solid var(--border); color: var(--text-sub); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; }
 
-        /* AI Agent Chat */
         .agent-chat-box {
             background: var(--card); border: 1px solid var(--border); border-radius: 20px;
             margin-top: 40px; padding: 20px; display: flex; flex-direction: column; height: 400px;
@@ -180,32 +171,34 @@
 <body>
 
     <nav class="nav">
-        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao <span>/ DESIGNER</span></div>
+        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao <span>/ PRODUCT DESIGNER</span></div>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
             <a href="#projects">PROJECTS</a>
             <a href="#resume">RESUME</a>
             <a href="#skills">SKILLS</a>
-            <a href="#agent">AI AGENT</a> <!-- 导航栏增加 AI Agent -->
+            <a href="#agent">AI AGENT</a>
             <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
         </div>
     </nav>
 
     <div class="container">
         
-        <!-- Hero -->
+        <!-- Hero 强化 Coding 和 Product 属性 -->
         <div class="hero reveal active" style="margin-bottom: 100px;">
             <div style="color: var(--accent); font-weight: 600; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;">Hong Kong</div>
             <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px;">Yiming Zhao</h1>
-            <h2 style="font-size: 2em; font-weight: 400; color: var(--text-sub); margin-bottom: 20px;">Designer & Creator</h2>
-            <p style="font-size: 1.2em; color: var(--text-sub); max-width: 600px; margin-bottom: 40px;">Designing and building cool stuff at the intersection of AI, EdTech, and Sound.</p>
+            <h2 style="font-size: 2em; font-weight: 400; color: var(--text-sub); margin-bottom: 20px;">Product Designer & Full-Stack Creator</h2>
+            <p style="font-size: 1.2em; color: var(--text-sub); max-width: 650px; margin-bottom: 40px;">
+                I turn complex ideas into elegant, high-fidelity products. Bridging the gap between <b>Product Strategy</b>, <b>Interactive Design</b>, and <b>Full-Stack Coding</b>.
+            </p>
             <div style="display: flex; gap: 15px;">
                 <a href="#projects" style="padding: 14px 28px; border-radius: 30px; font-weight: 500; background: var(--accent); color: #FFF; text-decoration: none;">See my work</a>
                 <a href="https://github.com/myrazanglin-art" target="_blank" style="padding: 14px 28px; border-radius: 30px; font-weight: 500; background: transparent; color: var(--text-main); border: 1px solid var(--border); text-decoration: none;">GitHub</a>
             </div>
         </div>
 
-        <!-- 01 About -->
+        <!-- 01 About 重塑产品与代码的侧重 -->
         <div id="about" style="margin-bottom: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">01</span>
@@ -215,8 +208,8 @@
             <div class="about-card reveal">
                 <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming Zhao" class="profile-img">
                 <div class="about-text">
-                    <p>Hellooooo! I'm Yiming Zhao 🧑‍💻, a designer and creator based in Hong Kong.</p>
-                    <p>This website isn't only about work. I'm deeply into experimental electronic music, indie rock, and creative coding. I believe the best creations come from cross-disciplinary inspiration.</p>
+                    <p>Hellooooo! I'm Yiming Zhao 🧑‍💻. A Product Designer who writes code, and a developer who understands user psychology.</p>
+                    <p>I focus on building end-to-end digital experiences. Whether it's designing a Tinder-style privacy-first app or coding a full-stack MVP with Python and MySQL, I love bringing ambitious product visions to life.</p>
                     <div class="about-details">
                         <span>📧 1155224388@link.cuhk.edu.hk</span>
                         <span>📍 Hong Kong</span>
@@ -261,7 +254,6 @@
                 <div class="section-line"></div>
             </div>
 
-            <!-- EDUCATION -->
             <div class="sub-heading reveal">Education</div>
             <div class="timeline" style="margin-bottom: 60px;">
                 <div class="timeline-item reveal">
@@ -281,7 +273,6 @@
                 </div>
             </div>
 
-            <!-- INTERNSHIP -->
             <div class="sub-heading reveal">Internship</div>
             <div class="timeline">
                 <div class="timeline-item reveal">
@@ -339,7 +330,7 @@
             </div>
         </div>
 
-        <!-- 05 Project Experience (比赛在 skills 下面) -->
+        <!-- 05 Project Experience -->
         <div id="experience" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">05</span>
@@ -361,7 +352,7 @@
             </div>
         </div>
 
-        <!-- 06 AI Agent (最后面) -->
+        <!-- 06 AI Agent -->
         <div id="agent" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">06</span>
@@ -373,12 +364,12 @@
                 <div class="agent-header">
                     <div class="agent-avatar">🤖</div>
                     <div>
-                        <div class="agent-name">Yiming's AI Twin</div>
+                        <div class="agent-name">Yiming's AI Assistant</div>
                         <div class="agent-status">Online</div>
                     </div>
                 </div>
                 <div class="chat-history" id="chatHistory">
-                    <div class="msg msg-bot">Hi! I'm Yiming's AI assistant. Ask me anything about his LDTE background, Hometree project, or audio DSP experience! (๑•̀ㅂ•́)و✧</div>
+                    <div class="msg msg-bot">Hi there! I'm Yiming's AI assistant. Ask me anything about the Hometree project, Rhythm Runner, or the product & coding skills showcased here! (๑•̀ㅂ•́)و✧</div>
                 </div>
                 <div class="chat-input-area">
                     <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question..." onkeypress="handleKeyPress(event)">
@@ -394,7 +385,6 @@
     </div>
 
     <script>
-        // 主题切换
         function toggleTheme() {
             const body = document.body;
             const btn = document.getElementById('theme-btn');
@@ -407,7 +397,6 @@
             }
         }
 
-        // 滚动特效
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -422,7 +411,6 @@
         window.addEventListener("scroll", reveal);
         reveal();
 
-        // 导航高亮
         const sections = document.querySelectorAll("div[id]");
         const navLinks = document.querySelectorAll(".nav-links a");
         window.addEventListener("scroll", () => {
@@ -441,11 +429,11 @@
             });
         });
 
-        // AI Chat 逻辑
         function handleKeyPress(e) {
             if (e.key === 'Enter') sendMessage();
         }
 
+        // 彻底去掉了 his / he 等代词，改成了客观的产品描述
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim().toLowerCase();
@@ -462,16 +450,16 @@
             setTimeout(() => {
                 const botMsg = document.createElement('div');
                 botMsg.className = 'msg msg-bot';
-                let reply = "I'm not sure about that, but Yiming is an expert in LDTE, Python, and audio analysis! Ask me about Hometree or Rhythm Runner. ✨";
+                let reply = "That's a great question! Explore the Projects section to see how product strategy and full-stack coding come together in Hometree and Rhythm Runner. ✨";
                 
                 if (text.includes('hometree')) {
-                    reply = "Hometree is a privacy-first social app. Yiming built the backend using Python Flask and MySQL, and implemented a collaborative filtering algorithm for Tinder-style swiping! 🚀";
+                    reply = "Hometree is a privacy-first social app. The backend was built using Python Flask and MySQL, featuring a custom collaborative filtering algorithm for Tinder-style swiping. Check out the live link in the Projects section! 🚀";
                 } else if (text.includes('rhythm') || text.includes('audio') || text.includes('dsp')) {
-                    reply = "Rhythm Runner is a Godot game. Yiming used Python & Librosa to extract 15+ audio features (like HPSS) to generate dynamic beatmaps automatically! 🎵";
-                } else if (text.includes('ldte') || text.includes('school') || text.includes('cuhk')) {
-                    reply = "Yiming studies BSc in Learning Design and Technology (LDTE) at CUHK. He's taking courses like Python, HCI, and Educational Data Mining! 🎓";
-                } else if (text.includes('design') || text.includes('figma')) {
-                    reply = "Yiming loves cross-disciplinary design. From user persona analysis to Figma prototyping, he designs experiences that blend AI with human emotion. 🎨";
+                    reply = "Rhythm Runner is a Godot game powered by Python & Librosa. Over 15 audio features (like HPSS) were extracted to dynamically generate beatmaps automatically! 🎵";
+                } else if (text.includes('ldte') || text.includes('school') || text.includes('cuhk') || text.includes('education')) {
+                    reply = "This portfolio showcases a BSc in Learning Design and Technology (LDTE) from CUHK. It bridges EdTech with rigorous CS courses like Python, HCI, and Data Mining. 🎓";
+                } else if (text.includes('design') || text.includes('figma') || text.includes('product')) {
+                    reply = "Product design here isn't just about visuals. It's about cross-disciplinary creation—blending UX research, Figma prototyping, and actual code deployment to build usable products. 🎨";
                 }
                 botMsg.innerText = reply;
                 chat.appendChild(botMsg);
