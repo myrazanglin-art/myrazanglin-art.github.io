@@ -113,6 +113,7 @@
         .project-title { font-size: 1.5em; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between; color: var(--text-main);}
         .project-title span { color: var(--accent); font-size: 0.6em; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; align-self: center; border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;}
         .project-desc { color: var(--text-sub); font-size: 1em; line-height: 1.7;}
+        .warning-text { color: #FF1493; font-size: 0.85em; margin-top: 15px; font-style: italic; font-family: monospace; }
 
         .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; }
@@ -225,11 +226,13 @@
             </div>
             
             <div class="projects-grid">
-                <a href="https://hometree-social-app-hgrjctg3cpkjlyf2hapxe.streamlit.app/" target="_blank" class="project-card reveal">
+                <!-- 更新了这里的链接和提示 -->
+                <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank" class="project-card reveal">
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/hometree.png" alt="Hometree" class="project-img" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'">
                     <div class="project-info">
                         <div class="project-title">Hometree: Privacy-First Social App <span>Live App ↗</span></div>
                         <div class="project-desc">Independently designed the MySQL database and built the backend with Python Flask. Led a 4-person team to build a live interactive MVP featuring matching swiping and real-time chat.</div>
+                        <div class="warning-text">* Note: The live app may take 10-20s to wake up due to free cloud hosting.</div>
                     </div>
                 </a>
 
@@ -367,7 +370,6 @@
                 <div class="interests-text">
                     <h3>Beyond the Screen</h3>
                     <p>When I'm not coding or designing, I express my creativity through crochet. It requires extreme patience and structural thinking—much like building a complex software architecture, but with yarn.</p>
-                    <!-- 修改了这段，去掉了具体的名字，加上了罗大佑的彩蛋 -->
                     <p><b>Music, ACG & More:</b> I'm a huge fan of indie music, experimental electronic sounds, and ACG (Anime, Comic, Games) culture. Fun fact: I share the exact same birthday as the legendary Taiwanese singer-songwriter Lo Ta-yu. My cross-genre music taste heavily inspires my audio-analysis projects.</p>
                     <div class="tags" style="margin-top: 15px;">
                         <span class="tag">Crochet</span>
