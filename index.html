@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yiming | Designer & Creator</title>
+    <title>Yiming Zhao | Designer & Creator</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
@@ -78,7 +78,7 @@
         .timeline-item {
             position: relative; background: var(--card); border: 1px solid var(--border);
             border-radius: 16px; padding: 30px; transition: border-color 0.3s;
-            overflow: hidden; /* 防止图片溢出 */
+            overflow: hidden;
         }
         .timeline-item:hover { border-color: rgba(255,255,255,0.2); }
         
@@ -92,18 +92,17 @@
         .faculty-bg {
             position: absolute;
             right: 0; top: 0; bottom: 0;
-            width: 45%;
+            width: 50%; /* 宽度稍微放大一点 */
             background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg');
             background-size: cover;
             background-position: center;
-            opacity: 0.35; /* 整体透明度 */
-            /* 极其高级的渐变遮罩，左边淡出融入底色 */
+            opacity: 0.4; 
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%);
             mask-image: linear-gradient(to right, transparent 0%, black 80%);
             z-index: 0;
             pointer-events: none;
         }
-        .timeline-content { position: relative; z-index: 1; } /* 让文字浮在照片上面 */
+        .timeline-content { position: relative; z-index: 1; }
 
         .tl-title { font-size: 1.3em; font-weight: 600; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
         .tl-date { color: var(--accent); font-family: monospace; font-size: 0.85em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; letter-spacing: 0.5px;}
@@ -113,11 +112,6 @@
         .tl-list { padding-left: 20px; color: #A1A1A6; font-size: 0.95em; line-height: 1.7;}
         .tl-list li { margin-bottom: 10px; }
         .tl-list li::marker { color: var(--accent); }
-
-        .logo-img {
-            width: 24px; height: 24px; object-fit: contain;
-            border-radius: 4px; background: #fff; padding: 2px;
-        }
 
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
         .project-card {
@@ -148,28 +142,28 @@
             .project-img { height: 250px; }
             .timeline { margin-left: 0; padding-left: 15px; }
             .timeline-item::before { left: -20px; }
-            .faculty-bg { width: 100%; opacity: 0.1; mask-image: linear-gradient(to top, transparent 0%, black 90%); }
+            .faculty-bg { width: 100%; opacity: 0.15; mask-image: linear-gradient(to top, transparent 0%, black 90%); }
         }
     </style>
 </head>
 <body>
 
     <nav class="nav">
-        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming <span>/ DESIGNER</span></div>
+        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao <span>/ DESIGNER</span></div>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
             <a href="#projects">PROJECTS</a>
-            <a href="#experience">RESUME</a>
+            <a href="#resume">RESUME</a>
             <a href="#skills">SKILLS</a>
         </div>
     </nav>
 
     <div class="container">
         
-        <!-- About (省略，保持原样) -->
+        <!-- Hero -->
         <div class="hero reveal active" style="margin-bottom: 100px;">
             <div style="color: var(--accent); font-weight: 600; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;">Hong Kong</div>
-            <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px;">Yiming</h1>
+            <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px;">Yiming Zhao</h1>
             <h2 style="font-size: 2em; font-weight: 400; color: var(--text-sub); margin-bottom: 20px;">Designer & Creator</h2>
             <p style="font-size: 1.2em; color: #A1A1A6; max-width: 600px; margin-bottom: 40px;">Designing and building cool stuff at the intersection of AI, EdTech, and Sound.</p>
             <div style="display: flex; gap: 15px;">
@@ -178,6 +172,7 @@
             </div>
         </div>
 
+        <!-- 01 About -->
         <div id="about" style="margin-bottom: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">01</span>
@@ -185,9 +180,9 @@
                 <div class="section-line"></div>
             </div>
             <div class="about-card reveal">
-                <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming" class="profile-img">
+                <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming Zhao" class="profile-img">
                 <div class="about-text">
-                    <p>Hellooooo! I'm Yiming 🧑‍💻, a designer and creator based in Hong Kong.</p>
+                    <p>Hellooooo! I'm Yiming Zhao 🧑‍💻, a designer and creator based in Hong Kong.</p>
                     <p>This website isn't only about work. I'm deeply into experimental electronic music, indie rock, and creative coding. I believe the best creations come from cross-disciplinary inspiration.</p>
                     <div class="about-details">
                         <span>📧 1155224388@link.cuhk.edu.hk</span>
@@ -225,18 +220,61 @@
             </div>
         </div>
 
-        <!-- 03 Resume (Experience & Education 拆分) -->
-        <div id="experience">
+        <!-- 03 Resume -->
+        <div id="resume">
             <div class="section-header reveal">
                 <span class="section-number">03</span>
                 <div class="section-title">Resume</div>
                 <div class="section-line"></div>
             </div>
 
-            <!-- WORK EXPERIENCE -->
-            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Work Experience</h3>
+            <!-- WORK (改为了 Project) -->
+            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Project Experience</h3>
             <div class="timeline" style="margin-bottom: 60px;">
-                <!-- 经历 1 -->
+                <div class="timeline-item reveal">
+                    <div class="tl-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                        Team Captain & Project Lead
+                    </div>
+                    <div class="tl-date">University Competition</div>
+                    <div class="tl-org">The 11th Hong Kong University Student Innovation and Entrepreneurship Competition</div>
+                    <div class="tl-loc">Hong Kong</div>
+                    <ul class="tl-list">
+                        <li>Independently designed MySQL database and built backend with Python Flask, implementing collaborative filtering.</li>
+                        <li>Led a 4-person team through full-cycle development: market research, prototyping (Figma), user testing.</li>
+                        <li>Orchestrated product strategy through user persona analysis and competitive benchmarking.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- EDUCATION -->
+            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Education</h3>
+            <div class="timeline" style="margin-bottom: 60px;">
+                <div class="timeline-item reveal">
+                    <!-- Faculty 照片渐变背景，如果你传了 faculty.jpg 就会显示 -->
+                    <div class="faculty-bg"></div>
+                    
+                    <div class="timeline-content">
+                        <div class="tl-title">
+                            The Chinese University of Hong Kong
+                        </div>
+                        <div class="tl-date">Expected Dec 2027</div>
+                        <div class="tl-org">BSc in Learning Design and Technology (LDTE)</div>
+                        <div class="tl-loc">Hong Kong</div>
+                        <div style="color: #A1A1A6; font-size: 0.95em; margin-bottom: 15px; max-width: 80%;">
+                            <b>Core Courses:</b> Python Programming, Data Structures & Algorithms, Human-Computer Interaction (HCI), Instructional Design, Educational Data Mining, Interactive Media Design.
+                        </div>
+                        <ul class="tl-list">
+                            <li>Focusing on the intersection of instructional design, educational technology, and interactive learning experiences.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTERNSHIP -->
+            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Internship</h3>
+            <div class="timeline">
+                <!-- CLEAR 实习挪回这里 -->
                 <div class="timeline-item reveal">
                     <div class="tl-title">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -251,36 +289,8 @@
                         <li>Leveraged ChatGPT, Claude, and Notion AI to accelerate literature review and document drafting.</li>
                     </ul>
                 </div>
-            </div>
 
-            <!-- EDUCATION -->
-            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Education</h3>
-            <div class="timeline" style="margin-bottom: 60px;">
-                <div class="timeline-item reveal">
-                    <!-- Faculty 照片渐变背景 -->
-                    <div class="faculty-bg"></div>
-                    
-                    <div class="timeline-content">
-                        <div class="tl-title">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Chinese_University_of_Hong_Kong_coat_of_arms.svg/200px-Chinese_University_of_Hong_Kong_coat_of_arms.svg.png" alt="CUHK Logo" class="logo-img">
-                            The Chinese University of Hong Kong
-                        </div>
-                        <div class="tl-date">Expected Dec 2027</div>
-                        <div class="tl-org">BSc in Learning Design and Technology (LDTE)</div>
-                        <div class="tl-loc">Hong Kong</div>
-                        <div style="color: #A1A1A6; font-size: 0.95em; margin-bottom: 15px;">
-                            <b>Core Courses:</b> Python Programming, Data Structures & Algorithms, Human-Computer Interaction (HCI), Instructional Design, Educational Data Mining, Interactive Media Design.
-                        </div>
-                        <ul class="tl-list">
-                            <li>Focusing on the intersection of instructional design, educational technology, and interactive learning experiences.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- INTERNSHIP -->
-            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Internship</h3>
-            <div class="timeline">
+                <!-- 中森建设 -->
                 <div class="timeline-item reveal">
                     <div class="tl-title">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -294,25 +304,10 @@
                         <li>Translated complex technical reports into actionable checklists, eliminating communication gaps.</li>
                     </ul>
                 </div>
-                
-                <!-- 比赛也可算作这个部分的经历 -->
-                <div class="timeline-item reveal">
-                    <div class="tl-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-                        Team Captain & Project Lead
-                    </div>
-                    <div class="tl-date">University Competition</div>
-                    <div class="tl-org">The 11th Hong Kong University Student Innovation and Entrepreneurship Competition</div>
-                    <div class="tl-loc">Hong Kong</div>
-                    <ul class="tl-list">
-                        <li>Independently designed MySQL database and built backend with Python Flask, implementing collaborative filtering.</li>
-                        <li>Led a 4-person team through full-cycle development: market research, prototyping (Figma), user testing.</li>
-                    </ul>
-                </div>
             </div>
         </div>
 
-        <!-- 04 Skills (保持不变) -->
+        <!-- 04 Skills -->
         <div id="skills" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">04</span>
@@ -360,7 +355,7 @@
         </div>
 
         <div class="footer">
-            © 2025 Yiming. Designed & Built with pure HTML/CSS.
+            © 2025 Yiming Zhao. Designed & Built with pure HTML/CSS.
         </div>
 
     </div>
