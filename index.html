@@ -122,7 +122,6 @@
         .tags { display: flex; flex-wrap: wrap; gap: 10px; }
         .tag { background: rgba(128, 128, 128, 0.1); border: 1px solid var(--border); color: var(--text-sub); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; }
 
-        /* Interests 画廊特效 */
         .interests-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .gallery-grid img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); transition: transform 0.3s, border-color 0.3s; }
@@ -169,8 +168,8 @@
             <a href="#projects">PROJECTS</a>
             <a href="#resume">RESUME</a>
             <a href="#skills">SKILLS</a>
-            <a href="#interests">INTERESTS</a> <!-- 任务栏加在这里 -->
-            <a href="#bot">BOT</a> <!-- 改名为了 BOT -->
+            <a href="#interests">INTERESTS</a>
+            <a href="#bot">BOT</a>
             <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
         </div>
     </nav>
@@ -347,7 +346,7 @@
             </div>
         </div>
 
-        <!-- 06 Interests (新增栏目) -->
+        <!-- 06 Interests -->
         <div id="interests" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">06</span>
@@ -356,7 +355,6 @@
             </div>
             
             <div class="interests-layout reveal">
-                <!-- 左侧图片画廊 -->
                 <div class="gallery-grid">
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/1.jpg" alt="Crochet 1" onerror="this.src='https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=400'">
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/2.jpg" alt="Crochet 2" onerror="this.src='https://images.unsplash.com/photo-1605289355680-75fb41239154?w=400'">
@@ -366,22 +364,22 @@
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/6.jpg" alt="Crochet 6" onerror="this.src='https://images.unsplash.com/photo-1620802051782-1b8880bece98?w=400'">
                 </div>
                 
-                <!-- 右侧文字描述 -->
                 <div class="interests-text">
                     <h3>Beyond the Screen</h3>
                     <p>When I'm not coding or designing, I express my creativity through crochet. It requires extreme patience and structural thinking—much like building a complex software architecture, but with yarn.</p>
-                    <p><b>Indie Music & ACG:</b> I'm an absolute fanatic of indie music, experimental electronic sounds, and ACG (Anime, Comic, Games). My playlist is a chaotic mix of The Smiths, Björk, and anime OSTs, which heavily inspires my audio-analysis projects.</p>
+                    <!-- 修改了这段，去掉了具体的名字，加上了罗大佑的彩蛋 -->
+                    <p><b>Music, ACG & More:</b> I'm a huge fan of indie music, experimental electronic sounds, and ACG (Anime, Comic, Games) culture. Fun fact: I share the exact same birthday as the legendary Taiwanese singer-songwriter Lo Ta-yu. My cross-genre music taste heavily inspires my audio-analysis projects.</p>
                     <div class="tags" style="margin-top: 15px;">
                         <span class="tag">Crochet</span>
                         <span class="tag">Indie Music</span>
                         <span class="tag">ACG</span>
-                        <span class="tag">Experimental Electronic</span>
+                        <span class="tag">Electronic Music</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 07 Bot (改名了) -->
+        <!-- 07 Bot -->
         <div id="bot" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">07</span>
@@ -488,8 +486,8 @@
                     reply = "This portfolio showcases a BSc in Learning Design and Technology (LDTE) from CUHK. It bridges EdTech with rigorous CS courses like Python, HCI, and Data Mining. 🎓";
                 } else if (text.includes('design') || text.includes('figma') || text.includes('product')) {
                     reply = "Product design here isn't just about visuals. It's about cross-disciplinary creation—blending UX research, Figma prototyping, and actual code deployment to build usable products. 🎨";
-                } else if (text.includes('crochet') || text.includes('interest') || text.includes('hobby')) {
-                    reply = "Beyond coding, Yiming loves crocheting, indie music, and ACG culture. It's the perfect balance between logic and extreme creativity! 🧶🎵";
+                } else if (text.includes('crochet') || text.includes('interest') || text.includes('hobby') || text.includes('music')) {
+                    reply = "Beyond coding, Yiming loves crocheting, indie music, and ACG culture. Did you know? Yiming shares the same birthday as the legendary Lo Ta-yu! 🧶🎵";
                 }
                 botMsg.innerText = reply;
                 chat.appendChild(botMsg);
