@@ -411,4 +411,91 @@
             © 2025 Yiming Zhao. Designed & Built with pure HTML/CSS.
         </div>
 
-    </div
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('theme-btn');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                btn.innerText = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                btn.innerText = '☀️';
+            }
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        const sections = document.querySelectorAll("div[id]");
+        const navLinks = document.querySelectorAll(".nav-links a");
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute("id");
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+                if (link.getAttribute("href").includes(current)) {
+                    link.classList.add("active");
+                }
+            });
+        });
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim().toLowerCase();
+            if (!text) return;
+
+            const chat = document.getElementById('chatHistory');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg msg-user';
+            userMsg.innerText = input.value;
+            chat.appendChild(userMsg);
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'msg msg-bot';
+                let reply = "That's a great question! Explore the Projects section to see how product strategy and full-stack coding come together in Hometree and Rhythm Runner. ✨";
+                
+                if (text.includes('hometree')) {
+                    reply = "Hometree is a privacy-first social app. The backend was built using Python Flask and MySQL, featuring a custom collaborative filtering algorithm for matching. Check out the live link in the Projects section! 🚀";
+                } else if (text.includes('rhythm') || text.includes('audio') || text.includes('dsp')) {
+                    reply = "Rhythm Runner is a Godot game powered by Python & Librosa. Over 15 audio features (like HPSS) were extracted to dynamically generate beatmaps automatically! 🎵";
+                } else if (text.includes('ldte') || text.includes('school') || text.includes('cuhk') || text.includes('education')) {
+                    reply = "This portfolio showcases a BSc in Learning Design and Technology (LDTE) from CUHK. It bridges EdTech with rigorous CS courses like Python, HCI, and Data Mining. 🎓";
+                } else if (text.includes('design') || text.includes('figma') || text.includes('product')) {
+                    reply = "Product design here isn't just about visuals. It's about cross-disciplinary creation—blending UX research, Figma prototyping, and actual code deployment to build usable products. 🎨";
+                } else if (text.includes('crochet') || text.includes('interest') || text.includes('hobby')) {
+                    reply = "Beyond coding, Yiming loves crocheting, indie music, and ACG culture. It's the perfect balance between logic and extreme creativity! 🧶🎵";
+                }
+                botMsg.innerText = reply;
+                chat.appendChild(botMsg);
+                chat.scrollTop = chat.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+</html>
