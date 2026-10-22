@@ -7,6 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
+        /* 默认（暗色）变量 */
         :root {
             --bg: #050508;
             --card: #111115;
@@ -15,6 +16,17 @@
             --accent: #00A8FF;
             --border: rgba(255, 255, 255, 0.08);
             --timeline: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 亮色模式变量 */
+        [data-theme="light"] {
+            --bg: #FBFBFD;
+            --card: #FFFFFF;
+            --text-main: #1D1D1F;
+            --text-sub: #515154;
+            --accent: #FF1493; /* 白天用樱花粉 */
+            --border: rgba(0, 0, 0, 0.08);
+            --timeline: rgba(0, 0, 0, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,26 +38,36 @@
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            transition: background 0.4s, color 0.4s;
             background-image: radial-gradient(circle at 80% 50%, rgba(0, 168, 255, 0.05), transparent 40%),
                               radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.02), transparent 30%);
             background-attachment: fixed;
         }
 
+        /* 顶部导航 */
         .nav {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
             display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
-            background: rgba(5, 5, 8, 0.8); backdrop-filter: blur(16px);
+            background: var(--bg); backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border); z-index: 1000;
+            opacity: 0.95; transition: background 0.4s, border-color 0.4s;
         }
 
-        .nav-logo { font-weight: 600; font-size: 1.1em; display: flex; align-items: center; gap: 10px; cursor: pointer;}
+        .nav-logo { font-weight: 600; font-size: 1.1em; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-main);}
         .nav-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 12px var(--accent);}
         .nav-logo span { color: var(--text-sub); font-weight: 400; font-size: 0.85em; margin-left: 5px; text-transform: uppercase;}
         
-        .nav-links { display: flex; gap: 30px; font-size: 0.85em; font-weight: 500; color: var(--text-sub); }
+        .nav-links { display: flex; align-items: center; gap: 30px; font-size: 0.85em; font-weight: 500; color: var(--text-sub); }
         .nav-links a { color: var(--text-sub); text-decoration: none; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; position: relative;}
         .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
         .nav-links a.active::after { content: ''; position: absolute; left: 0; bottom: -24px; width: 100%; height: 2px; background: var(--accent); }
+
+        .theme-btn {
+            background: transparent; border: 1px solid var(--border); border-radius: 50%;
+            width: 36px; height: 36px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; color: var(--text-main); font-size: 1.2em; transition: 0.3s;
+        }
+        .theme-btn:hover { border-color: var(--accent); color: var(--accent); transform: rotate(15deg); }
 
         .container { max-width: 900px; margin: 0 auto; padding: 140px 20px 100px; }
 
@@ -58,61 +80,50 @@
         .section-title { font-size: 2.5em; font-weight: 700; letter-spacing: -0.03em; }
         .section-line { flex: 1; height: 1px; background: var(--border); }
 
+        /* About */
         .about-card {
             background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-            padding: 40px; display: flex; gap: 40px; align-items: center;
+            padding: 40px; display: flex; gap: 40px; align-items: center; transition: 0.3s;
         }
-        .profile-img {
-            width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
-            border: 1px solid var(--border); flex-shrink: 0;
-        }
-        .about-text p { font-size: 1.1em; color: #A1A1A6; margin-bottom: 20px; line-height: 1.8;}
+        .profile-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
+        .about-text p { font-size: 1.1em; color: var(--text-sub); margin-bottom: 20px; line-height: 1.8;}
         .about-details { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-sub); font-size: 0.9em; font-family: monospace;}
 
-        /* 时间轴 */
+        /* Timeline */
         .timeline {
             position: relative; border-left: 1px solid var(--timeline);
             margin-left: 10px; padding-left: 30px; display: flex; flex-direction: column; gap: 30px;
         }
-
         .timeline-item {
             position: relative; background: var(--card); border: 1px solid var(--border);
-            border-radius: 16px; padding: 30px; transition: border-color 0.3s;
-            overflow: hidden;
+            border-radius: 16px; padding: 30px; transition: border-color 0.3s; overflow: hidden;
         }
-        .timeline-item:hover { border-color: rgba(255,255,255,0.2); }
-        
+        .timeline-item:hover { border-color: rgba(128, 128, 128, 0.3); }
         .timeline-item::before {
             content: ''; position: absolute; left: -35px; top: 35px;
             width: 9px; height: 9px; border-radius: 50%;
             background: var(--bg); border: 2px solid var(--accent);
         }
-
-        /* 右边 Faculty 照片渐变融合特效 */
+        /* 学院图片渐变 */
         .faculty-bg {
-            position: absolute;
-            right: 0; top: 0; bottom: 0;
-            width: 50%; /* 宽度稍微放大一点 */
+            position: absolute; right: 0; top: 0; bottom: 0; width: 50%;
             background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.4; 
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%);
-            mask-image: linear-gradient(to right, transparent 0%, black 80%);
-            z-index: 0;
-            pointer-events: none;
+            background-size: cover; background-position: center;
+            opacity: 0.3; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%); mask-image: linear-gradient(to right, transparent 0%, black 80%);
+            z-index: 0; pointer-events: none;
         }
         .timeline-content { position: relative; z-index: 1; }
 
-        .tl-title { font-size: 1.3em; font-weight: 600; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .tl-title { font-size: 1.3em; font-weight: 600; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--text-main);}
         .tl-date { color: var(--accent); font-family: monospace; font-size: 0.85em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; letter-spacing: 0.5px;}
         .tl-org { color: var(--text-main); font-weight: 500; font-size: 1em; margin-bottom: 5px; }
         .tl-loc { color: var(--text-sub); font-size: 0.9em; margin-bottom: 20px; }
-        
-        .tl-list { padding-left: 20px; color: #A1A1A6; font-size: 0.95em; line-height: 1.7;}
+        .tl-list { padding-left: 20px; color: var(--text-sub); font-size: 0.95em; line-height: 1.7;}
         .tl-list li { margin-bottom: 10px; }
         .tl-list li::marker { color: var(--accent); }
+        .sub-heading { color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; }
 
+        /* Projects */
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
         .project-card {
             background: var(--card); border: 1px solid var(--border); border-radius: 16px;
@@ -121,18 +132,38 @@
         .project-card:hover { border-color: var(--accent); }
         .project-img { width: 100%; height: 400px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000;}
         .project-info { padding: 30px; }
-        .project-title { font-size: 1.5em; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between;}
+        .project-title { font-size: 1.5em; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between; color: var(--text-main);}
         .project-title span { color: var(--accent); font-size: 0.6em; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; align-self: center; border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;}
-        .project-desc { color: #A1A1A6; font-size: 1em; line-height: 1.7;}
+        .project-desc { color: var(--text-sub); font-size: 1em; line-height: 1.7;}
 
+        /* Skills */
         .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; }
         .skill-icon { width: 40px; height: 40px; background: rgba(0, 168, 255, 0.1); border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: 20px; }
-        .skill-title { font-size: 1.2em; font-weight: 600; margin-bottom: 10px; }
+        .skill-title { font-size: 1.2em; font-weight: 600; margin-bottom: 10px; color: var(--text-main);}
         .skill-desc { font-size: 0.9em; color: var(--text-sub); margin-bottom: 20px; }
-        
         .tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .tag { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: #CCC; padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; }
+        .tag { background: rgba(128, 128, 128, 0.1); border: 1px solid var(--border); color: var(--text-sub); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; }
+
+        /* AI Agent Chat */
+        .agent-chat-box {
+            background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+            margin-top: 40px; padding: 20px; display: flex; flex-direction: column; height: 400px;
+        }
+        .agent-header { display: flex; align-items: center; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
+        .agent-avatar { width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        .agent-name { font-weight: 600; font-size: 1em; color: var(--text-main); }
+        .agent-status { font-size: 0.75em; color: #00FF00; display: flex; align-items: center; gap: 4px; }
+        .agent-status::before { content: ''; width: 6px; height: 6px; background: #00FF00; border-radius: 50%; }
+        
+        .chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 10px; }
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 0.95em; line-height: 1.5; }
+        .msg-bot { background: rgba(128,128,128,0.1); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--text-main);}
+        .msg-user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        
+        .chat-input-area { display: flex; gap: 10px; margin-top: 15px; }
+        .chat-input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text-main); padding: 10px 15px; border-radius: 20px; outline: none; font-family: inherit;}
+        .chat-send { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 0 20px; cursor: pointer; font-weight: 600; }
 
         .footer { text-align: center; color: var(--text-sub); font-size: 0.85em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: monospace;}
 
@@ -155,6 +186,8 @@
             <a href="#projects">PROJECTS</a>
             <a href="#resume">RESUME</a>
             <a href="#skills">SKILLS</a>
+            <a href="#agent">AI AGENT</a> <!-- 导航栏增加 AI Agent -->
+            <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
         </div>
     </nav>
 
@@ -165,7 +198,7 @@
             <div style="color: var(--accent); font-weight: 600; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;">Hong Kong</div>
             <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px;">Yiming Zhao</h1>
             <h2 style="font-size: 2em; font-weight: 400; color: var(--text-sub); margin-bottom: 20px;">Designer & Creator</h2>
-            <p style="font-size: 1.2em; color: #A1A1A6; max-width: 600px; margin-bottom: 40px;">Designing and building cool stuff at the intersection of AI, EdTech, and Sound.</p>
+            <p style="font-size: 1.2em; color: var(--text-sub); max-width: 600px; margin-bottom: 40px;">Designing and building cool stuff at the intersection of AI, EdTech, and Sound.</p>
             <div style="display: flex; gap: 15px;">
                 <a href="#projects" style="padding: 14px 28px; border-radius: 30px; font-weight: 500; background: var(--accent); color: #FFF; text-decoration: none;">See my work</a>
                 <a href="https://github.com/myrazanglin-art" target="_blank" style="padding: 14px 28px; border-radius: 30px; font-weight: 500; background: transparent; color: var(--text-main); border: 1px solid var(--border); text-decoration: none;">GitHub</a>
@@ -228,40 +261,17 @@
                 <div class="section-line"></div>
             </div>
 
-            <!-- WORK (改为了 Project) -->
-            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Project Experience</h3>
-            <div class="timeline" style="margin-bottom: 60px;">
-                <div class="timeline-item reveal">
-                    <div class="tl-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-                        Team Captain & Project Lead
-                    </div>
-                    <div class="tl-date">University Competition</div>
-                    <div class="tl-org">The 11th Hong Kong University Student Innovation and Entrepreneurship Competition</div>
-                    <div class="tl-loc">Hong Kong</div>
-                    <ul class="tl-list">
-                        <li>Independently designed MySQL database and built backend with Python Flask, implementing collaborative filtering.</li>
-                        <li>Led a 4-person team through full-cycle development: market research, prototyping (Figma), user testing.</li>
-                        <li>Orchestrated product strategy through user persona analysis and competitive benchmarking.</li>
-                    </ul>
-                </div>
-            </div>
-
             <!-- EDUCATION -->
-            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Education</h3>
+            <div class="sub-heading reveal">Education</div>
             <div class="timeline" style="margin-bottom: 60px;">
                 <div class="timeline-item reveal">
-                    <!-- Faculty 照片渐变背景，如果你传了 faculty.jpg 就会显示 -->
                     <div class="faculty-bg"></div>
-                    
                     <div class="timeline-content">
-                        <div class="tl-title">
-                            The Chinese University of Hong Kong
-                        </div>
+                        <div class="tl-title">The Chinese University of Hong Kong</div>
                         <div class="tl-date">Expected Dec 2027</div>
                         <div class="tl-org">BSc in Learning Design and Technology (LDTE)</div>
                         <div class="tl-loc">Hong Kong</div>
-                        <div style="color: #A1A1A6; font-size: 0.95em; margin-bottom: 15px; max-width: 80%;">
+                        <div style="color: var(--text-sub); font-size: 0.95em; margin-bottom: 15px; max-width: 80%;">
                             <b>Core Courses:</b> Python Programming, Data Structures & Algorithms, Human-Computer Interaction (HCI), Instructional Design, Educational Data Mining, Interactive Media Design.
                         </div>
                         <ul class="tl-list">
@@ -272,14 +282,10 @@
             </div>
 
             <!-- INTERNSHIP -->
-            <h3 style="color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px;">Internship</h3>
+            <div class="sub-heading reveal">Internship</div>
             <div class="timeline">
-                <!-- CLEAR 实习挪回这里 -->
                 <div class="timeline-item reveal">
-                    <div class="tl-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                        Research Intern
-                    </div>
+                    <div class="tl-title">Research Intern</div>
                     <div class="tl-date">Expected 2024 - Present</div>
                     <div class="tl-org">CLEAR, The Chinese University of Hong Kong</div>
                     <div class="tl-loc">Hong Kong</div>
@@ -290,12 +296,8 @@
                     </ul>
                 </div>
 
-                <!-- 中森建设 -->
                 <div class="timeline-item reveal">
-                    <div class="tl-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                        Technical Department Intern
-                    </div>
+                    <div class="tl-title">Technical Department Intern</div>
                     <div class="tl-date">May - Aug 2025</div>
                     <div class="tl-org">Guangdong Zhongsen Construction Engineering Co., Ltd.</div>
                     <div class="tl-loc">Guangdong, China</div>
@@ -320,36 +322,67 @@
                     <div class="skill-icon">📐</div>
                     <div class="skill-title">Product & UX Design</div>
                     <div class="skill-desc">From user persona analysis to high-fidelity prototyping and interaction design.</div>
-                    <div class="tags">
-                        <span class="tag">Figma</span>
-                        <span class="tag">Prototyping</span>
-                        <span class="tag">User Testing</span>
-                    </div>
+                    <div class="tags"><span class="tag">Figma</span><span class="tag">Prototyping</span><span class="tag">User Testing</span></div>
                 </div>
-
                 <div class="skill-card reveal">
                     <div class="skill-icon">💻</div>
                     <div class="skill-title">Development & Data</div>
                     <div class="skill-desc">Building full-stack prototypes and utilizing data-driven insights.</div>
-                    <div class="tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Java</span>
-                        <span class="tag">C</span>
-                        <span class="tag">MySQL</span>
-                        <span class="tag">HTML/CSS</span>
-                    </div>
+                    <div class="tags"><span class="tag">Python</span><span class="tag">Java</span><span class="tag">C</span><span class="tag">MySQL</span><span class="tag">HTML/CSS</span></div>
                 </div>
-
                 <div class="skill-card reveal">
                     <div class="skill-icon">🤖</div>
                     <div class="skill-title">AI & Prompt Engineering</div>
                     <div class="skill-desc">Leveraging LLMs to accelerate research, coding, and content development.</div>
-                    <div class="tags">
-                        <span class="tag">OpenAI API</span>
-                        <span class="tag">ChatGPT</span>
-                        <span class="tag">Claude</span>
-                        <span class="tag">Copilot</span>
+                    <div class="tags"><span class="tag">OpenAI API</span><span class="tag">ChatGPT</span><span class="tag">Claude</span><span class="tag">Copilot</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 05 Project Experience (比赛在 skills 下面) -->
+        <div id="experience" style="margin-top: 120px;">
+            <div class="section-header reveal">
+                <span class="section-number">05</span>
+                <div class="section-title">Project Experience</div>
+                <div class="section-line"></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="tl-title">Team Captain & Project Lead</div>
+                    <div class="tl-date">University Competition</div>
+                    <div class="tl-org">The 11th Hong Kong University Student Innovation and Entrepreneurship Competition</div>
+                    <div class="tl-loc">Hong Kong</div>
+                    <ul class="tl-list">
+                        <li>Independently designed MySQL database and built backend with Python Flask, implementing collaborative filtering.</li>
+                        <li>Led a 4-person team through full-cycle development: market research, prototyping (Figma), user testing.</li>
+                        <li>Orchestrated product strategy through user persona analysis and competitive benchmarking.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 06 AI Agent (最后面) -->
+        <div id="agent" style="margin-top: 120px;">
+            <div class="section-header reveal">
+                <span class="section-number">06</span>
+                <div class="section-title">Ask AI Agent</div>
+                <div class="section-line"></div>
+            </div>
+            
+            <div class="agent-chat-box reveal">
+                <div class="agent-header">
+                    <div class="agent-avatar">🤖</div>
+                    <div>
+                        <div class="agent-name">Yiming's AI Twin</div>
+                        <div class="agent-status">Online</div>
                     </div>
+                </div>
+                <div class="chat-history" id="chatHistory">
+                    <div class="msg msg-bot">Hi! I'm Yiming's AI assistant. Ask me anything about his LDTE background, Hometree project, or audio DSP experience! (๑•̀ㅂ•́)و✧</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question..." onkeypress="handleKeyPress(event)">
+                    <button class="chat-send" onclick="sendMessage()">Send</button>
                 </div>
             </div>
         </div>
@@ -361,13 +394,26 @@
     </div>
 
     <script>
+        // 主题切换
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('theme-btn');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                btn.innerText = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                btn.innerText = '☀️';
+            }
+        }
+
+        // 滚动特效
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
                 var windowHeight = window.innerHeight;
                 var elementTop = reveals[i].getBoundingClientRect().top;
                 var elementVisible = 100;
-
                 if (elementTop < windowHeight - elementVisible) {
                     reveals[i].classList.add("active");
                 }
@@ -376,9 +422,9 @@
         window.addEventListener("scroll", reveal);
         reveal();
 
+        // 导航高亮
         const sections = document.querySelectorAll("div[id]");
         const navLinks = document.querySelectorAll(".nav-links a");
-
         window.addEventListener("scroll", () => {
             let current = "";
             sections.forEach(section => {
@@ -387,7 +433,6 @@
                     current = section.getAttribute("id");
                 }
             });
-
             navLinks.forEach(link => {
                 link.classList.remove("active");
                 if (link.getAttribute("href").includes(current)) {
@@ -395,6 +440,44 @@
                 }
             });
         });
+
+        // AI Chat 逻辑
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim().toLowerCase();
+            if (!text) return;
+
+            const chat = document.getElementById('chatHistory');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg msg-user';
+            userMsg.innerText = input.value;
+            chat.appendChild(userMsg);
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'msg msg-bot';
+                let reply = "I'm not sure about that, but Yiming is an expert in LDTE, Python, and audio analysis! Ask me about Hometree or Rhythm Runner. ✨";
+                
+                if (text.includes('hometree')) {
+                    reply = "Hometree is a privacy-first social app. Yiming built the backend using Python Flask and MySQL, and implemented a collaborative filtering algorithm for Tinder-style swiping! 🚀";
+                } else if (text.includes('rhythm') || text.includes('audio') || text.includes('dsp')) {
+                    reply = "Rhythm Runner is a Godot game. Yiming used Python & Librosa to extract 15+ audio features (like HPSS) to generate dynamic beatmaps automatically! 🎵";
+                } else if (text.includes('ldte') || text.includes('school') || text.includes('cuhk')) {
+                    reply = "Yiming studies BSc in Learning Design and Technology (LDTE) at CUHK. He's taking courses like Python, HCI, and Educational Data Mining! 🎓";
+                } else if (text.includes('design') || text.includes('figma')) {
+                    reply = "Yiming loves cross-disciplinary design. From user persona analysis to Figma prototyping, he designs experiences that blend AI with human emotion. 🎨";
+                }
+                botMsg.innerText = reply;
+                chat.appendChild(botMsg);
+                chat.scrollTop = chat.scrollHeight;
+            }, 600);
+        }
     </script>
 </body>
 </html>
