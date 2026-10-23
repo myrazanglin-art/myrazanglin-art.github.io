@@ -7,19 +7,23 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
-        /* 默认：浅粉色毛玻璃（QQ空间网格 + 苹果高级感） */
         :root {
-            --bg: #FFF5F8; /* 樱花粉底色 */
-            --card: rgba(255, 255, 255, 0.65); /* 半透明毛玻璃卡片 */
-            --text-main: #2C1E24; /* 暖深灰，比纯黑更高级 */
+            --bg: #FFF5F8; 
+            --card: rgba(255, 255, 255, 0.65); 
+            --text-main: #2C1E24; 
             --text-sub: #7A6970;
-            --accent: #FF69B4; /* 高级樱花粉 */
-            --border: rgba(255, 182, 193, 0.4); /* 透光粉色边框 */
+            --accent: #FF69B4; 
+            --border: rgba(255, 182, 193, 0.4); 
             --timeline: rgba(255, 182, 193, 0.6);
-            --grid-color: rgba(255, 182, 193, 0.25); /* 网格线颜色 */
+            --grid-color: rgba(255, 182, 193, 0.25); 
+            
+            --brown: #8B5A2B;
+            --nav-bg: rgba(255, 245, 248, 0.85);
+            
+            --msg-bot-bg: rgba(255, 255, 255, 0.9);
+            --msg-bot-text: #2C1E24;
         }
 
-        /* 夜间模式（保持你喜欢的深空灰蓝） */
         [data-theme="dark"] {
             --bg: #050508;
             --card: #111115;
@@ -28,7 +32,13 @@
             --accent: #00A8FF;
             --border: rgba(255, 255, 255, 0.08);
             --timeline: rgba(255, 255, 255, 0.15);
-            --grid-color: transparent; /* 夜间模式不显示网格 */
+            --grid-color: transparent;
+            
+            --brown: #D2A679; 
+            --nav-bg: rgba(5, 5, 8, 0.85);
+            
+            --msg-bot-bg: rgba(255, 255, 255, 0.1);
+            --msg-bot-text: #FFFFFF;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,8 +51,6 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             transition: background 0.4s, color 0.4s;
-            
-            /* 浅色模式特有的毛玻璃网格背景 */
             background-image: 
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px),
@@ -51,26 +59,50 @@
             background-attachment: fixed;
         }
 
-        /* 导航栏 */
+        .petal-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            pointer-events: none; z-index: 1; overflow: hidden;
+        }
+        .petal {
+            position: absolute; top: -10%;
+            width: 12px; height: 12px;
+            background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+            border-radius: 15px 0 15px 0;
+            opacity: 0.6;
+            animation: fall linear infinite;
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.3);
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(100px); opacity: 0; }
+        }
+
         .nav {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
             display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
-            background: rgba(255, 245, 248, 0.8); /* 半透明底部 */
-            backdrop-filter: blur(20px); /* 毛玻璃核心 */
-            border-bottom: 1px solid var(--border); z-index: 1000;
-            transition: background 0.4s, border-color 0.4s;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border); 
+            z-index: 1000;
+            transition: 0.4s;
+        }
+        
+        .nav::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--brown), var(--accent), var(--brown));
+            opacity: 0.5;
         }
 
-        [data-theme="dark"] .nav { background: rgba(5, 5, 8, 0.8); }
-
         .nav-logo { font-weight: 700; font-size: 1.1em; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-main);}
-        .nav-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 12px var(--accent);}
-        .nav-logo span { color: var(--text-sub); font-weight: 500; font-size: 0.85em; margin-left: 5px; text-transform: uppercase; letter-spacing: 1px;}
+        .nav-logo::before { content: '🎞️'; font-size: 1.2em; filter: sepia(1) hue-rotate(-20deg); }
+        .nav-logo span { color: var(--brown); font-weight: 600; font-size: 0.85em; margin-left: 5px; text-transform: uppercase; letter-spacing: 2px;}
         
         .nav-links { display: flex; align-items: center; gap: 30px; font-size: 0.85em; font-weight: 600; color: var(--text-sub); }
         .nav-links a { color: var(--text-sub); text-decoration: none; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; position: relative;}
-        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-        .nav-links a.active::after { content: ''; position: absolute; left: 0; bottom: -24px; width: 100%; height: 2px; background: var(--accent); }
+        .nav-links a:hover, .nav-links a.active { color: var(--brown); }
+        .nav-links a.active::after { content: '•'; position: absolute; left: 50%; transform: translateX(-50%); bottom: -22px; color: var(--accent); font-size: 1.5em;}
 
         .theme-btn {
             background: rgba(255, 255, 255, 0.5); border: 1px solid var(--border); border-radius: 50%;
@@ -78,18 +110,19 @@
             cursor: pointer; color: var(--text-main); font-size: 1.2em; transition: 0.3s;
             backdrop-filter: blur(10px);
         }
-        .theme-btn:hover { transform: rotate(15deg); background: #FFF; }
+        [data-theme="dark"] .theme-btn { background: transparent;}
+        .theme-btn:hover { transform: rotate(15deg) scale(1.1); background: #FFF; color: var(--accent); }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 140px 20px 100px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 140px 20px 100px; position: relative; z-index: 10;}
 
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         .section-header { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; margin-top: 80px; }
         .section-header:first-child { margin-top: 0; }
-        .section-number { color: var(--accent); font-family: monospace; font-weight: 700; font-size: 1em;}
+        .section-number { color: var(--brown); font-family: monospace; font-weight: 700; font-size: 1em;}
         .section-title { font-size: 2.5em; font-weight: 800; letter-spacing: -0.04em; }
-        .section-line { flex: 1; height: 2px; background: var(--border); }
+        .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--brown), transparent); }
 
         .btn-group { display: flex; gap: 15px; align-items: center; }
         .btn-primary { padding: 14px 28px; border-radius: 30px; font-weight: 600; font-size: 1em; background: var(--accent); color: #FFF; text-decoration: none; transition: 0.3s; box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);}
@@ -98,7 +131,6 @@
         .btn-icon:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px);}
         .btn-icon svg { width: 20px; height: 20px; }
 
-        /* 卡片全局毛玻璃效果 */
         .about-card, .timeline-item, .project-card, .skill-card, .interests-text, .agent-chat-box {
             background: var(--card);
             backdrop-filter: blur(16px);
@@ -117,26 +149,44 @@
         }
 
         .about-card { border-radius: 20px; padding: 40px; display: flex; gap: 40px; align-items: center; transition: 0.3s; }
-        .profile-img { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 4px solid #FFF; flex-shrink: 0; box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2); }
+        
+        .profile-img-container {
+            position: relative; width: 240px; height: 240px; flex-shrink: 0;
+            border-radius: 50%; padding: 8px;
+            background: linear-gradient(135deg, #FFF, var(--accent), var(--brown), #FFF);
+            box-shadow: 0 10px 30px rgba(139, 90, 43, 0.2);
+            animation: pulseGlow 4s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(255, 105, 180, 0.2); }
+            100% { box-shadow: 0 0 30px rgba(139, 90, 43, 0.4); }
+        }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid #FFF; }
+        
         .about-text p { font-size: 1.1em; color: var(--text-sub); margin-bottom: 20px; line-height: 1.8;}
         .about-details { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-sub); font-size: 0.9em; font-family: monospace;}
 
         .timeline { position: relative; border-left: 2px solid var(--timeline); margin-left: 10px; padding-left: 30px; display: flex; flex-direction: column; gap: 30px; }
         .timeline-item { border-radius: 16px; padding: 30px; transition: border-color 0.3s; overflow: hidden; }
         .timeline-item:hover { border-color: var(--accent); }
-        .timeline-item::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 3px solid var(--accent); }
+        .timeline-item::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 3px solid var(--brown); }
         
         .faculty-bg { position: absolute; right: 0; top: 0; bottom: 0; width: 50%; background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg'); background-size: cover; background-position: center; opacity: 0.2; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%); mask-image: linear-gradient(to right, transparent 0%, black 80%); z-index: 0; pointer-events: none; }
         .timeline-content { position: relative; z-index: 1; }
 
         .tl-title { font-size: 1.3em; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--text-main);}
-        .tl-date { color: var(--accent); font-family: monospace; font-size: 0.85em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px;}
+        .tl-date { color: var(--brown); font-family: monospace; font-size: 0.85em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px;}
         .tl-org { color: var(--text-main); font-weight: 600; font-size: 1em; margin-bottom: 5px; }
         .tl-loc { color: var(--text-sub); font-size: 0.9em; margin-bottom: 20px; }
         .tl-list { padding-left: 20px; color: var(--text-sub); font-size: 0.95em; line-height: 1.7;}
         .tl-list li { margin-bottom: 10px; }
-        .tl-list li::marker { color: var(--accent); }
-        .sub-heading { color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; font-weight: 700;}
+        .tl-list li::marker { color: var(--brown); }
+        
+        /* 官网链接的专属样式 */
+        .tl-org a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); transition: 0.3s;}
+        .tl-org a:hover { color: var(--brown); border-bottom-color: var(--brown); }
+
+        .sub-heading { color: var(--brown); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; font-weight: 700;}
 
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
         .project-card { border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: 0.3s; }
@@ -144,7 +194,7 @@
         .project-img { width: 100%; height: 400px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000;}
         .project-info { padding: 30px; }
         .project-title { font-size: 1.5em; font-weight: 800; margin-bottom: 10px; display: flex; justify-content: space-between; color: var(--text-main);}
-        .project-title span { color: var(--accent); font-size: 0.6em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; align-self: center; border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;}
+        .project-title span { color: var(--brown); font-size: 0.6em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; align-self: center; border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;}
         .project-desc { color: var(--text-sub); font-size: 1em; line-height: 1.7;}
         .warning-text { color: #FF1493; font-size: 0.85em; margin-top: 15px; font-style: italic; font-family: monospace; }
 
@@ -155,13 +205,14 @@
         .skill-desc { font-size: 0.9em; color: var(--text-sub); margin-bottom: 20px; }
         .tags { display: flex; flex-wrap: wrap; gap: 10px; }
         .tag { background: rgba(255, 255, 255, 0.5); border: 1px solid var(--border); color: var(--text-main); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; font-weight: 600;}
+        [data-theme="dark"] .tag { background: rgba(255, 255, 255, 0.05); }
 
         .interests-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .gallery-grid img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; border: 2px solid #FFF; transition: transform 0.3s, border-color 0.3s; box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);}
         .gallery-grid img:hover { transform: scale(1.05); border-color: var(--accent); }
         .interests-text { border-radius: 20px; padding: 30px; }
-        .interests-text h3 { color: var(--accent); font-size: 1.2em; font-weight: 800; margin-bottom: 15px; }
+        .interests-text h3 { color: var(--brown); font-size: 1.2em; font-weight: 800; margin-bottom: 15px; }
         .interests-text p { color: var(--text-sub); font-size: 0.95em; margin-bottom: 15px; line-height: 1.8; }
 
         .agent-chat-box { border-radius: 20px; margin-top: 40px; padding: 20px; display: flex; flex-direction: column; height: 400px; }
@@ -172,33 +223,36 @@
         .agent-status::before { content: ''; width: 6px; height: 6px; background: #00C853; border-radius: 50%; box-shadow: 0 0 8px #00C853;}
         
         .chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 10px; }
-        .msg { max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 0.95em; line-height: 1.5; }
-        .msg-bot { background: rgba(255, 255, 255, 0.8); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--text-main);}
+        .msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.95em; line-height: 1.5; }
+        .msg-bot { background: var(--msg-bot-bg); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--msg-bot-text); }
         .msg-user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(255,105,180,0.2);}
         
         .chat-input-area { display: flex; gap: 10px; margin-top: 15px; }
         .chat-input { flex: 1; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border); color: var(--text-main); padding: 12px 20px; border-radius: 20px; outline: none; font-family: inherit; font-weight: 500; transition: 0.3s;}
-        .chat-input:focus { border-color: var(--accent); background: #FFF; }
+        [data-theme="dark"] .chat-input { background: rgba(255, 255, 255, 0.05); }
+        .chat-input:focus { border-color: var(--accent); background: #FFF; color: #000; }
         .chat-send { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 0 25px; cursor: pointer; font-weight: 700; transition: 0.3s;}
         .chat-send:hover { opacity: 0.9; }
 
         .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: monospace; font-weight: 500;}
 
         @media (max-width: 768px) {
-            .about-card, .interests-layout { flex-direction: column; grid-template-columns: 1fr; }
+            .about-card, .interests-layout { flex-direction: column; grid-template-columns: 1fr; text-align: center; }
             .nav-links { display: none; }
             .project-img { height: 250px; }
             .timeline { margin-left: 0; padding-left: 15px; }
             .timeline-item::before { left: -22px; }
             .faculty-bg { width: 100%; opacity: 0.1; }
-            .profile-img { width: 180px; height: 180px; }
+            .profile-img-container { width: 200px; height: 200px; }
         }
     </style>
 </head>
-<body> <!-- 删除了 data-theme="light"，默认即浅色 -->
+<body>
+
+    <div class="petal-layer" id="petalLayer"></div>
 
     <nav class="nav">
-        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao <span>/ PRODUCT DESIGNER</span></div>
+        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao <span>/ DESIGNER</span></div>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
             <a href="#projects">PROJECTS</a>
@@ -213,7 +267,7 @@
     <div class="container">
         
         <div class="hero reveal active" style="margin-bottom: 100px;">
-            <div style="color: var(--accent); font-weight: 800; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;">Hong Kong</div>
+            <div style="color: var(--brown); font-weight: 800; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;">Hong Kong</div>
             <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px;">Yiming Zhao</h1>
             <h2 style="font-size: 2em; font-weight: 500; color: var(--text-sub); margin-bottom: 20px;">Product Designer & Full-Stack Creator</h2>
             
@@ -239,7 +293,9 @@
                 <div class="section-line"></div>
             </div>
             <div class="about-card reveal">
-                <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming Zhao" class="profile-img">
+                <div class="profile-img-container">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming Zhao" class="profile-img">
+                </div>
                 <div class="about-text">
                     <p>Hellooooo! I'm Yiming Zhao 🧑‍💻.</p>
                     <p>I focus on end-to-end product design and full-stack coding. My technical toolkit includes Python, Flask, MySQL, and audio signal processing, which I used to build a fully automated rhythm game.</p>
@@ -311,7 +367,10 @@
                 <div class="timeline-item reveal">
                     <div class="tl-title">Research Intern</div>
                     <div class="tl-date">Expected 2024 - Present</div>
-                    <div class="tl-org">CLEAR, The Chinese University of Hong Kong</div>
+                    <!-- 这里修改为了全称，并加上了超链接 -->
+                    <div class="tl-org">
+                        <a href="https://clear.cuhk.edu.hk/web/" target="_blank">Centre for Learning Enhancement and Research (CLEAR)</a>, The Chinese University of Hong Kong
+                    </div>
                     <div class="tl-loc">Hong Kong</div>
                     <ul class="tl-list">
                         <li>Audited website using Python & Excel automation; identified 20+ outdated resources and cut redundant navigation paths by ~30%.</li>
@@ -446,11 +505,24 @@
     </div>
 
     <script>
+        const petalLayer = document.getElementById('petalLayer');
+        const petalCount = 20;
+        for (let i = 0; i < petalCount; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.left = `${Math.random() * 100}vw`;
+            const scale = 0.5 + Math.random();
+            petal.style.transform = `scale(${scale})`;
+            petal.style.animationDuration = `${8 + Math.random() * 7}s`;
+            petal.style.animationDelay = `-${Math.random() * 10}s`;
+            petalLayer.appendChild(petal);
+        }
+
         function toggleTheme() {
             const body = document.body;
             const btn = document.getElementById('theme-btn');
             if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme'); // 恢复默认浅粉色
+                body.removeAttribute('data-theme');
                 btn.innerText = '🌙';
             } else {
                 body.setAttribute('data-theme', 'dark');
@@ -522,6 +594,8 @@
                     reply = "Product design here isn't just about visuals. It's about cross-disciplinary creation—blending UX research, Figma prototyping, and actual code deployment to build usable products. 🎨";
                 } else if (text.includes('crochet') || text.includes('interest') || text.includes('hobby') || text.includes('music')) {
                     reply = "Beyond coding, Yiming loves crocheting, indie music, and ACG culture. Did you know? Yiming shares the same birthday as the legendary Lo Ta-yu! 🧶🎵";
+                } else if (text.includes('clear') || text.includes('intern')) {
+                    reply = "Yiming worked as a Research Intern at CLEAR (Centre for Learning Enhancement and Research) at CUHK, where he used Python to optimize their website and benchmarked international EdTech provisions. 🎓";
                 }
                 botMsg.innerText = reply;
                 chat.appendChild(botMsg);
