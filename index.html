@@ -284,8 +284,8 @@
 
     <div class="petal-layer" id="petalLayer"></div>
 
-    <!-- 注意：这里的 src 改成了纯英文的 bgm.mp3 -->
-    <audio id="bgm" src="bgm.mp3" loop></audio>
+    <!-- 注意这里：路径改为了 images/bgm.mp3，并且使用了网络直链 -->
+    <audio id="bgm" src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/bgm.mp3" loop></audio>
 
     <div class="music-player-container">
         <div class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play Secret Base">
@@ -569,13 +569,12 @@
                 btn.classList.remove('playing');
                 isPlaying = false;
             } else {
-                // 强制播放，捕捉错误以防被拦截
                 bgm.play().then(() => {
                     btn.classList.add('playing');
                     isPlaying = true;
                 }).catch(error => {
                     console.error("Playback failed:", error);
-                    alert("无法播放音乐。请确认您已经上传了 bgm.mp3 文件。");
+                    // 兼容部分浏览器必须用户手动交互才能播放的机制
                 });
             }
         }
