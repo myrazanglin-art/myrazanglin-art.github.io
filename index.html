@@ -11,7 +11,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
         :root {
-            /* 背景粉色调浅 */
             --bg: #FFFAFC; 
             --card: rgba(255, 255, 255, 0.5); 
             --text-main: #2C1E24; 
@@ -19,7 +18,6 @@
             --accent: #FF69B4; 
             --border: rgba(255, 182, 193, 0.45); 
             --timeline: rgba(255, 182, 193, 0.55);
-            /* 网格与顶部光晕同步调浅 */
             --grid-color: rgba(255, 182, 193, 0.16); 
             --nav-bg: rgba(255, 250, 252, 0.55);
             --msg-bot-bg: rgba(255, 255, 255, 0.9);
@@ -54,7 +52,6 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             transition: background 0.4s, color 0.4s;
-            /* 顶部粉色光晕调浅 */
             background-image: 
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px),
@@ -63,7 +60,6 @@
             background-attachment: fixed;
         }
 
-        /* ===== 顶部滚动进度条 ===== */
         .scroll-progress {
             position: fixed;
             top: 0; left: 0;
@@ -77,7 +73,6 @@
             border-radius: 0 3px 3px 0;
         }
 
-        /* ===== Bot 悬浮面板 ===== */
         .bot-float-container {
             position: fixed;
             bottom: 30px;
@@ -258,7 +253,6 @@
 
         .bot-float-panel .chat-send:hover { opacity: 0.9; }
 
-        /* 雪花 */
         .snow-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             pointer-events: none; z-index: 1; overflow: hidden;
@@ -286,7 +280,6 @@
             100% { transform: translateY(110vh) translateX(50px); opacity: 0; }
         }
 
-        /* ===== 玻璃拟态导航栏 ===== */
         .nav {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
             display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
@@ -320,7 +313,6 @@
 
         .container { max-width: 900px; margin: 0 auto; padding: 140px 20px 100px; position: relative; z-index: 10;}
 
-        /* ===== 苹果式丝滑滚动渐入 ===== */
         .reveal {
             opacity: 0;
             transform: translateY(60px) scale(0.97);
@@ -349,8 +341,7 @@
         .btn-icon:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px);}
         .btn-icon svg { width: 20px; height: 20px; }
 
-        /* ===== 所有板块玻璃化加强 ===== */
-        .about-card, .timeline-item, .project-card, .skill-card, .interests-text, .agent-chat-box {
+        .about-card, .timeline-item, .project-card, .skill-card, .interests-text {
             background: var(--card);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
@@ -364,8 +355,7 @@
         [data-theme="dark"] .timeline-item, 
         [data-theme="dark"] .project-card, 
         [data-theme="dark"] .skill-card, 
-        [data-theme="dark"] .interests-text, 
-        [data-theme="dark"] .agent-chat-box {
+        [data-theme="dark"] .interests-text {
             box-shadow: inset 0 1px 0 var(--glass-inner);
         }
 
@@ -392,7 +382,6 @@
         .timeline-item:hover { border-color: var(--accent); }
         .timeline-item::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 3px solid var(--accent); z-index: 2; }
         
-        /* ===== 学校图片透明度回调 + 文字可读性 ===== */
         .faculty-bg { 
             position: absolute; right: 0; top: 0; bottom: 0; width: 50%; 
             background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg'); 
@@ -406,7 +395,6 @@
 
         .tl-title { font-size: 1.3em; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--text-main);}
         .tl-date { color: var(--accent); font-family: monospace; font-size: 0.85em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px;}
-        /* 关键：让 LDTE 长标题自然换行，避免被背景图挡住 */
         .tl-org { 
             color: var(--text-main); 
             font-weight: 600; 
@@ -427,12 +415,10 @@
 
         .sub-heading { color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; font-weight: 700;}
 
-        /* ===== Projects：Hometree 恢复普通封面，Rhythm 保留悬停预览 ===== */
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
         .project-card { border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); position: relative; }
         .project-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 15px 40px rgba(255, 105, 180, 0.25); }
         
-        /* 普通封面（Hometree） */
         .project-img-simple {
             width: 100%; height: 400px; object-fit: cover; 
             border-bottom: 1px solid var(--border); 
@@ -441,7 +427,6 @@
         }
         .project-card:hover .project-img-simple { transform: scale(1.03); }
 
-        /* 悬停预览容器（Rhythm Runner） */
         .project-preview-wrap {
             position: relative;
             width: 100%;
@@ -492,25 +477,6 @@
         .interests-text h3 { color: var(--accent); font-size: 1.2em; font-weight: 800; margin-bottom: 15px; }
         .interests-text p { color: var(--text-sub); font-size: 0.95em; margin-bottom: 15px; line-height: 1.8; }
 
-        .agent-chat-box { border-radius: 20px; margin-top: 40px; padding: 20px; display: flex; flex-direction: column; height: 400px; }
-        .agent-header { display: flex; align-items: center; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
-        .agent-avatar { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 4px 10px rgba(255,105,180,0.4);}
-        .agent-name { font-weight: 700; font-size: 1em; color: var(--text-main); }
-        .agent-status { font-size: 0.75em; color: #00C853; display: flex; align-items: center; gap: 4px; font-weight: 600;}
-        .agent-status::before { content: ''; width: 6px; height: 6px; background: #00C853; border-radius: 50%; box-shadow: 0 0 8px #00C853;}
-        
-        .chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 10px; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.95em; line-height: 1.5; }
-        .msg-bot { background: var(--msg-bot-bg); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--msg-bot-text); }
-        .msg-user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(255,105,180,0.2);}
-        
-        .chat-input-area { display: flex; gap: 10px; margin-top: 15px; }
-        .chat-input { flex: 1; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border); color: var(--text-main); padding: 12px 20px; border-radius: 20px; outline: none; font-family: inherit; font-weight: 500; transition: 0.3s;}
-        [data-theme="dark"] .chat-input { background: rgba(255, 255, 255, 0.05); }
-        .chat-input:focus { border-color: var(--accent); background: #FFF; color: #000; }
-        .chat-send { background: var(--accent); color: #fff; border: none; border-radius: 20px; padding: 0 25px; cursor: pointer; font-weight: 700; transition: 0.3s;}
-        .chat-send:hover { opacity: 0.9; }
-
         .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: monospace; font-weight: 500;}
 
         @media (max-width: 768px) {
@@ -545,7 +511,8 @@
                 </div>
             </div>
             <div class="chat-history" id="botFloatChatHistory">
-                <div class="msg msg-bot">Hi there! I'm Yiming's Bot. Ask me about Hometree, Rhythm Runner, or his skills! (๑•̀ㅂ•́)و✧</div>
+                <!-- 改：开场白不再提 skills -->
+                <div class="msg msg-bot">Hi there! I'm Yiming's Bot. Ask me about Hometree, Rhythm Runner, or anything on this portfolio! (๑•̀ㅂ•́)و✧</div>
             </div>
             <div class="chat-input-area">
                 <input type="text" class="chat-input" id="botFloatInput" placeholder="Ask a question..." onkeypress="handleBotFloatKeyPress(event)">
@@ -570,7 +537,7 @@
             <a href="#resume">RESUME</a>
             <a href="#skills">SKILLS</a>
             <a href="#interests">INTERESTS</a>
-            <a href="#bot">BOT</a>
+            <!-- 改：移除 BOT 导航链接 -->
             <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
         </div>
     </nav>
@@ -635,7 +602,6 @@
             </div>
             
             <div class="projects-grid">
-                <!-- Hometree：普通封面，取消悬停预览 -->
                 <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank" class="project-card reveal">
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/hometree.png" alt="Hometree" class="project-img-simple" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'">
                     <div class="project-info">
@@ -645,7 +611,6 @@
                     </div>
                 </a>
 
-                <!-- Rhythm Runner：保留悬停实时预览 -->
                 <a href="https://myrazanglin-art.github.io/Rhythm-Runner-Game/" target="_blank" class="project-card reveal">
                     <div class="project-preview-wrap">
                         <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/rhythm.png" alt="Rhythm Runner" class="project-img" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800'">
@@ -674,7 +639,6 @@
                     <div class="timeline-content">
                         <div class="tl-title">The Chinese University of Hong Kong</div>
                         <div class="tl-date">Expected Dec 2027</div>
-                        <!-- LDTE 长标题，max-width + 换行避免被背景图遮挡 -->
                         <div class="tl-org">BSc in Learning Design and Technology (LDTE)</div>
                         <div class="tl-loc">Hong Kong</div>
                         <div style="color: var(--text-sub); font-size: 0.95em; margin-bottom: 15px; max-width: 80%;">
@@ -797,30 +761,7 @@
             </div>
         </div>
 
-        <div id="bot" style="margin-top: 120px;">
-            <div class="section-header reveal">
-                <span class="section-number">07</span>
-                <div class="section-title">Ask Bot</div>
-                <div class="section-line"></div>
-            </div>
-            
-            <div class="agent-chat-box reveal">
-                <div class="agent-header">
-                    <div class="agent-avatar">🤖</div>
-                    <div>
-                        <div class="agent-name">Yiming's Bot</div>
-                        <div class="agent-status">Online</div>
-                    </div>
-                </div>
-                <div class="chat-history" id="chatHistory">
-                    <div class="msg msg-bot">Hi there! I'm Yiming's Bot. Ask me anything about the Hometree project, Rhythm Runner, or the product & coding skills showcased here! (๑•̀ㅂ•́)و✧</div>
-                </div>
-                <div class="chat-input-area">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question..." onkeypress="handleKeyPress(event)">
-                    <button class="chat-send" onclick="sendMessage()">Send</button>
-                </div>
-            </div>
-        </div>
+        <!-- 改：删除页面底部 Ask Bot 区块 -->
 
         <div class="footer">
             © 2025 Yiming Zhao. Designed & Built with pure HTML/CSS.
@@ -944,47 +885,6 @@
                 }
             });
         }, { passive: true });
-
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const text = input.value.trim().toLowerCase();
-            if (!text) return;
-
-            const chat = document.getElementById('chatHistory');
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg msg-user';
-            userMsg.innerText = input.value;
-            chat.appendChild(userMsg);
-            input.value = '';
-            chat.scrollTop = chat.scrollHeight;
-
-            setTimeout(() => {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'msg msg-bot';
-                let reply = "That's a great question! Explore the Projects section to see how product strategy and full-stack coding come together in Hometree and Rhythm Runner. ✨";
-                
-                if (text.includes('hometree')) {
-                    reply = "Hometree is a privacy-first social app. The backend was built using Python Flask and MySQL, featuring a custom collaborative filtering algorithm for matching. Check out the live link in the Projects section! 🚀";
-                } else if (text.includes('rhythm') || text.includes('audio') || text.includes('dsp')) {
-                    reply = "Rhythm Runner is a Godot game powered by Python & Librosa. Over 15 audio features (like HPSS) were extracted to dynamically generate beatmaps automatically! 🎵";
-                } else if (text.includes('ldte') || text.includes('school') || text.includes('cuhk') || text.includes('education')) {
-                    reply = "This portfolio showcases a BSc in Learning Design and Technology (LDTE) from CUHK. It bridges EdTech with rigorous CS courses like Python, HCI, and Data Mining. 🎓";
-                } else if (text.includes('design') || text.includes('figma') || text.includes('product')) {
-                    reply = "Product design here isn't just about visuals. It's about cross-disciplinary creation—blending UX research, Figma prototyping, and actual code deployment to build usable products. 🎨";
-                } else if (text.includes('crochet') || text.includes('interest') || text.includes('hobby') || text.includes('music')) {
-                    reply = "Beyond coding, Yiming loves crocheting, indie music, and ACG culture. Did you know? Yiming shares the same birthday as the legendary Lo Ta-yu! 🧶🎵";
-                } else if (text.includes('clear') || text.includes('intern')) {
-                    reply = "Yiming worked as a Research Intern at CLEAR (Centre for Learning Enhancement and Research) at CUHK, where he used Python to optimize their website and benchmarked international EdTech provisions. 🎓";
-                }
-                botMsg.innerText = reply;
-                chat.appendChild(botMsg);
-                chat.scrollTop = chat.scrollHeight;
-            }, 600);
-        }
     </script>
 </body>
 </html>
