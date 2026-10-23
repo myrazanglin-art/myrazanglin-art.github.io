@@ -63,6 +63,64 @@
             background-attachment: fixed;
         }
 
+        /* 悬浮网易云音乐按钮 */
+        .music-player-container {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .music-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--card);
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--accent);
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            transition: 0.4s;
+            backdrop-filter: blur(10px);
+            font-size: 24px;
+        }
+        
+        .music-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* 唱片旋转动画 */
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .music-btn.playing {
+            animation: spin 3s linear infinite;
+            background: var(--accent);
+            color: #FFF;
+        }
+
+        /* 隐藏的网易云官方 iframe 播放器 */
+        .music-iframe-wrapper {
+            display: none; /* 默认隐藏，点击后通过 JS 显示 */
+            background: var(--card);
+            border-radius: 10px;
+            padding: 5px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .music-iframe-wrapper iframe {
+            border-radius: 5px;
+            border: none;
+        }
+
         /* 动态花瓣特效层 */
         .petal-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
@@ -95,7 +153,6 @@
             transition: 0.4s;
         }
         
-        /* 去掉了原本的 emoji，只保留纯文字和极简点 */
         .nav-logo { font-weight: 700; font-size: 1.1em; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-main);}
         .nav-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent);}
         .nav-logo span { color: var(--text-sub); font-weight: 500; font-size: 0.85em; margin-left: 5px; text-transform: uppercase; letter-spacing: 2px;}
@@ -151,7 +208,6 @@
 
         .about-card { border-radius: 20px; padding: 40px; display: flex; gap: 40px; align-items: center; transition: 0.3s; }
         
-        /* 头像框恢复最初干净的浅粉色 */
         .profile-img-container {
             position: relative; width: 240px; height: 240px; flex-shrink: 0;
             border-radius: 50%; padding: 6px;
@@ -245,6 +301,7 @@
             .timeline-item::before { left: -22px; }
             .faculty-bg { width: 100%; opacity: 0.1; }
             .profile-img-container { width: 200px; height: 200px; }
+            .music-player-container { bottom: 20px; left: 20px; }
         }
     </style>
 </head>
@@ -252,8 +309,19 @@
 
     <div class="petal-layer" id="petalLayer"></div>
 
+    <!-- 悬浮网易云音乐按钮 & 隐藏播放器 -->
+    <div class="music-player-container">
+        <div class="music-iframe-wrapper" id="musicIframeWrapper">
+            <!-- 网易云官方外链播放器，高度66px，自动播放设为0（防止被浏览器拦截） -->
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=421885306&auto=0&height=66"></iframe>
+        </div>
+        <div class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play Secret Base">
+            <!-- 音乐符号 SVG -->
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+        </div>
+    </div>
+
     <nav class="nav">
-        <!-- 删除 emoji，保持干净 -->
         <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao <span>/ DESIGNER</span></div>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
@@ -506,6 +574,7 @@
     </div>
 
     <script>
+        // 花瓣特效
         const petalLayer = document.getElementById('petalLayer');
         const petalCount = 20;
         for (let i = 0; i < petalCount; i++) {
@@ -517,6 +586,22 @@
             petal.style.animationDuration = `${8 + Math.random() * 7}s`;
             petal.style.animationDelay = `-${Math.random() * 10}s`;
             petalLayer.appendChild(petal);
+        }
+
+        // 音乐播放控制
+        let isMusicOpen = false;
+        function toggleMusic() {
+            const wrapper = document.getElementById('musicIframeWrapper');
+            const btn = document.getElementById('musicBtn');
+            if (!isMusicOpen) {
+                wrapper.style.display = 'block';
+                btn.classList.add('playing');
+                isMusicOpen = true;
+            } else {
+                wrapper.style.display = 'none';
+                btn.classList.remove('playing');
+                isMusicOpen = false;
+            }
         }
 
         function toggleTheme() {
