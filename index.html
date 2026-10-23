@@ -10,13 +10,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
-        /* 赛博科幻浅粉（高对比、发光质感） */
+        /* 赛博科幻浅粉 */
         :root {
             --bg: #FFF5F8; 
             --card: rgba(255, 255, 255, 0.7); 
             --text: #2C1E24; 
             --muted: #7A6970;
-            --pink: #FF2A7A; /* 高饱和霓虹粉 */
+            --pink: #FF2A7A; 
             --pink-dim: rgba(255, 42, 122, 0.15);
             --border: rgba(255, 42, 122, 0.2); 
             --nav-bg: rgba(255, 245, 248, 0.8);
@@ -31,30 +31,23 @@
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            /* 加一点点极简的网格纹理，营造科幻感 */
             background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
-        /* ===== 顶部进度条 ===== */
+        /* 顶部进度条 */
         .progress-bar {
-            position: fixed;
-            top: 0; left: 0; height: 3px; width: 0%;
-            background: var(--pink);
-            box-shadow: 0 0 10px var(--pink);
-            z-index: 2000;
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            background: var(--pink); box-shadow: 0 0 10px var(--pink); z-index: 2000;
         }
 
-        /* ===== 顶部导航 ===== */
+        /* 顶部导航 */
         .navbar {
             position: fixed; top: 0; left: 0; width: 100%; height: 70px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(20px);
+            background: var(--nav-bg); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             display: flex; justify-content: center; align-items: center;
-            z-index: 1000;
-            transform: translateY(-100%);
-            transition: transform 0.4s ease;
+            z-index: 1000; transform: translateY(-100%); transition: transform 0.4s ease;
         }
         .navbar.visible { transform: translateY(0); }
         .nav-links { display: flex; gap: 40px; list-style: none; }
@@ -63,25 +56,37 @@
         .nav-links a::after { content: ""; position: absolute; bottom: -8px; left: 0; width: 100%; height: 2px; background: var(--pink); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
         .nav-links a.active::after, .nav-links a:hover::after { transform: scaleX(1); }
 
-        /* ===== 通用板块 ===== */
+        /* 通用板块 */
         .section { padding: 120px 24px; max-width: 1000px; margin: 0 auto; position: relative; }
         .section-label { font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--pink); margin-bottom: 16px; font-weight: 700;}
         .section-title { font-size: clamp(36px, 5vw, 64px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 48px; }
 
-        /* ===== HERO 区 ===== */
+        /* HERO 区 */
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding: 0 24px; text-align: center;}
         .hero h1 { font-size: clamp(48px, 9vw, 100px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
         .hero h1 .accent { color: var(--pink); text-shadow: 0 0 40px var(--pink-dim); }
         .hero-sub { margin-top: 20px; font-size: clamp(16px, 2vw, 20px); color: var(--muted); font-weight: 500; }
+        
+        /* 社交图标按钮 */
+        .hero-socials { display: flex; gap: 16px; justify-content: center; margin-top: 30px; }
+        .social-btn { 
+            display: flex; justify-content: center; align-items: center; 
+            width: 50px; height: 50px; border-radius: 50%; 
+            background: var(--card); border: 1px solid var(--border); 
+            color: var(--muted); transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .social-btn:hover { border-color: var(--pink); color: var(--pink); box-shadow: 0 0 20px var(--pink-dim); transform: translateY(-4px); }
+        .social-btn svg { width: 22px; height: 22px; fill: currentColor; }
+
         .hero-tags { margin-top: 30px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
         .tag { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 16px; border: 1px solid var(--border); border-radius: 999px; color: var(--text); background: var(--card); backdrop-filter: blur(10px); transition: 0.3s;}
         .tag:hover { border-color: var(--pink); color: var(--pink); box-shadow: 0 0 20px var(--pink-dim); }
 
-        /* ===== 头像框 ===== */
+        /* 头像框 */
         .profile-img-container { width: 220px; height: 220px; border-radius: 50%; padding: 6px; background: linear-gradient(135deg, #FFF, var(--pink), #FFF); box-shadow: 0 10px 30px var(--pink-dim); margin: 0 auto 30px;}
         .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid #FFF; }
 
-        /* ===== 经历卡片 (带折叠) ===== */
+        /* 经历卡片 */
         .exp-item { padding: 40px 0; border-top: 1px solid var(--border); }
         .exp-role { font-size: clamp(22px, 2.6vw, 30px); font-weight: 700; margin-bottom: 8px; }
         .exp-company { color: var(--pink); font-size: 18px; font-weight: 600; text-decoration: none;}
@@ -94,7 +99,7 @@
         .exp-detail.open { max-height: 500px; opacity: 1; margin-top: 15px; }
         .exp-detail p { color: var(--muted); font-size: 15px; line-height: 1.9; }
 
-        /* ===== 项目 ===== */
+        /* 项目 */
         .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
         .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px 32px; transition: 0.4s; backdrop-filter: blur(10px);}
         .project-card:hover { transform: translateY(-6px); border-color: var(--pink); box-shadow: 0 20px 60px var(--pink-dim); }
@@ -102,15 +107,15 @@
         .project-date { color: var(--pink); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; font-weight: 700;}
         .project-card p { color: var(--muted); font-size: 15px; line-height: 1.8; }
 
-        /* ===== 技能 ===== */
+        /* 技能 */
         .skills-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;}
         .skill-tag { font-size: 14px; padding: 10px 18px; border: 1px solid var(--border); border-radius: 999px; color: var(--text); background: var(--card); transition: 0.3s; font-weight: 600;}
         .skill-tag:hover { border-color: var(--pink); color: var(--pink); box-shadow: 0 0 20px var(--pink-dim); transform: translateY(-2px); }
 
-        /* ===== 底部 ===== */
+        /* 底部 */
         .footer { text-align: center; padding: 60px 24px; color: var(--muted); font-size: 12px; letter-spacing: 0.1em; border-top: 1px solid var(--border); }
 
-        /* ===== AI Bot 悬浮 ===== */
+        /* AI Bot 悬浮 */
         .bot-container { position: fixed; bottom: 40px; right: 40px; z-index: 1002; }
         .bot-toggle {
             width: 60px; height: 60px; border-radius: 50%; background: var(--bg); border: 1px solid var(--pink);
@@ -146,7 +151,6 @@
         .bot-input-area button:hover { transform: scale(1.1); }
         .bot-input-area button svg { width: 18px; height: 18px; fill: #FFF; }
 
-        /* ===== 滚动显现 ===== */
         .reveal { opacity: 0; transform: translateY(40px); }
 
         @media (max-width: 768px) {
@@ -177,6 +181,21 @@
             </div>
             <h1>Yiming <span class="accent">Zhao</span></h1>
             <p class="hero-sub">Product Designer & Full-Stack Creator</p>
+            
+            <!-- 社交链接区域：GitHub / LinkedIn / Email -->
+            <div class="hero-socials">
+                <a href="https://github.com/myrazanglin-art" target="_blank" class="social-btn" title="GitHub">
+                    <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </a>
+                <!-- 加入 LinkedIn 按钮 -->
+                <a href="https://www.linkedin.com/in/myra-z-1a5299339/" target="_blank" class="social-btn" title="LinkedIn">
+                    <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="mailto:1155224388@link.cuhk.edu.hk" class="social-btn" title="Email">
+                    <svg viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/></svg>
+                </a>
+            </div>
+
             <div class="hero-tags">
                 <span class="tag">AI Product</span>
                 <span class="tag">Python</span>
@@ -302,7 +321,6 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // 核心丝滑滚动动画
         document.querySelectorAll('.reveal').forEach((el) => {
             gsap.from(el, {
                 y: 40, opacity: 0, duration: 1, ease: 'power3.out',
@@ -310,7 +328,6 @@
             });
         });
 
-        // 顶部进度条与导航栏
         const progressBar = document.getElementById('progressBar');
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
@@ -326,7 +343,6 @@
             }
         });
 
-        // 导航高亮
         const sections = document.querySelectorAll('.section, .hero');
         const navLinks = document.querySelectorAll('.nav-link');
         window.addEventListener('scroll', () => {
@@ -345,7 +361,6 @@
             });
         });
 
-        // 折叠展开
         function toggleDetail(btn) {
             const detail = btn.nextElementSibling;
             const isOpen = detail.classList.contains('open');
@@ -353,7 +368,6 @@
             btn.textContent = isOpen ? 'Expand Detail' : 'Collapse Detail';
         }
 
-        // Bot 逻辑
         function toggleBot() {
             const panel = document.getElementById('botPanel');
             panel.classList.toggle('open');
@@ -393,6 +407,7 @@
             if (q.match(/design|figma|product/)) return "Product design here isn't just about visuals. It's about cross-disciplinary creation—blending UX research, Figma prototyping, and actual code deployment. 🎨";
             if (q.match(/crochet|interest|hobby|music/)) return "Beyond coding, Yiming loves crocheting, indie music, and ACG culture. Fun fact: Yiming shares the same birthday as Lo Ta-yu! 🧶🎵";
             if (q.match(/clear|intern/)) return "Yiming worked as a Research Intern at CLEAR (Centre for Learning Enhancement and Research) at CUHK. 🎓";
+            if (q.match(/linkedin|connect|social/)) return "You can connect with Yiming on LinkedIn! The link is at the top of the page. 💼";
             return "Great question! Explore the sections above to see how product strategy and full-stack coding come together in Hometree and Rhythm Runner. ✨";
         }
     </script>
