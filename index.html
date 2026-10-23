@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yiming Zhao | Product Designer & Creator</title>
-    
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/a.jpg">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
         :root {
-            --bg: #FFF5F8; 
-            --card: rgba(255, 255, 255, 0.65); 
-            --text-main: #2C1E24; 
+            --bg: #FFF5F8;
+            --card: rgba(255, 255, 255, 0.65);
+            --text-main: #2C1E24;
             --text-sub: #7A6970;
-            --accent: #FF69B4; 
-            --border: rgba(255, 182, 193, 0.4); 
+            --accent: #FF69B4;
+            --border: rgba(255, 182, 193, 0.4);
             --timeline: rgba(255, 182, 193, 0.6);
-            --grid-color: rgba(255, 182, 193, 0.25); 
-            --nav-bg: rgba(255, 245, 248, 0.85);
+            --grid-color: rgba(255, 182, 193, 0.25);
+            --nav-bg: rgba(255, 245, 248, 0.55);
             --msg-bot-bg: rgba(255, 255, 255, 0.9);
             --msg-bot-text: #2C1E24;
+            --nav-glow: rgba(255, 255, 255, 0.7);
         }
 
         [data-theme="dark"] {
@@ -33,13 +32,14 @@
             --border: rgba(255, 255, 255, 0.08);
             --timeline: rgba(255, 255, 255, 0.15);
             --grid-color: transparent;
-            --nav-bg: rgba(5, 5, 8, 0.85);
+            --nav-bg: rgba(5, 5, 8, 0.55);
             --msg-bot-bg: rgba(255, 255, 255, 0.1);
             --msg-bot-text: #FFFFFF;
+            --nav-glow: rgba(255, 255, 255, 0.08);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             background-color: var(--bg);
@@ -48,7 +48,7 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             transition: background 0.4s, color 0.4s;
-            background-image: 
+            background-image:
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px),
                 radial-gradient(circle at 50% 0%, rgba(255, 182, 193, 0.4), transparent 70%);
@@ -56,227 +56,46 @@
             background-attachment: fixed;
         }
 
-        /* 修改：删除音乐悬浮，替换为Bot悬浮面板 */
-        .bot-float-container {
+        /* ===== 顶部滚动进度条 ===== */
+        .scroll-progress {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
-            z-index: 1000;
+            top: 0; left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #FFB6C1, var(--accent));
+            background-size: 200% 100%;
+            box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(255, 105, 180, 0.5);
+            z-index: 2000;
+            transition: width 0.08s linear;
+            border-radius: 0 3px 3px 0;
         }
 
-        .bot-float-btn {
-            width: 55px;
-            height: 55px;
-            background: var(--card);
-            border: 1px solid var(--accent);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            color: var(--accent);
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
-            transition: 0.4s;
-            backdrop-filter: blur(10px);
-            font-size: 24px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .bot-float-btn:hover { transform: scale(1.1) rotate(8deg); }
-        .bot-float-btn.active { background: var(--accent); color: #FFF; }
-
-        .bot-float-panel {
-            position: absolute;
-            bottom: 70px;
-            left: 0;
-            width: 340px;
-            max-width: calc(100vw - 40px);
-            border-radius: 20px;
-            background: var(--card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.25);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            height: 380px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(12px) scale(0.96);
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: bottom left;
-        }
-
-        [data-theme="dark"] .bot-float-panel { box-shadow: none; }
-
-        .bot-float-panel.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-
-        .bot-float-panel .agent-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 12px;
-            flex-shrink: 0;
-        }
-
-        .bot-float-panel .agent-avatar {
-            width: 36px;
-            height: 36px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            box-shadow: 0 4px 10px rgba(255,105,180,0.4);
-        }
-
-        .bot-float-panel .agent-name {
-            font-weight: 700;
-            font-size: 0.95em;
-            color: var(--text-main);
-        }
-
-        .bot-float-panel .agent-status {
-            font-size: 0.7em;
-            color: #00C853;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 600;
-        }
-
-        .bot-float-panel .agent-status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: #00C853;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00C853;
-        }
-
-        .bot-float-panel .chat-history {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding-right: 6px;
-            min-height: 0;
-        }
-
-        .bot-float-panel .msg {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 0.88em;
-            line-height: 1.5;
-        }
-
-        .bot-float-panel .msg-bot {
-            background: var(--msg-bot-bg);
-            border: 1px solid var(--border);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            color: var(--msg-bot-text);
-        }
-
-        .bot-float-panel .msg-user {
-            background: var(--accent);
-            color: #fff;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 10px rgba(255,105,180,0.2);
-        }
-
-        .bot-float-panel .chat-input-area {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-shrink: 0;
-        }
-
-        .bot-float-panel .chat-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 10px 14px;
-            border-radius: 18px;
-            outline: none;
-            font-family: inherit;
-            font-weight: 500;
-            font-size: 0.85em;
-            transition: 0.3s;
-        }
-
-        [data-theme="dark"] .bot-float-panel .chat-input { background: rgba(255, 255, 255, 0.05); }
-        .bot-float-panel .chat-input:focus { border-color: var(--accent); background: #FFF; color: #000; }
-
-        .bot-float-panel .chat-send {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 18px;
-            padding: 0 16px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.85em;
-            transition: 0.3s;
-        }
-
-        .bot-float-panel .chat-send:hover { opacity: 0.9; }
-
-        .snow-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            pointer-events: none; z-index: 1; overflow: hidden;
-        }
-        .snowflake {
-            position: absolute; top: -10px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.6);
-            animation: fall linear infinite;
-        }
-        :root .snowflake { background: #FFB6C1; box-shadow: 0 0 6px 1px rgba(255, 182, 193, 0.8); }
-        [data-theme="dark"] .snowflake { background: #FFFFFF; box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.8); }
-
-        @keyframes fall {
-            0% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(110vh) translateX(50px); opacity: 0; }
-        }
-
+        /* ===== 玻璃拟态导航栏 ===== */
         .nav {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
             display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
             background: var(--nav-bg);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border); 
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(255, 105, 180, 0.12),
+                        inset 0 1px 0 var(--nav-glow),
+                        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
             z-index: 1000;
-            transition: 0.4s;
+            transition: background 0.4s, box-shadow 0.4s;
         }
-        
+
         .nav-logo { font-weight: 700; font-size: 1.1em; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-main);}
         .nav-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent);}
         .nav-logo span { color: var(--text-sub); font-weight: 500; font-size: 0.85em; margin-left: 5px; text-transform: uppercase; letter-spacing: 2px;}
-        
+
         .nav-links { display: flex; align-items: center; gap: 30px; font-size: 0.85em; font-weight: 600; color: var(--text-sub); }
         .nav-links a { color: var(--text-sub); text-decoration: none; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; position: relative;}
         .nav-links a:hover, .nav-links a.active { color: var(--accent); }
         .nav-links a.active::after { content: ''; position: absolute; left: 0; bottom: -24px; width: 100%; height: 2px; background: var(--accent); }
 
         .theme-btn {
-            background: rgba(255, 255, 255, 0.5); border: 1px solid var(--border); border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4); border: 1px solid var(--border); border-radius: 50%;
             width: 36px; height: 36px; display: flex; justify-content: center; align-items: center;
             cursor: pointer; color: var(--text-main); font-size: 1.2em; transition: 0.3s;
             backdrop-filter: blur(10px);
@@ -284,8 +103,63 @@
         [data-theme="dark"] .theme-btn { background: transparent;}
         .theme-btn:hover { transform: rotate(15deg) scale(1.1); background: #FFF; color: var(--accent); }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 140px 20px 100px; position: relative; z-index: 10;}
+        /* ===== Bot 悬浮 ===== */
+        .bot-float-container { position: fixed; bottom: 30px; left: 30px; z-index: 1000; }
+        .bot-float-btn {
+            width: 55px; height: 55px; background: var(--card);
+            border: 1px solid var(--accent); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; color: var(--accent);
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            transition: 0.4s; backdrop-filter: blur(10px);
+            position: relative; z-index: 2;
+        }
+        .bot-float-btn:hover { transform: scale(1.1) rotate(8deg); }
+        .bot-float-btn.active { background: var(--accent); color: #FFF; }
+        .bot-float-panel {
+            position: absolute; bottom: 70px; left: 0;
+            width: 340px; max-width: calc(100vw - 40px);
+            border-radius: 20px; background: var(--card);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.25);
+            padding: 16px; display: flex; flex-direction: column; height: 380px;
+            opacity: 0; visibility: hidden; transform: translateY(12px) scale(0.96);
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: bottom left;
+        }
+        [data-theme="dark"] .bot-float-panel { box-shadow: none; }
+        .bot-float-panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .bot-float-panel .agent-header { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 12px; flex-shrink: 0; }
+        .bot-float-panel .agent-avatar { width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; box-shadow: 0 4px 10px rgba(255,105,180,0.4); }
+        .bot-float-panel .agent-name { font-weight: 700; font-size: 0.95em; color: var(--text-main); }
+        .bot-float-panel .agent-status { font-size: 0.7em; color: #00C853; display: flex; align-items: center; gap: 4px; font-weight: 600; }
+        .bot-float-panel .agent-status::before { content: ''; width: 6px; height: 6px; background: #00C853; border-radius: 50%; box-shadow: 0 0 8px #00C853; }
+        .bot-float-panel .chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 6px; min-height: 0; }
+        .bot-float-panel .msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 0.88em; line-height: 1.5; }
+        .bot-float-panel .msg-bot { background: var(--msg-bot-bg); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--msg-bot-text); }
+        .bot-float-panel .msg-user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(255,105,180,0.2); }
+        .bot-float-panel .chat-input-area { display: flex; gap: 8px; margin-top: 10px; flex-shrink: 0; }
+        .bot-float-panel .chat-input { flex: 1; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border); color: var(--text-main); padding: 10px 14px; border-radius: 18px; outline: none; font-family: inherit; font-weight: 500; font-size: 0.85em; transition: 0.3s; }
+        [data-theme="dark"] .bot-float-panel .chat-input { background: rgba(255, 255, 255, 0.05); }
+        .bot-float-panel .chat-input:focus { border-color: var(--accent); background: #FFF; color: #000; }
+        .bot-float-panel .chat-send { background: var(--accent); color: #fff; border: none; border-radius: 18px; padding: 0 16px; cursor: pointer; font-weight: 700; font-size: 0.85em; transition: 0.3s; }
+        .bot-float-panel .chat-send:hover { opacity: 0.9; }
 
+        /* ===== 雪花 ===== */
+        .snow-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 1; overflow: hidden; }
+        .snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.6); animation: fall linear infinite; }
+        :root .snowflake { background: #FFB6C1; box-shadow: 0 0 6px 1px rgba(255, 182, 193, 0.8); }
+        [data-theme="dark"] .snowflake { background: #FFFFFF; box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.8); }
+        @keyframes fall {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) translateX(50px); opacity: 0; }
+        }
+
+        /* ===== 布局 ===== */
+        .container { max-width: 900px; margin: 0 auto; padding: 140px 20px 100px; position: relative; z-index: 10;}
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -295,7 +169,7 @@
         .section-title { font-size: 2.5em; font-weight: 800; letter-spacing: -0.04em; }
         .section-line { flex: 1; height: 1px; background: var(--border); }
 
-        .btn-group { display: flex; gap: 15px; align-items: center; }
+        .btn-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .btn-primary { padding: 14px 28px; border-radius: 30px; font-weight: 600; font-size: 1em; background: var(--accent); color: #FFF; text-decoration: none; transition: 0.3s; box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);}
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(255, 105, 180, 0.5);}
         .btn-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: var(--card); color: var(--text-main); border: 1px solid var(--border); text-decoration: none; transition: 0.3s; backdrop-filter: blur(10px);}
@@ -309,16 +183,14 @@
             border: 1px solid var(--border);
             box-shadow: 0 10px 30px rgba(255, 182, 193, 0.1);
         }
-
-        [data-theme="dark"] .about-card, 
-        [data-theme="dark"] .timeline-item, 
-        [data-theme="dark"] .project-card, 
-        [data-theme="dark"] .skill-card, 
-        [data-theme="dark"] .interests-text, 
+        [data-theme="dark"] .about-card,
+        [data-theme="dark"] .timeline-item,
+        [data-theme="dark"] .project-card,
+        [data-theme="dark"] .skill-card,
+        [data-theme="dark"] .interests-text,
         [data-theme="dark"] .agent-chat-box { box-shadow: none; }
 
         .about-card { border-radius: 20px; padding: 40px; display: flex; gap: 40px; align-items: center; transition: 0.3s; }
-        
         .profile-img-container {
             position: relative; width: 240px; height: 240px; flex-shrink: 0;
             border-radius: 50%; padding: 6px;
@@ -331,18 +203,15 @@
             100% { box-shadow: 0 0 30px rgba(255, 105, 180, 0.5); }
         }
         .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid #FFF; }
-        
         .about-text p { font-size: 1.1em; color: var(--text-sub); margin-bottom: 20px; line-height: 1.8;}
         .about-details { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-sub); font-size: 0.9em; font-family: monospace;}
 
         .timeline { position: relative; border-left: 2px solid var(--timeline); margin-left: 10px; padding-left: 30px; display: flex; flex-direction: column; gap: 30px; }
-        .timeline-item { border-radius: 16px; padding: 30px; transition: border-color 0.3s; overflow: hidden; }
+        .timeline-item { border-radius: 16px; padding: 30px; transition: border-color 0.3s; overflow: hidden; position: relative; }
         .timeline-item:hover { border-color: var(--accent); }
-        .timeline-item::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 3px solid var(--accent); }
-        
+        .timeline-item::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 3px solid var(--accent); z-index: 2; }
         .faculty-bg { position: absolute; right: 0; top: 0; bottom: 0; width: 50%; background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg'); background-size: cover; background-position: center; opacity: 0.2; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%); mask-image: linear-gradient(to right, transparent 0%, black 80%); z-index: 0; pointer-events: none; }
         .timeline-content { position: relative; z-index: 1; }
-
         .tl-title { font-size: 1.3em; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--text-main);}
         .tl-date { color: var(--accent); font-family: monospace; font-size: 0.85em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px;}
         .tl-org { color: var(--text-main); font-weight: 600; font-size: 1em; margin-bottom: 5px; }
@@ -350,10 +219,8 @@
         .tl-list { padding-left: 20px; color: var(--text-sub); font-size: 0.95em; line-height: 1.7;}
         .tl-list li { margin-bottom: 10px; }
         .tl-list li::marker { color: var(--accent); }
-        
         .tl-org a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); transition: 0.3s;}
         .tl-org a:hover { color: var(--accent); font-weight: 800; border-bottom-color: transparent; }
-
         .sub-heading { color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; font-weight: 700;}
 
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
@@ -389,12 +256,10 @@
         .agent-name { font-weight: 700; font-size: 1em; color: var(--text-main); }
         .agent-status { font-size: 0.75em; color: #00C853; display: flex; align-items: center; gap: 4px; font-weight: 600;}
         .agent-status::before { content: ''; width: 6px; height: 6px; background: #00C853; border-radius: 50%; box-shadow: 0 0 8px #00C853;}
-        
         .chat-history { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 10px; }
         .msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.95em; line-height: 1.5; }
         .msg-bot { background: var(--msg-bot-bg); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--msg-bot-text); }
         .msg-user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(255,105,180,0.2);}
-        
         .chat-input-area { display: flex; gap: 10px; margin-top: 15px; }
         .chat-input { flex: 1; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border); color: var(--text-main); padding: 12px 20px; border-radius: 20px; outline: none; font-family: inherit; font-weight: 500; transition: 0.3s;}
         [data-theme="dark"] .chat-input { background: rgba(255, 255, 255, 0.05); }
@@ -418,9 +283,12 @@
 </head>
 <body>
 
+    <!-- 顶部滚动进度条 -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <div class="snow-layer" id="snowLayer"></div>
 
-    <!-- 修改：音乐播放器已移除，替换为Bot悬浮面板 -->
+    <!-- Bot 悬浮 -->
     <div class="bot-float-container">
         <div class="bot-float-panel" id="botFloatPanel">
             <div class="agent-header">
@@ -449,7 +317,7 @@
     </div>
 
     <nav class="nav">
-        <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao <span>/ DESIGNER</span></div>
+        <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">Yiming Zhao <span>/ DESIGNER</span></div>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
             <a href="#projects">PROJECTS</a>
@@ -462,22 +330,21 @@
     </nav>
 
     <div class="container">
-        
+
         <div class="hero reveal active" style="margin-bottom: 100px;">
             <div style="color: var(--accent); font-weight: 800; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px;">Hong Kong</div>
             <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px;">Yiming Zhao</h1>
             <h2 style="font-size: 2em; font-weight: 500; color: var(--text-sub); margin-bottom: 20px;">Product Designer & Full-Stack Creator</h2>
-            
+
             <p style="font-size: 1.2em; color: var(--text-sub); max-width: 650px; margin-bottom: 40px; font-weight: 500;">
                 I design and build digital products from 0 to 1. Combining product strategy, UX design, and full-stack development to solve real user problems.
             </p>
-            
+
             <div class="btn-group">
                 <a href="#projects" class="btn-primary">See my work</a>
                 <a href="https://github.com/myrazanglin-art" target="_blank" class="btn-icon" title="GitHub">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                 </a>
-                <!-- 修改：新增 LinkedIn 图标，填入你的领英链接 -->
                 <a href="https://www.linkedin.com/in/myra-z-1a5299339/" target="_blank" class="btn-icon" title="LinkedIn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
@@ -490,3 +357,308 @@
                 </a>
             </div>
         </div>
+
+        <div id="about" style="margin-bottom: 120px;">
+            <div class="section-header reveal">
+                <span class="section-number">01</span>
+                <div class="section-title">About</div>
+                <div class="section-line"></div>
+            </div>
+            <div class="about-card reveal">
+                <div class="profile-img-container">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming Zhao" class="profile-img">
+                </div>
+                <div class="about-text">
+                    <p>Hellooooo! I'm Yiming Zhao 🧑‍💻.</p>
+                    <p>I focus on end-to-end product design and full-stack coding. My technical toolkit includes Python, Flask, MySQL, and audio signal processing, which I used to build a fully automated rhythm game.</p>
+                    <p>Outside of tech, I'm a huge ACG (Anime, Comic, Games) fan and an experimental electronic music producer. I also enjoy crocheting—a perfect way to balance out all the screen time.</p>
+                    <div class="about-details">
+                        <span>📧 1155224388@link.cuhk.edu.hk</span>
+                        <span>📍 Hong Kong</span>
+                        <span>🎓 CUHK</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="projects" style="margin-bottom: 120px;">
+            <div class="section-header reveal">
+                <span class="section-number">02</span>
+                <div class="section-title">Projects</div>
+                <div class="section-line"></div>
+            </div>
+            <div class="projects-grid">
+                <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank" class="project-card reveal">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/hometree.png" alt="Hometree" class="project-img" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'">
+                    <div class="project-info">
+                        <div class="project-title">Hometree: Privacy-First Social App <span>Live App ↗</span></div>
+                        <div class="project-desc">Independently designed the MySQL database and built the backend with Python Flask. Led a 4-person team to build a live interactive MVP featuring matching swiping and real-time chat.</div>
+                        <div class="warning-text">* Note: The live app may take 10-20s to wake up due to free cloud hosting.</div>
+                    </div>
+                </a>
+                <a href="https://myrazanglin-art.github.io/Rhythm-Runner-Game/" target="_blank" class="project-card reveal">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/rhythm.png" alt="Rhythm Runner" class="project-img" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800'">
+                    <div class="project-info">
+                        <div class="project-title">Rhythm Runner: Audio-Driven Game <span>Website ↗</span></div>
+                        <div class="project-desc">Developed a 2D rhythm game driven by multi-layer audio analysis. Extracted 15+ DSP descriptors (HPSS, RMS) using Python to generate dynamic beatmaps for the Godot engine.</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div id="resume">
+            <div class="section-header reveal">
+                <span class="section-number">03</span>
+                <div class="section-title">Resume</div>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="sub-heading reveal">Education</div>
+            <div class="timeline" style="margin-bottom: 60px;">
+                <div class="timeline-item reveal">
+                    <div class="faculty-bg"></div>
+                    <div class="timeline-content">
+                        <div class="tl-title">The Chinese University of Hong Kong</div>
+                        <div class="tl-date">Expected Dec 2027</div>
+                        <div class="tl-org">BSc in Learning Design and Technology (LDTE)</div>
+                        <div class="tl-loc">Hong Kong</div>
+                        <div style="color: var(--text-sub); font-size: 0.95em; margin-bottom: 15px; max-width: 80%;">
+                            <b>Core Courses:</b> Python Programming, Data Structures & Algorithms, Human-Computer Interaction (HCI), Instructional Design, Educational Data Mining, Interactive Media Design.
+                        </div>
+                        <ul class="tl-list">
+                            <li>Focusing on the intersection of instructional design, educational technology, and interactive learning experiences.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-heading reveal">Internship</div>
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="tl-title">Research Intern</div>
+                    <div class="tl-date">Expected 2024 - Present</div>
+                    <div class="tl-org">
+                        <a href="https://clear.cuhk.edu.hk/web/" target="_blank">Centre for Learning Enhancement and Research (CLEAR)</a>, The Chinese University of Hong Kong
+                    </div>
+                    <div class="tl-loc">Hong Kong</div>
+                    <ul class="tl-list">
+                        <li>Audited website using Python & Excel automation; identified 20+ outdated resources and cut redundant navigation paths by ~30%.</li>
+                        <li>Built a 12-dimension comparative matrix for Advance HE provisions across 5+ international institutions.</li>
+                        <li>Leveraged ChatGPT, Claude, and Notion AI to accelerate literature review and content synthesis.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="skills" style="margin-bottom: 120px; margin-top: 80px;">
+            <div class="section-header reveal">
+                <span class="section-number">04</span>
+                <div class="section-title">Skills</div>
+                <div class="section-line"></div>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-card reveal">
+                    <div class="skill-icon">💻</div>
+                    <div class="skill-title">Full-Stack Development</div>
+                    <div class="skill-desc">Building end-to-end products, from database schema to responsive frontends.</div>
+                    <div class="tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Flask</span>
+                        <span class="tag">MySQL</span>
+                        <span class="tag">HTML/CSS</span>
+                    </div>
+                </div>
+                <div class="skill-card reveal">
+                    <div class="skill-icon">🎨</div>
+                    <div class="skill-title">Product & UX Design</div>
+                    <div class="skill-desc">Designing user flows, wireframes, and interface systems focused on real problems.</div>
+                    <div class="tags">
+                        <span class="tag">Figma</span>
+                        <span class="tag">Prototyping</span>
+                        <span class="tag">User Research</span>
+                    </div>
+                </div>
+                <div class="skill-card reveal">
+                    <div class="skill-icon">🎵</div>
+                    <div class="skill-title">Audio & Signal Processing</div>
+                    <div class="skill-desc">Extracting musical features to drive generative game mechanics.</div>
+                    <div class="tags">
+                        <span class="tag">DSP</span>
+                        <span class="tag">Librosa</span>
+                        <span class="tag">Godot</span>
+                    </div>
+                </div>
+                <div class="skill-card reveal">
+                    <div class="skill-icon">📊</div>
+                    <div class="skill-title">Data & Automation</div>
+                    <div class="skill-desc">Automating research tasks and building comparative analytical frameworks.</div>
+                    <div class="tags">
+                        <span class="tag">Excel</span>
+                        <span class="tag">Pandas</span>
+                        <span class="tag">Notion AI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="interests" style="margin-bottom: 120px;">
+            <div class="section-header reveal">
+                <span class="section-number">05</span>
+                <div class="section-title">Interests</div>
+                <div class="section-line"></div>
+            </div>
+            <div class="interests-layout">
+                <div class="gallery-grid reveal">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/interest1.jpg" alt="Interest 1" onerror="this.src='https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400'">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/interest2.jpg" alt="Interest 2" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400'">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/interest3.jpg" alt="Interest 3" onerror="this.src='https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400'">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/interest4.jpg" alt="Interest 4" onerror="this.src='https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400'">
+                </div>
+                <div class="interests-text reveal">
+                    <h3>Beyond the Screen</h3>
+                    <p>When I'm not designing or coding, you'll find me deep in the ACG universe—anime marathons, manga, and indie games.</p>
+                    <p>I also produce experimental electronic music, exploring how sound can become an interactive medium, and I crochet to give my eyes a break from screens.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="bot" style="margin-bottom: 40px;">
+            <div class="section-header reveal">
+                <span class="section-number">06</span>
+                <div class="section-title">Bot</div>
+                <div class="section-line"></div>
+            </div>
+            <div class="agent-chat-box reveal">
+                <div class="agent-header">
+                    <div class="agent-avatar">🤖</div>
+                    <div>
+                        <div class="agent-name">Yiming's Assistant</div>
+                        <div class="agent-status">ONLINE</div>
+                    </div>
+                </div>
+                <div class="chat-history" id="mainChatHistory">
+                    <div class="msg msg-bot">Hi! I'm Yiming's assistant. Ask me about his projects, skills, or experience. 👋</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="mainChatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMainMsg()">
+                    <button class="chat-send" onclick="sendMainMsg()">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2025 Yiming Zhao · Designed & Built from scratch
+        </div>
+    </div>
+
+    <script>
+        /* ===== 主题切换 ===== */
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('theme-btn');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                btn.textContent = '☀️';
+            }
+        }
+
+        /* ===== 滚动进度条 ===== */
+        const progressBar = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            progressBar.style.width = pct + '%';
+        });
+
+        /* ===== Bot 悬浮展开/收起 ===== */
+        function toggleBotFloat() {
+            const panel = document.getElementById('botFloatPanel');
+            const btn = document.getElementById('botFloatBtn');
+            panel.classList.toggle('open');
+            btn.classList.toggle('active');
+        }
+
+        /* ===== 简单自动回复 ===== */
+        function botReply(text) {
+            const t = text.toLowerCase();
+            if (t.includes('project') || t.includes('work')) return "Yiming has built Hometree (privacy-first social app) and Rhythm Runner (audio-driven rhythm game). Check the Projects section for live links! 🚀";
+            if (t.includes('skill') || t.includes('tech')) return "Python, Flask, MySQL, Figma, DSP with Librosa, and Godot. He blends product design with full-stack development. 💻";
+            if (t.includes('contact') || t.includes('email')) return "You can reach Yiming at 1155224388@link.cuhk.edu.hk, or via GitHub and LinkedIn in the hero section. 📧";
+            if (t.includes('resume') || t.includes('experience') || t.includes('intern')) return "He's a Research Intern at CLEAR, CUHK, auditing websites and building comparative matrices. Studying LDTE at CUHK, expected Dec 2027. 🎓";
+            if (t.includes('hi') || t.includes('hello') || t.includes('hey')) return "Hey there! Ask me about Yiming's projects, skills, or how to get in touch. 👋";
+            return "Good question! Yiming focuses on product design + full-stack development. Try asking about his projects, skills, or contact info. 🤖";
+        }
+
+        function appendMsg(containerId, text, isUser) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = 'msg ' + (isUser ? 'msg-user' : 'msg-bot');
+            div.textContent = text;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendBotFloatMsg() {
+            const input = document.getElementById('botFloatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            appendMsg('botFloatChatHistory', text, true);
+            input.value = '';
+            setTimeout(() => appendMsg('botFloatChatHistory', botReply(text), false), 500);
+        }
+
+        function sendMainMsg() {
+            const input = document.getElementById('mainChatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            appendMsg('mainChatHistory', text, true);
+            input.value = '';
+            setTimeout(() => appendMsg('mainChatHistory', botReply(text), false), 500);
+        }
+
+        /* ===== 雪花 ===== */
+        const snowLayer = document.getElementById('snowLayer');
+        for (let i = 0; i < 30; i++) {
+            const flake = document.createElement('div');
+            flake.className = 'snowflake';
+            const size = Math.random() * 5 + 2;
+            flake.style.width = size + 'px';
+            flake.style.height = size + 'px';
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.animationDuration = (Math.random() * 6 + 6) + 's';
+            flake.style.animationDelay = (Math.random() * 8) + 's';
+            flake.style.opacity = Math.random() * 0.5 + 0.4;
+            snowLayer.appendChild(flake);
+        }
+
+        /* ===== 滚动出现动画 ===== */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        /* ===== 导航高亮 ===== */
+        const sections = document.querySelectorAll('[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(sec => {
+                const top = sec.offsetTop - 100;
+                if (window.scrollY >= top) current = sec.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+            });
+        });
+    </script>
+</body>
+</html>
