@@ -469,26 +469,15 @@
         .tag { background: rgba(255, 255, 255, 0.35); border: 1px solid var(--border); color: var(--text-main); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; font-weight: 600; backdrop-filter: blur(8px);}
         [data-theme="dark"] .tag { background: rgba(255, 255, 255, 0.05); }
 
-        /* ===== Interests 布局：Cover Flow + 文字（文字再右移） ===== */
-        .interests-layout { 
-            display: grid; 
-            grid-template-columns: 1.55fr 1fr; 
-            gap: 40px; 
-            margin-top: 30px; 
-            align-items: center; 
-        }
-        /* 右侧文字列再右移，增加与 Cover Flow 的间距 */
-        .interests-side-text {
-            margin-left: 48px;
-            min-width: 0;
-        }
+        /* ===== Interests：上扇形展示 + 下文字 ===== */
+        .interests-block { margin-top: 30px; }
 
-        /* Cover Flow 容器：完全透明无框，图片悬浮在壁纸上 */
+        /* 扇形 Cover Flow 容器：透明无框 */
         .coverflow {
             position: relative;
             width: 100%;
-            height: 460px;
-            perspective: 1400px;
+            height: 420px;
+            perspective: 1600px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -509,10 +498,10 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 230px;
-            height: 310px;
-            margin-left: -115px;
-            margin-top: -155px;
+            width: 210px;
+            height: 290px;
+            margin-left: -105px;
+            margin-top: -145px;
             border-radius: 16px;
             overflow: hidden;
             border: none;
@@ -523,6 +512,8 @@
             cursor: pointer;
             backface-visibility: hidden;
             background: #000;
+            /* 扇形旋转以底部为轴心，形成微微展开的扇面 */
+            transform-origin: center bottom;
         }
         .cf-item img {
             width: 100%;
@@ -552,7 +543,7 @@
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-top: 14px;
+            margin-top: 6px;
         }
         .cf-dot {
             width: 8px; height: 8px;
@@ -570,9 +561,9 @@
             box-shadow: 0 0 8px var(--accent);
         }
 
-        .interests-text { border-radius: 20px; padding: 30px; }
-        .interests-text h3 { color: var(--accent); font-size: 1.2em; font-weight: 800; margin-bottom: 15px; }
-        .interests-text p { color: var(--text-sub); font-size: 0.95em; margin-bottom: 15px; line-height: 1.8; }
+        .interests-text { border-radius: 20px; padding: 36px; margin-top: 36px; }
+        .interests-text h3 { color: var(--accent); font-size: 1.3em; font-weight: 800; margin-bottom: 16px; }
+        .interests-text p { color: var(--text-sub); font-size: 1em; margin-bottom: 15px; line-height: 1.85; }
 
         .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: monospace; font-weight: 500;}
 
@@ -589,9 +580,7 @@
             .profile-img-container { width: 200px; height: 200px; }
             .bot-float-container { bottom: 20px; left: 20px; }
 
-            /* 移动端：Cover Flow 降级为两列网格 */
-            .interests-layout { grid-template-columns: 1fr; gap: 20px; }
-            .interests-side-text { margin-left: 0; }
+            /* 移动端：扇形降级为两列网格 */
             .coverflow { height: auto; padding: 0; perspective: none; }
             .coverflow-stage {
                 display: grid;
@@ -611,6 +600,7 @@
                 border-radius: 10px;
                 filter: none !important;
                 box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+                transform-origin: center center;
             }
             .cf-item.is-center { box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2); }
             .cf-dots { display: none; }
@@ -857,8 +847,8 @@
                 <div class="section-line"></div>
             </div>
             
-            <div class="interests-layout reveal">
-                <!-- Cover Flow：无框透明，图片悬浮在壁纸上 -->
+            <div class="interests-block reveal">
+                <!-- 上：扇形 Cover Flow -->
                 <div class="coverflow" id="coverflow">
                     <div class="coverflow-stage" id="coverflowStage">
                         <div class="cf-item"><img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/1.jpg" alt="Crochet 1" onerror="this.src='https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=400'"></div>
@@ -870,19 +860,19 @@
                     </div>
                 </div>
 
-                <!-- 右侧文字：margin-left 加大到 48px，与倾斜图拉开距离 -->
-                <div class="interests-side-text">
-                    <div class="cf-dots" id="cfDots"></div>
-                    <div class="interests-text" style="margin-top: 20px;">
-                        <h3>Beyond the Screen</h3>
-                        <p>When I'm not coding or designing, I express my creativity through crochet. It requires extreme patience and structural thinking—much like building a complex software architecture, but with yarn.</p>
-                        <p><b>Music, ACG & More:</b> I'm a huge fan of indie music, experimental electronic sounds, and ACG (Anime, Comic, Games) culture. Fun fact: I share the exact same birthday as the legendary Taiwanese singer-songwriter Lo Ta-yu. My cross-genre music taste heavily inspires my audio-analysis projects.</p>
-                        <div class="tags" style="margin-top: 15px;">
-                            <span class="tag">Crochet</span>
-                            <span class="tag">Indie Music</span>
-                            <span class="tag">ACG</span>
-                            <span class="tag">Electronic Music</span>
-                        </div>
+                <!-- 圆点 -->
+                <div class="cf-dots" id="cfDots"></div>
+
+                <!-- 下：文字块 -->
+                <div class="interests-text">
+                    <h3>Beyond the Screen</h3>
+                    <p>When I'm not coding or designing, I express my creativity through crochet. It requires extreme patience and structural thinking—much like building a complex software architecture, but with yarn.</p>
+                    <p><b>Music, ACG & More:</b> I'm a huge fan of indie music, experimental electronic sounds, and ACG (Anime, Comic, Games) culture. Fun fact: I share the exact same birthday as the legendary Taiwanese singer-songwriter Lo Ta-yu. My cross-genre music taste heavily inspires my audio-analysis projects.</p>
+                    <div class="tags" style="margin-top: 15px;">
+                        <span class="tag">Crochet</span>
+                        <span class="tag">Indie Music</span>
+                        <span class="tag">ACG</span>
+                        <span class="tag">Electronic Music</span>
                     </div>
                 </div>
             </div>
@@ -1010,7 +1000,7 @@
             });
         }, { passive: true });
 
-        /* ===== Cover Flow 逻辑（悬停防抖 + 相邻限制） ===== */
+        /* ===== 扇形 Cover Flow 逻辑 ===== */
         (function initCoverFlow() {
             const stage = document.getElementById('coverflowStage');
             const dotsWrap = document.getElementById('cfDots');
@@ -1037,27 +1027,33 @@
                     if (offset < -total / 2) offset += total;
 
                     const abs = Math.abs(offset);
-                    let translateX, rotateY, translateZ, scale, opacity, zIndex;
+                    let translateX, translateY, rotateZ, rotateY, scale, opacity, zIndex;
 
                     if (offset === 0) {
+                        // 中心：正面
                         translateX = 0;
+                        translateY = 0;
+                        rotateZ = 0;
                         rotateY = 0;
-                        translateZ = 90;
                         scale = 1;
                         opacity = 1;
                         zIndex = 10;
                     } else {
+                        // 扇形：以底部为轴心微微展开
                         const dir = offset > 0 ? 1 : -1;
                         const step = Math.min(abs, 3);
-                        translateX = dir * (170 + (step - 1) * 70);
-                        rotateY = dir * -40;
-                        translateZ = 0;
-                        scale = Math.max(0.6, 0.88 - (step - 1) * 0.1);
-                        opacity = Math.max(0.35, 0.85 - (step - 1) * 0.18);
+                        translateX = dir * (95 + (step - 1) * 55);
+                        translateY = step * 10; // 两侧略微下沉
+                        rotateZ = dir * (6 + (step - 1) * 4); // 扇形角度：6°/10°/14°
+                        rotateY = dir * -12; // 轻微景深
+                        scale = Math.max(0.68, 0.9 - (step - 1) * 0.09);
+                        opacity = Math.max(0.4, 0.9 - (step - 1) * 0.16);
                         zIndex = 10 - step;
                     }
 
-                    item.style.transform = `translateX(${translateX}px) rotateY(${rotateY}deg) translateZ(${translateZ}px) scale(${scale})`;
+                    item.style.transform = 
+                        `translateX(${translateX}px) translateY(${translateY}px) ` +
+                        `rotateZ(${rotateZ}deg) rotateY(${rotateY}deg) scale(${scale})`;
                     item.style.opacity = opacity;
                     item.style.zIndex = zIndex;
                     item.classList.toggle('is-center', offset === 0);
@@ -1071,17 +1067,15 @@
             }
 
             items.forEach((item, i) => {
-                // 点击直接切换
                 item.addEventListener('click', () => {
                     clearHoverTimer();
                     if (i !== current) { current = i; update(); }
                 });
 
-                // 悬停：仅对相邻 ±2 张响应，且延迟 180ms 防抖
+                // 悬停：相邻 ±2 张，延迟 220ms 防抖
                 item.addEventListener('mouseenter', () => {
                     if (window.innerWidth <= 768) return;
                     let diff = Math.abs(i - current);
-                    // 环绕距离
                     diff = Math.min(diff, total - diff);
                     if (diff === 0 || diff > 2) return;
 
@@ -1089,16 +1083,14 @@
                     hoverTimer = setTimeout(() => {
                         if (i !== current) { current = i; update(); }
                         hoverTimer = null;
-                    }, 180);
+                    }, 220);
                 });
 
-                // 鼠标离开该图时取消待切换
                 item.addEventListener('mouseleave', () => {
                     clearHoverTimer();
                 });
             });
 
-            // 鼠标离开整个 Cover Flow 区域时也取消
             stage.addEventListener('mouseleave', () => {
                 clearHoverTimer();
             });
