@@ -469,17 +469,17 @@
         .tag { background: rgba(255, 255, 255, 0.35); border: 1px solid var(--border); color: var(--text-main); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; font-weight: 600; backdrop-filter: blur(8px);}
         [data-theme="dark"] .tag { background: rgba(255, 255, 255, 0.05); }
 
-        /* ===== Interests 布局：Cover Flow + 文字（文字右移避免遮挡） ===== */
+        /* ===== Interests 布局：Cover Flow + 文字（文字再右移） ===== */
         .interests-layout { 
             display: grid; 
-            grid-template-columns: 1.45fr 1fr; 
-            gap: 30px; 
+            grid-template-columns: 1.55fr 1fr; 
+            gap: 40px; 
             margin-top: 30px; 
             align-items: center; 
         }
-        /* 右侧文字列整体右移，增加与 Cover Flow 的间距 */
+        /* 右侧文字列再右移，增加与 Cover Flow 的间距 */
         .interests-side-text {
-            margin-left: 24px;
+            margin-left: 48px;
             min-width: 0;
         }
 
@@ -870,7 +870,7 @@
                     </div>
                 </div>
 
-                <!-- 右侧文字：margin-left 右移，避免被倾斜图遮挡 -->
+                <!-- 右侧文字：margin-left 加大到 48px，与倾斜图拉开距离 -->
                 <div class="interests-side-text">
                     <div class="cf-dots" id="cfDots"></div>
                     <div class="interests-text" style="margin-top: 20px;">
@@ -1010,7 +1010,7 @@
             });
         }, { passive: true });
 
-        /* ===== Cover Flow 逻辑（新增鼠标悬停切换） ===== */
+        /* ===== Cover Flow 逻辑（悬停防抖 + 相邻限制） ===== */
         (function initCoverFlow() {
             const stage = document.getElementById('coverflowStage');
             const dotsWrap = document.getElementById('cfDots');
@@ -1019,6 +1019,7 @@
             const items = Array.from(stage.querySelectorAll('.cf-item'));
             const total = items.length;
             let current = 0;
+            let hoverTimer = null;
 
             items.forEach((_, i) => {
                 const dot = document.createElement('button');
@@ -1065,15 +1066,41 @@
                 dots.forEach((d, i) => d.classList.toggle('active', i === current));
             }
 
-            // 点击切换
+            function clearHoverTimer() {
+                if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
+            }
+
             items.forEach((item, i) => {
+                // 点击直接切换
                 item.addEventListener('click', () => {
+                    clearHoverTimer();
                     if (i !== current) { current = i; update(); }
                 });
-                // 新增：鼠标悬停即切换，无需点击
+
+                // 悬停：仅对相邻 ±2 张响应，且延迟 180ms 防抖
                 item.addEventListener('mouseenter', () => {
-                    if (i !== current) { current = i; update(); }
+                    if (window.innerWidth <= 768) return;
+                    let diff = Math.abs(i - current);
+                    // 环绕距离
+                    diff = Math.min(diff, total - diff);
+                    if (diff === 0 || diff > 2) return;
+
+                    clearHoverTimer();
+                    hoverTimer = setTimeout(() => {
+                        if (i !== current) { current = i; update(); }
+                        hoverTimer = null;
+                    }, 180);
                 });
+
+                // 鼠标离开该图时取消待切换
+                item.addEventListener('mouseleave', () => {
+                    clearHoverTimer();
+                });
+            });
+
+            // 鼠标离开整个 Cover Flow 区域时也取消
+            stage.addEventListener('mouseleave', () => {
+                clearHoverTimer();
             });
 
             document.addEventListener('keydown', (e) => {
