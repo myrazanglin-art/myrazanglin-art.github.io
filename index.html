@@ -369,16 +369,37 @@
         .timeline-item::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 3px solid var(--accent); z-index: 2; transform: scale(0); transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .timeline-item.active::before { transform: scale(1); }
         [data-theme="dark"] .timeline-item::before { background: #050508; }
-        
+
+        /* ===== 修复：Education 学校图片改为柔和 fade ===== */
         .faculty-bg { 
-            position: absolute; right: 0; top: 0; bottom: 0; width: 50%; 
+            position: absolute; 
+            right: -10%; 
+            top: -30%; 
+            bottom: -30%; 
+            width: 70%; 
             background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg'); 
-            background-size: cover; background-position: center; 
-            opacity: 0.38; 
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 75%); 
-            mask-image: linear-gradient(to right, transparent 0%, black 75%); 
-            z-index: 0; pointer-events: none; 
+            background-size: cover; 
+            background-position: center; 
+            opacity: 0.35; 
+            /* 四向淡出：左边、上边、下边、右边都柔化 */
+            -webkit-mask-image: 
+                linear-gradient(to right, transparent 0%, black 45%, black 75%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+            -webkit-mask-composite: source-in;
+            mask-image: 
+                linear-gradient(to right, transparent 0%, black 45%, black 75%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+            mask-composite: intersect;
+            z-index: 0; 
+            pointer-events: none; 
+            filter: blur(0.5px);
+            transition: opacity 0.6s, filter 0.6s;
         }
+        [data-theme="dark"] .faculty-bg {
+            opacity: 0.28;
+            filter: blur(0.5px) brightness(0.85);
+        }
+        
         .timeline-content { position: relative; z-index: 1; }
 
         .tl-title { font-size: 1.3em; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--text-main); text-shadow: var(--title-shadow); }
@@ -662,7 +683,6 @@
         .interests-text p { color: var(--text-sub); font-size: 1em; margin-bottom: 15px; line-height: 1.85; text-shadow: var(--text-float); }
         [data-theme="dark"] .interests-text p { text-shadow: var(--text-float-dark); }
 
-        /* ===== 全局 tag 样式（修复 Interests 底部标签） ===== */
         .tag {
             background: rgba(255, 255, 255, 0.4);
             border: 1px solid var(--border);
@@ -707,7 +727,6 @@
         .hero h1 .char.space { width: 0.28em; }
         @keyframes charIn { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 
-        /* ===== Hero 顶部小标签（Hong Kong） ===== */
         .hero-kicker {
             color: var(--text-sub);
             font-weight: 800;
@@ -733,6 +752,9 @@
             .flip-card-inner { transition: none !important; }
         }
 
+        /* ============================================================
+           ===== 移动端适配 =====
+           ============================================================ */
         @media (max-width: 768px) {
             .about-card { flex-direction: column; text-align: center; }
             .nav-links { display: none; }
@@ -741,26 +763,86 @@
             .project-card:hover .project-img { opacity: 1; transform: none; }
             .timeline { margin-left: 0; padding-left: 15px; }
             .timeline-item::before { left: -22px; }
-            .faculty-bg { width: 100%; opacity: 0.22; }
+            .faculty-bg { 
+                width: 100%; 
+                right: 0; 
+                top: 0; 
+                bottom: 0;
+                opacity: 0.15; 
+                -webkit-mask-image: 
+                    linear-gradient(to right, transparent 0%, black 50%, transparent 100%),
+                    linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+                -webkit-mask-composite: source-in;
+                mask-image: 
+                    linear-gradient(to right, transparent 0%, black 50%, transparent 100%),
+                    linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+                mask-composite: intersect;
+            }
             .tl-org { max-width: 100%; }
             .profile-img-container { width: 200px; height: 200px; }
             .bot-float-container { bottom: 20px; left: 20px; }
 
-            .coverflow { height: auto; padding: 0; perspective: none; }
+            /* ===== 修复：Hero 标题在移动端不换行 ===== */
+            .hero h1 {
+                font-size: 2.6em !important;
+                white-space: nowrap;
+                letter-spacing: -0.03em !important;
+            }
+            .hero h1 .char.space { width: 0.22em; }
+            .hero h2 { font-size: 1.3em !important; }
+            .hero p { font-size: 1em !important; }
+            .hero-kicker { font-size: 0.8em; letter-spacing: 1.5px; }
+
+            /* ===== 修复：移动端 Coverflow 改为横向滑动轮播 ===== */
+            .coverflow {
+                height: auto;
+                padding: 0;
+                perspective: none;
+                overflow: visible;
+                display: block;
+            }
             .coverflow-stage {
-                display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-                height: auto; transform-style: flat;
+                display: flex;
+                gap: 14px;
+                height: auto;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                padding: 8px 20px 18px;
+                margin: 0 -20px;
+                transform-style: flat;
+                scrollbar-width: none;
             }
+            .coverflow-stage::-webkit-scrollbar { display: none; }
             .cf-item {
-                position: relative; top: auto; left: auto; margin: 0;
-                width: 100%; height: 140px;
-                transform: none !important; opacity: 1 !important;
-                border-radius: 10px; filter: none !important;
-                box-shadow: 0 4px 15px rgba(79, 179, 232, 0.2);
-                transform-origin: center center; animation: none !important;
+                position: relative;
+                top: auto; left: auto;
+                margin: 0;
+                flex: 0 0 68%;
+                width: 68%;
+                height: 300px;
+                transform: none !important;
+                opacity: 1 !important;
+                border-radius: 16px;
+                filter: none !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(79, 179, 232, 0.15);
+                transform-origin: center center;
+                animation: none !important;
+                scroll-snap-align: center;
+                transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                            box-shadow 0.4s, opacity 0.4s;
             }
-            .cf-item.is-center { box-shadow: 0 4px 15px rgba(79, 179, 232, 0.2); }
-            .cf-dots { display: none; }
+            .cf-item.is-center {
+                box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(79, 179, 232, 0.35);
+                animation: none !important;
+            }
+            .cf-item:not(.is-center) {
+                opacity: 0.65 !important;
+                transform: scale(0.92) !important;
+            }
+            .cf-dots { display: flex; }
             .project-card::after { display: none; }
 
             .skills-flip-grid {
@@ -769,6 +851,18 @@
             }
             .flip-card { height: 220px; }
         }
+
+        /* 超小屏进一步缩小 */
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 2.15em !important;
+            }
+            .cf-item {
+                flex: 0 0 78%;
+                width: 78%;
+                height: 280px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -776,7 +870,7 @@
     <div class="scroll-progress" id="scrollProgress"></div>
     <div class="snow-layer" id="snowLayer"></div>
 
-    <div class="bot-float-container">
+    <div class="bot-float-container" id="botFloatContainer">
         <div class="bot-float-panel" id="botFloatPanel">
             <div class="agent-header">
                 <div class="agent-avatar">
@@ -1311,10 +1405,40 @@
             });
         })();
 
+        /* ===== 修复：点击 Bot 外部自动关闭 ===== */
+        (function initBotOutsideClick() {
+            const container = document.getElementById('botFloatContainer');
+            const panel = document.getElementById('botFloatPanel');
+            const btn = document.getElementById('botFloatBtn');
+            document.addEventListener('click', (e) => {
+                if (!panel.classList.contains('open')) return;
+                if (container.contains(e.target)) return;
+                panel.classList.remove('open');
+                btn.classList.remove('active');
+            }, true);
+            document.addEventListener('touchstart', (e) => {
+                if (!panel.classList.contains('open')) return;
+                if (container.contains(e.target)) return;
+                panel.classList.remove('open');
+                btn.classList.remove('active');
+            }, { passive: true, capture: true });
+        })();
+
         function toggleBotFloat() {
             haptic.tap();
-            document.getElementById('botFloatPanel').classList.toggle('open');
-            document.getElementById('botFloatBtn').classList.toggle('active');
+            const panel = document.getElementById('botFloatPanel');
+            const btn = document.getElementById('botFloatBtn');
+            const willOpen = !panel.classList.contains('open');
+            panel.classList.toggle('open');
+            btn.classList.toggle('active');
+            if (willOpen) {
+                setTimeout(() => {
+                    const input = document.getElementById('botFloatInput');
+                    if (input && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                        input.focus();
+                    }
+                }, 320);
+            }
         }
 
         function handleBotFloatKeyPress(e) {
@@ -1413,12 +1537,18 @@
             let current = 0;
             let hoverTimer = null;
             let autoTimer = null;
+            let isMobile = window.innerWidth <= 768;
 
             items.forEach((_, i) => {
                 const dot = document.createElement('button');
                 dot.className = 'cf-dot' + (i === 0 ? ' active' : '');
                 dot.setAttribute('aria-label', 'Go to image ' + (i + 1));
-                dot.addEventListener('click', () => { haptic.light(); current = i; update(); });
+                dot.addEventListener('click', () => {
+                    haptic.light();
+                    current = i;
+                    if (isMobile) scrollToItem(i);
+                    else update();
+                });
                 dotsWrap.appendChild(dot);
             });
             const dots = Array.from(dotsWrap.querySelectorAll('.cf-dot'));
@@ -1458,6 +1588,15 @@
                 dots.forEach((d, i) => d.classList.toggle('active', i === current));
             }
 
+            function scrollToItem(i) {
+                const item = items[i];
+                if (!item) return;
+                const target = item.offsetLeft - (stage.clientWidth - item.clientWidth) / 2;
+                stage.scrollTo({ left: target, behavior: 'smooth' });
+                items.forEach((it, idx) => it.classList.toggle('is-center', idx === i));
+                dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+            }
+
             function clearHoverTimer() {
                 if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
             }
@@ -1466,9 +1605,9 @@
                 stopAuto();
                 autoTimer = setInterval(() => {
                     if (document.hidden) return;
-                    if (window.innerWidth <= 768) return;
                     current = (current + 1) % total;
-                    update();
+                    if (isMobile) scrollToItem(current);
+                    else update();
                 }, 4200);
             }
             function stopAuto() {
@@ -1488,11 +1627,13 @@
                 item.addEventListener('click', () => {
                     haptic.light();
                     clearHoverTimer();
-                    if (i !== current) { current = i; update(); }
+                    if (i !== current) { current = i; }
+                    if (isMobile) scrollToItem(i);
+                    else update();
                     startAuto();
                 });
                 item.addEventListener('mouseenter', () => {
-                    if (window.innerWidth <= 768) return;
+                    if (isMobile) return;
                     let diff = Math.abs(i - current);
                     diff = Math.min(diff, total - diff);
                     if (diff === 0 || diff > 2) return;
@@ -1505,13 +1646,40 @@
                 item.addEventListener('mouseleave', () => clearHoverTimer());
             });
 
+            // 移动端滚动同步
+            let scrollTimer = null;
+            stage.addEventListener('scroll', () => {
+                if (!isMobile) return;
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(() => {
+                    const centerX = stage.scrollLeft + stage.clientWidth / 2;
+                    let bestIdx = 0, bestDist = Infinity;
+                    items.forEach((it, idx) => {
+                        const itCenter = it.offsetLeft + it.clientWidth / 2;
+                        const d = Math.abs(itCenter - centerX);
+                        if (d < bestDist) { bestDist = d; bestIdx = idx; }
+                    });
+                    if (bestIdx !== current) {
+                        current = bestIdx;
+                        items.forEach((it, idx) => it.classList.toggle('is-center', idx === bestIdx));
+                        dots.forEach((d, idx) => d.classList.toggle('active', idx === bestIdx));
+                    }
+                }, 80);
+            }, { passive: true });
+
             stage.addEventListener('mouseleave', () => clearHoverTimer());
 
             document.addEventListener('keydown', (e) => {
                 const rect = stage.getBoundingClientRect();
                 if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-                if (e.key === 'ArrowLeft') { current = (current - 1 + total) % total; update(); }
-                if (e.key === 'ArrowRight') { current = (current + 1) % total; update(); }
+                if (e.key === 'ArrowLeft') {
+                    current = (current - 1 + total) % total;
+                    if (isMobile) scrollToItem(current); else update();
+                }
+                if (e.key === 'ArrowRight') {
+                    current = (current + 1) % total;
+                    if (isMobile) scrollToItem(current); else update();
+                }
             });
 
             let touchStartX = null;
@@ -1521,23 +1689,35 @@
                 const dx = e.changedTouches[0].clientX - touchStartX;
                 if (Math.abs(dx) > 40) {
                     haptic.tap();
-                    current = (current + (dx < 0 ? 1 : -1) + total) % total;
-                    update();
+                    if (isMobile) {
+                        // 横向滚动已经由原生 scroll-snap 接管，这里只是视觉反馈
+                    } else {
+                        current = (current + (dx < 0 ? 1 : -1) + total) % total;
+                        update();
+                    }
                 }
                 touchStartX = null;
             }, { passive: true });
 
             window.addEventListener('resize', () => {
-                if (window.innerWidth <= 768) {
+                const nowMobile = window.innerWidth <= 768;
+                if (nowMobile) {
+                    isMobile = true;
                     items.forEach(it => { it.style.transform = ''; it.style.opacity = ''; it.style.zIndex = ''; });
                     stopAuto();
                 } else {
+                    isMobile = false;
+                    items.forEach(it => { it.style.transform = ''; it.style.opacity = ''; it.style.zIndex = ''; });
                     update();
                     startAuto();
                 }
             });
 
-            update();
+            if (isMobile) {
+                items.forEach((it, idx) => it.classList.toggle('is-center', idx === 0));
+            } else {
+                update();
+            }
             startAuto();
         })();
     </script>
