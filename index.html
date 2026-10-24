@@ -80,6 +80,38 @@
             background-attachment: fixed;
         }
 
+        /* ===== 新增：主题切换圆形扩散层 ===== */
+        .theme-ripple {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            background: var(--bg);
+            clip-path: circle(0% at 50% 50%);
+            opacity: 0;
+        }
+        .theme-ripple.expanding {
+            animation: themeRipple 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+        @keyframes themeRipple {
+            0% {
+                opacity: 1;
+                clip-path: circle(0% at var(--rx, 50%) var(--ry, 50%));
+            }
+            100% {
+                opacity: 1;
+                clip-path: circle(150% at var(--rx, 50%) var(--ry, 50%));
+            }
+        }
+        .theme-ripple.fading {
+            animation: themeRippleFade 0.35s ease-out forwards;
+        }
+        @keyframes themeRippleFade {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         .scroll-progress {
             position: fixed; top: 0; left: 0; height: 3px; width: 0%;
             background: linear-gradient(90deg, var(--accent), #9FD8F5, var(--accent));
@@ -176,9 +208,15 @@
             border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(79, 179, 232, 0.2);
         }
 
+        /* ===== Bot 快捷问题 chips（动态） ===== */
         .bot-suggestions {
             display: flex; flex-wrap: wrap; gap: 6px;
             margin-top: 10px; flex-shrink: 0;
+            min-height: 28px;
+            transition: opacity 0.3s;
+        }
+        .bot-suggestions.switching {
+            opacity: 0.3;
         }
         .bot-suggestion-chip {
             background: rgba(255, 255, 255, 0.5);
@@ -188,6 +226,11 @@
             font-size: 0.72em; font-family: var(--font-round); font-weight: 700;
             cursor: pointer; transition: 0.25s cubic-bezier(0.25, 1, 0.5, 1);
             white-space: nowrap; backdrop-filter: blur(8px);
+            animation: chipIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
+        }
+        @keyframes chipIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         [data-theme="dark"] .bot-suggestion-chip { background: rgba(255, 255, 255, 0.06); }
         .bot-suggestion-chip:hover {
@@ -271,6 +314,7 @@
             display: flex; justify-content: center; align-items: center;
             cursor: pointer; color: var(--text-main); font-size: 1.2em; transition: 0.3s;
             backdrop-filter: blur(10px);
+            position: relative;
         }
         [data-theme="dark"] .theme-btn { background: transparent;}
         .theme-btn:hover { transform: rotate(15deg) scale(1.1); background: #FFF; color: var(--accent); }
@@ -360,11 +404,12 @@
         .timeline-item.active::before { transform: scale(1); }
         [data-theme="dark"] .timeline-item::before { background: #050508; }
 
+        /* ===== 修复：Education 学校图片柔和 fade + 进入视口时推近 ===== */
         .faculty-bg { 
             position: absolute; right: -10%; top: -30%; bottom: -30%; width: 70%; 
             background-image: url('https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/faculty.jpg'); 
             background-size: cover; background-position: center; 
-            opacity: 0.35; 
+            opacity: 0; 
             -webkit-mask-image: 
                 linear-gradient(to right, transparent 0%, black 45%, black 75%, transparent 100%),
                 linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
@@ -374,9 +419,16 @@
                 linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
             mask-composite: intersect;
             z-index: 0; pointer-events: none; filter: blur(0.5px);
-            transition: opacity 0.6s, filter 0.6s;
+            transform: scale(1.08);
+            transition: opacity 1.4s cubic-bezier(0.25, 1, 0.5, 1),
+                        transform 2.2s cubic-bezier(0.25, 1, 0.5, 1),
+                        filter 0.6s;
         }
-        [data-theme="dark"] .faculty-bg { opacity: 0.28; filter: blur(0.5px) brightness(0.85); }
+        .timeline-item.active .faculty-bg {
+            opacity: 0.35;
+            transform: scale(1);
+        }
+        [data-theme="dark"] .timeline-item.active .faculty-bg { opacity: 0.28; filter: blur(0.5px) brightness(0.85); }
         
         .timeline-content { position: relative; z-index: 1; }
 
@@ -467,7 +519,7 @@
         [data-theme="dark"] .warning-text { color: var(--accent-soft); }
         .preview-hint { color: var(--text-sub); font-size: 0.82em; margin-top: 12px; font-family: var(--font-round); font-weight: 600; opacity: 0.75; }
 
-        /* ===== Skills 可翻转卡片 ===== */
+        /* ===== Skills 可翻转卡片（加翻页角） ===== */
         .skills-flip-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -526,22 +578,111 @@
                         inset 0 1px 0 var(--glass-inner);
         }
 
-        .flip-card-front .fc-icon { font-size: 30px; margin-bottom: 12px; filter: drop-shadow(0 2px 4px rgba(79, 179, 232, 0.25)); }
-        .flip-card-front .fc-kicker { font-size: 0.75em; font-family: var(--font-round); font-weight: 800; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+        .flip-card-front .fc-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 4px rgba(79, 179, 232, 0.25));
+        }
+        .flip-card-front .fc-kicker {
+            font-size: 0.75em;
+            font-family: var(--font-round);
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
         [data-theme="dark"] .flip-card-front .fc-kicker { color: var(--accent-soft); }
-        .flip-card-front .fc-title { font-size: 1.25em; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em; text-shadow: var(--title-shadow); }
+        .flip-card-front .fc-title {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            text-shadow: var(--title-shadow);
+        }
         [data-theme="dark"] .flip-card-front .fc-title { text-shadow: var(--title-shadow-dark); }
-        .flip-card-front .fc-hint { font-size: 0.75em; font-family: var(--font-round); font-weight: 600; color: var(--text-sub); margin-top: 10px; opacity: 0.75; }
+        .flip-card-front .fc-hint {
+            font-size: 0.75em;
+            font-family: var(--font-round);
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-top: 10px;
+            opacity: 0.75;
+        }
 
-        .flip-card-back { transform: rotateY(180deg); justify-content: flex-start; }
-        .flip-card-back .fc-back-kicker { font-size: 0.72em; font-family: var(--font-round); font-weight: 800; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+        /* ===== 新增：翻页角 ===== */
+        .flip-card-front::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 28px 28px;
+            border-color: transparent transparent var(--accent) transparent;
+            opacity: 0.35;
+            transition: border-width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                        opacity 0.4s;
+            pointer-events: none;
+            filter: drop-shadow(-2px -2px 4px rgba(79, 179, 232, 0.3));
+        }
+        .flip-card:hover .flip-card-front::after {
+            border-width: 0 0 38px 38px;
+            opacity: 0.6;
+        }
+        [data-theme="dark"] .flip-card-front::after {
+            opacity: 0.25;
+        }
+        [data-theme="dark"] .flip-card:hover .flip-card-front::after {
+            opacity: 0.5;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+            justify-content: flex-start;
+        }
+        .flip-card-back .fc-back-kicker {
+            font-size: 0.72em;
+            font-family: var(--font-round);
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
         [data-theme="dark"] .flip-card-back .fc-back-kicker { color: var(--accent-soft); }
-        .flip-card-back .fc-back-desc { font-size: 0.92em; color: var(--text-sub); line-height: 1.65; margin-bottom: 16px; text-shadow: var(--text-float); }
+        .flip-card-back .fc-back-desc {
+            font-size: 0.92em;
+            color: var(--text-sub);
+            line-height: 1.65;
+            margin-bottom: 16px;
+            text-shadow: var(--text-float);
+        }
         [data-theme="dark"] .flip-card-back .fc-back-desc { text-shadow: var(--text-float-dark); }
-        .flip-card-back .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
-        .flip-card-back .tag { background: rgba(255, 255, 255, 0.55); border: 1px solid var(--border); color: var(--text-main); padding: 5px 12px; border-radius: 8px; font-size: 0.78em; font-family: var(--font-round); font-weight: 700; backdrop-filter: blur(8px); transition: 0.3s; }
+        .flip-card-back .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+        .flip-card-back .tag {
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.78em;
+            font-family: var(--font-round);
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
+        }
         [data-theme="dark"] .flip-card-back .tag { background: rgba(255,255,255,0.06); }
-        .flip-card-back .tag:hover { background: rgba(79, 179, 232, 0.2); border-color: var(--accent); }
+        .flip-card-back .tag:hover {
+            background: rgba(79, 179, 232, 0.2);
+            border-color: var(--accent);
+        }
 
         .interests-block { margin-top: 30px; }
 
@@ -551,7 +692,7 @@
             perspective: 1600px; display: flex; justify-content: center; align-items: center;
             overflow: hidden;
             background: transparent; border: none; box-shadow: none;
-            touch-action: pan-y;  /* 允许垂直滚动，横向手势自己处理 */
+            touch-action: pan-y;
             user-select: none;
             -webkit-user-select: none;
         }
@@ -587,7 +728,6 @@
         .cf-item:not(.is-center) { filter: brightness(0.8); }
         .cf-item:not(.is-center):hover { filter: brightness(0.95); }
 
-        /* 拖动时不加过渡，松手后加过渡归位 */
         .coverflow.dragging .cf-item {
             transition: none !important;
         }
@@ -671,11 +811,9 @@
             .timeline::before { transform: scaleY(1); }
             .timeline-item::before { transform: scale(1); }
             .flip-card-inner { transition: none !important; }
+            .theme-ripple { display: none !important; }
         }
 
-        /* ============================================================
-           ===== 移动端适配 =====
-           ============================================================ */
         @media (max-width: 768px) {
             .about-card { flex-direction: column; text-align: center; }
             .nav-links { display: none; }
@@ -686,7 +824,6 @@
             .timeline-item::before { left: -22px; }
             .faculty-bg { 
                 width: 100%; right: 0; top: 0; bottom: 0;
-                opacity: 0.15;
                 -webkit-mask-image: 
                     linear-gradient(to right, transparent 0%, black 50%, transparent 100%),
                     linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
@@ -696,6 +833,8 @@
                     linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
                 mask-composite: intersect;
             }
+            .timeline-item.active .faculty-bg { opacity: 0.15; }
+            [data-theme="dark"] .timeline-item.active .faculty-bg { opacity: 0.12; }
             .tl-org { max-width: 100%; }
             .profile-img-container { width: 200px; height: 200px; }
             .bot-float-container { bottom: 20px; left: 20px; }
@@ -710,7 +849,6 @@
             .hero p { font-size: 1em !important; }
             .hero-kicker { font-size: 0.8em; letter-spacing: 1.5px; }
 
-            /* ===== Coverflow 移动端：保留 3D 效果，只缩小尺寸 ===== */
             .coverflow {
                 height: 340px;
                 perspective: 1200px;
@@ -752,6 +890,9 @@
 </head>
 <body>
 
+    <!-- ===== 主题切换圆形扩散层 ===== -->
+    <div class="theme-ripple" id="themeRipple"></div>
+
     <div class="scroll-progress" id="scrollProgress"></div>
     <div class="snow-layer" id="snowLayer"></div>
 
@@ -772,14 +913,7 @@
                 <div class="msg msg-bot">Hi there! I'm Yiming's Bot. Ask me about Hometree, Rhythm Runner, or anything on this portfolio! (๑•̀ㅂ•́)و✧</div>
             </div>
 
-            <div class="bot-suggestions" id="botSuggestions">
-                <button class="bot-suggestion-chip" data-q="Tell me about Hometree">Hometree?</button>
-                <button class="bot-suggestion-chip" data-q="How does Rhythm Runner use audio?">Rhythm Runner?</button>
-                <button class="bot-suggestion-chip" data-q="What did you study at CUHK?">CUHK / LDTE?</button>
-                <button class="bot-suggestion-chip" data-q="What is your design approach?">Design approach?</button>
-                <button class="bot-suggestion-chip" data-q="Tell me about your crochet and music hobbies">Hobbies?</button>
-                <button class="bot-suggestion-chip" data-q="What did you do at CLEAR internship?">CLEAR internship?</button>
-            </div>
+            <div class="bot-suggestions" id="botSuggestions"></div>
 
             <div class="chat-input-area">
                 <input type="text" class="chat-input" id="botFloatInput" placeholder="Ask a question..." onkeypress="handleBotFloatKeyPress(event)">
@@ -802,7 +936,7 @@
             <a href="#resume">RESUME</a>
             <a href="#skills">SKILLS</a>
             <a href="#interests">INTERESTS</a>
-            <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">☀️</button>
+            <button class="theme-btn" onclick="toggleTheme(event)" id="theme-btn">☀️</button>
         </div>
     </nav>
 
@@ -1316,6 +1450,7 @@
             panel.classList.toggle('open');
             btn.classList.toggle('active');
             if (willOpen) {
+                refreshBotSuggestions();
                 setTimeout(() => {
                     const input = document.getElementById('botFloatInput');
                     if (input && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
@@ -1324,6 +1459,94 @@
                 }, 320);
             }
         }
+
+        /* ===== 新增：Bot 快捷 chips 根据当前 section 动态渲染 ===== */
+        const BOT_SUGGESTIONS_BY_SECTION = {
+            hero: [
+                { q: 'What do you do?', label: 'What do you do?' },
+                { q: 'Tell me about Hometree', label: 'Hometree?' },
+                { q: 'How does Rhythm Runner use audio?', label: 'Rhythm Runner?' }
+            ],
+            about: [
+                { q: 'Tell me about yourself', label: 'About you?' },
+                { q: 'Tell me about your crochet and music hobbies', label: 'Hobbies?' },
+                { q: 'What did you study at CUHK?', label: 'CUHK / LDTE?' }
+            ],
+            projects: [
+                { q: 'Tell me about Hometree', label: 'Hometree?' },
+                { q: 'How does Rhythm Runner use audio?', label: 'Rhythm Runner?' },
+                { q: 'What is your design approach?', label: 'Design approach?' }
+            ],
+            resume: [
+                { q: 'What did you do at CLEAR internship?', label: 'CLEAR internship?' },
+                { q: 'What did you study at CUHK?', label: 'CUHK / LDTE?' },
+                { q: 'Tell me about yourself', label: 'About you?' }
+            ],
+            skills: [
+                { q: 'What is your design approach?', label: 'Design approach?' },
+                { q: 'How does Rhythm Runner use audio?', label: 'Rhythm Runner?' },
+                { q: 'What did you study at CUHK?', label: 'CUHK / LDTE?' }
+            ],
+            interests: [
+                { q: 'Tell me about your crochet and music hobbies', label: 'Hobbies?' },
+                { q: 'How does Rhythm Runner use audio?', label: 'Rhythm Runner?' },
+                { q: 'Tell me about Hometree', label: 'Hometree?' }
+            ]
+        };
+        let currentSection = 'hero';
+
+        function refreshBotSuggestions() {
+            const wrap = document.getElementById('botSuggestions');
+            if (!wrap) return;
+            const list = BOT_SUGGESTIONS_BY_SECTION[currentSection] || BOT_SUGGESTIONS_BY_SECTION.hero;
+            wrap.classList.add('switching');
+            setTimeout(() => {
+                wrap.innerHTML = '';
+                list.forEach((item, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'bot-suggestion-chip';
+                    btn.setAttribute('data-q', item.q);
+                    btn.textContent = item.label;
+                    btn.style.animationDelay = (idx * 0.06) + 's';
+                    btn.addEventListener('click', () => {
+                        const input = document.getElementById('botFloatInput');
+                        input.value = item.q;
+                        sendBotFloatMessage();
+                    });
+                    wrap.appendChild(btn);
+                });
+                wrap.classList.remove('switching');
+            }, 200);
+        }
+
+        // 监听滚动，更新 currentSection
+        (function watchSection() {
+            const map = [
+                { id: 'heroSection', key: 'hero' },
+                { id: 'about', key: 'about' },
+                { id: 'projects', key: 'projects' },
+                { id: 'resume', key: 'resume' },
+                { id: 'skills', key: 'skills' },
+                { id: 'interests', key: 'interests' }
+            ];
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+                        const found = map.find(m => m.id === entry.target.id);
+                        if (found && currentSection !== found.key) {
+                            currentSection = found.key;
+                            refreshBotSuggestions();
+                        }
+                    }
+                });
+            }, { threshold: [0.35, 0.6] });
+            map.forEach(m => {
+                const el = document.getElementById(m.id);
+                if (el) io.observe(el);
+            });
+        })();
+
+        refreshBotSuggestions();
 
         function handleBotFloatKeyPress(e) {
             if (e.key === 'Enter') sendBotFloatMessage();
@@ -1349,7 +1572,9 @@
                 botMsg.className = 'msg msg-bot';
                 let reply = "That's a great question! Explore the Projects section to see how product strategy and full-stack coding come together in Hometree and Rhythm Runner. ✨";
                 
-                if (text.includes('hometree')) {
+                if (text.includes('what do you do') || text.includes('about you') || text.includes('about yourself')) {
+                    reply = "I design and build digital products from 0 to 1 — combining product strategy, UX design, and full-stack development. Explore the Projects section to see Hometree and Rhythm Runner! 🚀";
+                } else if (text.includes('hometree')) {
                     reply = "Hometree is a privacy-first social app. The backend was built using Python Flask and MySQL, featuring a custom collaborative filtering algorithm for matching. Check out the live link in the Projects section! 🚀";
                 } else if (text.includes('rhythm') || text.includes('audio') || text.includes('dsp')) {
                     reply = "Rhythm Runner is a Godot game powered by Python & Librosa. Over 15 audio features (like HPSS) were extracted to dynamically generate beatmaps automatically! 🎵";
@@ -1369,17 +1594,46 @@
             }, 600);
         }
 
-        function toggleTheme() {
+        /* ===== 新增：主题切换圆形扩散 ===== */
+        function toggleTheme(e) {
             haptic.light();
             const html = document.documentElement;
             const btn = document.getElementById('theme-btn');
-            if (html.getAttribute('data-theme') === 'dark') {
-                html.removeAttribute('data-theme');
-                btn.innerText = '🌙';
-            } else {
-                html.setAttribute('data-theme', 'dark');
-                btn.innerText = '☀️';
+            const ripple = document.getElementById('themeRipple');
+            const willDark = html.getAttribute('data-theme') !== 'dark';
+
+            // 计算扩散圆心（按钮位置）
+            let rx = window.innerWidth / 2;
+            let ry = window.innerHeight / 2;
+            if (e && e.currentTarget) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                rx = rect.left + rect.width / 2;
+                ry = rect.top + rect.height / 2;
             }
+            // 用目标主题的背景色
+            const targetBg = willDark ? '#050508' : '#F2FAFF';
+            ripple.style.background = targetBg;
+            ripple.style.setProperty('--rx', rx + 'px');
+            ripple.style.setProperty('--ry', ry + 'px');
+
+            // 先扩散，再切换主题，再淡出
+            ripple.classList.remove('expanding', 'fading');
+            void ripple.offsetWidth; // force reflow
+            ripple.classList.add('expanding');
+
+            setTimeout(() => {
+                if (willDark) {
+                    html.setAttribute('data-theme', 'dark');
+                    btn.innerText = '☀️';
+                } else {
+                    html.removeAttribute('data-theme');
+                    btn.innerText = '🌙';
+                }
+                ripple.classList.add('fading');
+                setTimeout(() => {
+                    ripple.classList.remove('expanding', 'fading');
+                }, 360);
+            }, 380);
         }
 
         function reveal() {
@@ -1410,9 +1664,7 @@
             });
         }, { passive: true });
 
-        /* ============================================================
-           ===== Coverflow：PC 与移动端同一套 3D 排列 + 触摸拖动 =====
-           ============================================================ */
+        /* ===== Coverflow：PC 与移动端同一套 3D + 惯性滑动 ===== */
         (function initCoverFlow() {
             const stage = document.getElementById('coverflowStage');
             const dotsWrap = document.getElementById('cfDots');
@@ -1424,10 +1676,8 @@
             let current = 0;
             let hoverTimer = null;
             let autoTimer = null;
-            // 拖动时临时偏移（px）
             let dragOffset = 0;
 
-            // 根据屏幕宽度调整 X 间距（卡片更小，间距也应缩小）
             function getSpacing() {
                 return window.innerWidth <= 400 ? 78 : (window.innerWidth <= 768 ? 88 : 95);
             }
@@ -1451,7 +1701,6 @@
             function update() {
                 const spacing = getSpacing();
                 const stepSpacing = getStepSpacing();
-                // 拖动偏移换算为"半个卡片"的偏移，让视觉跟手
                 const dragShift = dragOffset / 120;
 
                 items.forEach((item, i) => {
@@ -1459,7 +1708,6 @@
                     if (offset > total / 2) offset -= total;
                     if (offset < -total / 2) offset += total;
 
-                    // 应用拖动偏移（让每张卡片按自身相对位置微移）
                     let visualOffset = offset + dragShift;
                     const abs = Math.abs(visualOffset);
 
@@ -1477,8 +1725,7 @@
                         const dir = visualOffset > 0 ? 1 : -1;
                         const step = Math.min(abs, 3);
                         translateX = visualOffset * spacing;
-                        // 加上原有的步进偏移
-                        translateX += dir * (step - 1) * stepSpacing * 0.0; // 已由 spacing 覆盖
+                        translateX += dir * (step - 1) * stepSpacing * 0.0;
                         translateY = step * 10;
                         rotateZ = dir * (6 + (step - 1) * 4);
                         rotateY = dir * -12;
@@ -1554,16 +1801,24 @@
                 if (e.key === 'ArrowRight') { current = (current + 1) % total; update(); }
             });
 
-            /* ===== 触摸拖动：与 PC 同一套 3D 排列，只是多了跟手偏移 ===== */
+            /* ===== 触摸：跟手拖动 + 速度惯性切换 ===== */
             let touchStartX = null;
             let touchStartY = null;
+            let touchStartTime = 0;
             let touchMoved = false;
-            let touchDirectionLocked = null; // 'x' | 'y'
+            let touchDirectionLocked = null;
+            let lastTouchX = 0;
+            let lastTouchTime = 0;
+            let velocity = 0;
 
             stage.addEventListener('touchstart', (e) => {
                 if (e.touches.length !== 1) return;
                 touchStartX = e.touches[0].clientX;
                 touchStartY = e.touches[0].clientY;
+                lastTouchX = touchStartX;
+                touchStartTime = performance.now();
+                lastTouchTime = touchStartTime;
+                velocity = 0;
                 touchMoved = false;
                 touchDirectionLocked = null;
                 dragOffset = 0;
@@ -1573,38 +1828,61 @@
 
             stage.addEventListener('touchmove', (e) => {
                 if (touchStartX === null) return;
-                const dx = e.touches[0].clientX - touchStartX;
-                const dy = e.touches[0].clientY - touchStartY;
+                const now = performance.now();
+                const cx = e.touches[0].clientX;
+                const cy = e.touches[0].clientY;
+                const dx = cx - touchStartX;
+                const dy = cy - touchStartY;
 
                 if (touchDirectionLocked === null) {
                     if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
                         touchDirectionLocked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-                        if (touchDirectionLocked === 'x') {
-                            stage.classList.add('dragging');
-                        }
+                        if (touchDirectionLocked === 'x') stage.classList.add('dragging');
                     }
                 }
 
                 if (touchDirectionLocked === 'x') {
-                    // 阻止页面滚动
                     if (e.cancelable) e.preventDefault();
                     dragOffset = dx;
                     touchMoved = true;
+                    // 速度采样
+                    const dt = now - lastTouchTime;
+                    if (dt > 0) {
+                        const instantV = (cx - lastTouchX) / dt; // px/ms
+                        velocity = velocity * 0.6 + instantV * 0.4;
+                    }
+                    lastTouchX = cx;
+                    lastTouchTime = now;
                     update();
                 }
             }, { passive: false });
 
             stage.addEventListener('touchend', (e) => {
                 if (touchStartX === null) return;
-                const dx = (e.changedTouches[0] ? e.changedTouches[0].clientX : touchStartX) - touchStartX;
+                const endX = (e.changedTouches[0] ? e.changedTouches[0].clientX : touchStartX);
+                const dx = endX - touchStartX;
+                const dt = Math.max(1, performance.now() - touchStartTime);
+                const avgV = dx / dt; // px/ms
 
                 stage.classList.remove('dragging');
 
-                if (touchDirectionLocked === 'x' && Math.abs(dx) > 40) {
-                    // 达到切换阈值
-                    if (dx < 0) current = (current + 1) % total;
-                    else current = (current - 1 + total) % total;
-                    haptic.tap();
+                // 惯性判断：速度 > 0.6 px/ms 或位移 > 40px 才切换
+                // 如果速度很快，一次切 2 张
+                let steps = 0;
+                if (touchDirectionLocked === 'x') {
+                    const v = Math.abs(velocity) > 0.05 ? velocity : avgV;
+                    if (v < -0.6) {
+                        steps = Math.abs(v) > 1.2 ? 2 : 1;
+                        current = (current + steps) % total;
+                    } else if (v > 0.6) {
+                        steps = Math.abs(v) > 1.2 ? 2 : 1;
+                        current = (current - steps % total + total) % total;
+                    } else if (Math.abs(dx) > 40) {
+                        // 慢速但位移够大
+                        if (dx < 0) current = (current + 1) % total;
+                        else current = (current - 1 + total) % total;
+                    }
+                    if (steps > 0 || Math.abs(dx) > 40) haptic.tap();
                 }
 
                 dragOffset = 0;
@@ -1614,6 +1892,7 @@
                 touchStartX = null;
                 touchStartY = null;
                 touchDirectionLocked = null;
+                velocity = 0;
                 setTimeout(() => { touchMoved = false; }, 0);
             }, { passive: true });
 
@@ -1625,9 +1904,9 @@
                 touchStartX = null;
                 touchStartY = null;
                 touchDirectionLocked = null;
+                velocity = 0;
             }, { passive: true });
 
-            // 阻止拖动后误触发 click
             stage.addEventListener('click', (e) => {
                 if (touchMoved) {
                     e.stopPropagation();
