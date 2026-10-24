@@ -311,16 +311,42 @@
                         inset 0 1px 0 var(--nav-glow),
                         inset 0 -1px 0 rgba(255, 255, 255, 0.1);
             z-index: 1000;
-            transition: background 0.4s, box-shadow 0.4s;
+            transition: background 0.4s, box-shadow 0.4s,
+                        height 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+                        backdrop-filter 0.45s;
+            /* ===== 新增：导航收缩 ===== */
+        }
+        .nav.scrolled {
+            height: 56px;
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: 0 4px 24px rgba(79, 179, 232, 0.16),
+                        inset 0 1px 0 var(--nav-glow);
         }
         
         .nav-logo { font-weight: 700; font-size: 1.1em; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-main); text-shadow: var(--text-float);}
-        .nav-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent);}
+        .nav-logo::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .nav-logo:hover::before { transform: scale(1.6); }
         
         .nav-links { display: flex; align-items: center; gap: 30px; font-size: 0.85em; font-weight: 600; color: var(--text-sub); }
-        .nav-links a { color: var(--text-sub); text-decoration: none; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; position: relative;}
+        .nav-links a { color: var(--text-sub); text-decoration: none; transition: color 0.2s; text-transform: uppercase; letter-spacing: 1px; position: relative;}
         .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-        .nav-links a.active::after { content: ''; position: absolute; left: 0; bottom: -24px; width: 100%; height: 2px; background: var(--accent); }
+
+        /* ===== 新增：下划线从中间扫入 ===== */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -24px;
+            width: 100%; height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+        .nav-links a:hover::after { transform: scaleX(1); }
+        .nav-links a.active::after { transform: scaleX(1); }
+        .nav.scrolled .nav-links a::after { bottom: -17px; }
+        /* 移除原 active::after 的静态下划线规则，已被上面统一接管 */
 
         .theme-btn {
             background: rgba(255, 255, 255, 0.45); border: 1px solid var(--border); border-radius: 50%;
@@ -396,11 +422,27 @@
             background: linear-gradient(135deg, #FFF, #A8DCF5, #4FB3E8, #FFF);
             box-shadow: 0 10px 30px rgba(79, 179, 232, 0.25);
             animation: pulseGlow 4s infinite alternate;
+            /* ===== 新增：鼠标视差 ===== */
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
         }
         @keyframes pulseGlow {
             0% { box-shadow: 0 0 15px rgba(79, 179, 232, 0.2); }
             100% { box-shadow: 0 0 30px rgba(79, 179, 232, 0.5); }
         }
+        /* ===== 新增：头像外圈旋转光环 ===== */
+        .profile-img-container::before {
+            content: '';
+            position: absolute; inset: -6px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, var(--accent) 60deg, transparent 120deg, transparent 360deg);
+            animation: spinRing 8s linear infinite;
+            z-index: -1;
+            opacity: 0.55;
+            filter: blur(6px);
+        }
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+
         .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid #FFF; }
         
         .about-text p { 
@@ -423,8 +465,15 @@
             box-shadow: none; 
             backdrop-filter: none;
             overflow: visible; 
+            position: relative;
         }
         .timeline-item::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 3px solid var(--accent); z-index: 2; }
+        /* ===== 新增：节点弹入 ===== */
+        .timeline-item::before {
+            transform: scale(0);
+            transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .timeline-item.active::before { transform: scale(1); }
         
         .faculty-bg { 
             position: absolute; right: 0; top: 0; bottom: 0; width: 50%; 
@@ -469,6 +518,13 @@
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
         .project-card { border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); position: relative; }
         .project-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 15px 40px rgba(79, 179, 232, 0.25); }
+        /* ===== 新增：3D tilt 时禁用 hover 自带的 translateY（避免冲突） ===== */
+        .project-card.tilting:hover { transform: none; }
+        .project-card.tilting {
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                        border-color 0.4s,
+                        box-shadow 0.4s;
+        }
         
         .project-img-simple {
             width: 100%; height: 400px; object-fit: cover; 
@@ -503,6 +559,38 @@
         .project-card:hover .project-img { opacity: 0; transform: scale(1.05); }
         .project-card:hover .project-iframe { opacity: 1; pointer-events: auto; }
 
+        /* ===== 新增：卡片序号标注 + 扫描竖条 ===== */
+        .project-card::before {
+            content: attr(data-index);
+            position: absolute;
+            top: 18px; left: 22px;
+            font-family: monospace;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 3;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+        .project-card:hover::before { opacity: 0.75; }
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 0;
+            width: 4px;
+            background: var(--accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 3;
+            pointer-events: none;
+            box-shadow: 0 0 12px var(--accent);
+        }
+        .project-card:hover::after { transform: scaleY(1); }
+
         .project-info { padding: 30px; position: relative; z-index: 1; }
         .project-title { font-size: 1.5em; font-weight: 800; margin-bottom: 10px; display: flex; justify-content: space-between; color: var(--text-main); text-shadow: var(--title-shadow);}
         [data-theme="dark"] .project-title { text-shadow: var(--title-shadow-dark); }
@@ -522,14 +610,16 @@
             backdrop-filter: none;
         }
         .skill-card:hover { transform: translateY(-4px); }
-        .skill-icon { width: 40px; height: 40px; background: rgba(79, 179, 232, 0.15); border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(79, 179, 232, 0.15);}
+        .skill-icon { width: 40px; height: 40px; background: rgba(79, 179, 232, 0.15); border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(79, 179, 232, 0.15); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s; }
+        .skill-card:hover .skill-icon { transform: translateY(-3px) rotate(-6deg); box-shadow: 0 8px 18px rgba(79, 179, 232, 0.3); }
         .skill-title { font-size: 1.2em; font-weight: 700; margin-bottom: 10px; color: var(--text-main); text-shadow: var(--title-shadow);}
         [data-theme="dark"] .skill-title { text-shadow: var(--title-shadow-dark); }
         .skill-desc { font-size: 0.9em; color: var(--text-sub); margin-bottom: 20px; text-shadow: var(--text-float);}
         [data-theme="dark"] .skill-desc { text-shadow: var(--text-float-dark); }
         .tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .tag { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--border); color: var(--text-main); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; font-weight: 600; backdrop-filter: blur(8px);}
+        .tag { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--border); color: var(--text-main); padding: 6px 14px; border-radius: 8px; font-size: 0.8em; font-family: monospace; font-weight: 600; backdrop-filter: blur(8px); transition: letter-spacing 0.35s cubic-bezier(0.25, 1, 0.5, 1), background 0.35s, border-color 0.35s, transform 0.35s; }
         [data-theme="dark"] .tag { background: rgba(255, 255, 255, 0.05); }
+        .tag:hover { letter-spacing: 0.06em; background: rgba(79, 179, 232, 0.18); border-color: var(--accent); transform: translateY(-1px); }
 
         .interests-block { margin-top: 30px; }
 
@@ -585,6 +675,12 @@
         .cf-item.is-center {
             z-index: 10;
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35), 0 0 40px rgba(79, 179, 232, 0.35);
+            /* ===== 新增：中心浮动 ===== */
+            animation: cfFloat 3.2s ease-in-out infinite;
+        }
+        @keyframes cfFloat {
+            0%, 100% { margin-top: -145px; }
+            50% { margin-top: -151px; }
         }
         [data-theme="dark"] .cf-item.is-center {
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 168, 255, 0.3);
@@ -648,6 +744,59 @@
 
         .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: monospace; font-weight: 500;}
 
+        /* ===== 新增：Hero 字符入场 ===== */
+        .hero { position: relative; }
+        .hero::before {
+            content: '';
+            position: absolute; inset: -40px;
+            background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%),
+                        rgba(79, 179, 232, 0.10), transparent 55%);
+            pointer-events: none;
+            transition: opacity 0.5s;
+            border-radius: 30px;
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .hero h1 .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(28px);
+            filter: blur(10px);
+            animation: charIn 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        .hero h1 .char.space { width: 0.28em; }
+        @keyframes charIn {
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* ===== 新增：时间轴生长线（覆盖原 border-left） ===== */
+        .timeline { border-left: none; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 2px;
+            background: var(--timeline);
+            transform-origin: top;
+            transform: scaleY(0);
+            transition: transform 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .timeline.grown::before { transform: scaleY(1); }
+        /* 兼容原 timeline 的 padding-left:30px 和节点位置（-37px 相对 item，item 内边距 0） */
+        .timeline { margin-left: 10px; padding-left: 30px; position: relative; }
+
+        /* ===== 新增：prefers-reduced-motion 降级 ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .hero h1 .char { opacity: 1; transform: none; filter: none; }
+            .timeline::before { transform: scaleY(1); }
+            .timeline-item::before { transform: scale(1); }
+        }
+
         @media (max-width: 768px) {
             .about-card { flex-direction: column; text-align: center; }
             .nav-links { display: none; }
@@ -681,9 +830,12 @@
                 filter: none !important;
                 box-shadow: 0 4px 15px rgba(79, 179, 232, 0.2);
                 transform-origin: center center;
+                animation: none !important;
             }
             .cf-item.is-center { box-shadow: 0 4px 15px rgba(79, 179, 232, 0.2); }
             .cf-dots { display: none; }
+            /* 移动端禁用 tilt 和 hero 光晕 */
+            .project-card::after { display: none; }
         }
     </style>
 </head>
@@ -696,7 +848,7 @@
     <div class="bot-float-container">
         <div class="bot-float-panel" id="botFloatPanel">
             <div class="agent-header">
-                <div class="agent-avatar">🤖</div>
+                <div class="agent-avatar" id="agentAvatar">🤖</div>
                 <div>
                     <div class="agent-name">Yiming's Bot</div>
                     <div class="agent-status">Online</div>
@@ -720,7 +872,7 @@
         </div>
     </div>
 
-    <nav class="nav">
+    <nav class="nav" id="mainNav">
         <div class="nav-logo" onclick="window.scrollTo(0,0)">Yiming Zhao</div>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
@@ -734,9 +886,9 @@
 
     <div class="container">
         
-        <div class="hero reveal active" style="margin-bottom: 100px;">
+        <div class="hero reveal active" id="heroSection" style="margin-bottom: 100px;">
             <div style="color: var(--accent); font-weight: 800; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px; text-shadow: var(--text-float);">Hong Kong</div>
-            <h1 style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px; text-shadow: var(--title-shadow);">Yiming Zhao</h1>
+            <h1 id="heroTitle" style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px; text-shadow: var(--title-shadow);">Yiming Zhao</h1>
             <h2 style="font-size: 2em; font-weight: 500; color: var(--text-sub); margin-bottom: 20px; text-shadow: var(--text-float);">Product Designer & Full-Stack Creator</h2>
             
             <p style="font-size: 1.2em; color: var(--text-sub); max-width: 650px; margin-bottom: 40px; font-weight: 500; text-shadow: var(--text-float);">
@@ -768,7 +920,7 @@
                 <div class="section-line"></div>
             </div>
             <div class="about-card reveal">
-                <div class="profile-img-container">
+                <div class="profile-img-container" id="profileContainer">
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/avatar.jpg" alt="Yiming Zhao" class="profile-img">
                 </div>
                 <div class="about-text">
@@ -792,7 +944,7 @@
             </div>
             
             <div class="projects-grid">
-                <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank" class="project-card reveal">
+                <a href="https://hometree-social-app-hgrjctg3cpkjlylf2hapxe.streamlit.app/" target="_blank" class="project-card reveal tilt-card" data-index="01">
                     <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/hometree.png" alt="Hometree" class="project-img-simple" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'">
                     <div class="project-info">
                         <div class="project-title">Hometree: Privacy-First Social App <span>Live App ↗</span></div>
@@ -801,7 +953,7 @@
                     </div>
                 </a>
 
-                <a href="https://myrazanglin-art.github.io/Rhythm-Runner-Game/" target="_blank" class="project-card reveal">
+                <a href="https://myrazanglin-art.github.io/Rhythm-Runner-Game/" target="_blank" class="project-card reveal tilt-card" data-index="02">
                     <div class="project-preview-wrap">
                         <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/rhythm.png" alt="Rhythm Runner" class="project-img" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800'">
                         <iframe class="project-iframe" src="https://myrazanglin-art.github.io/Rhythm-Runner-Game/" loading="lazy" title="Rhythm Runner live preview"></iframe>
@@ -962,6 +1114,26 @@
     </div>
 
     <script>
+        // ===== 新增：Hero 标题字符拆分（在 DOM 就绪后立即执行） =====
+        (function splitHeroTitle() {
+            const h1 = document.getElementById('heroTitle');
+            if (!h1) return;
+            const text = h1.textContent;
+            h1.textContent = '';
+            const frag = document.createDocumentFragment();
+            let delay = 0.15; // 起始延迟
+            for (let i = 0; i < text.length; i++) {
+                const ch = text[i];
+                const span = document.createElement('span');
+                span.className = 'char' + (ch === ' ' ? ' space' : '');
+                span.textContent = ch === ' ' ? '\u00A0' : ch;
+                span.style.animationDelay = delay + 's';
+                delay += 0.045;
+                frag.appendChild(span);
+            }
+            h1.appendChild(frag);
+        })();
+
         // 生成小雪花
         const snowLayer = document.getElementById('snowLayer');
         const snowCount = 40;
@@ -985,6 +1157,141 @@
             const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
             progressBar.style.width = pct + '%';
         }, { passive: true });
+
+        // ===== 新增：导航滚动收缩 =====
+        const mainNav = document.getElementById('mainNav');
+        const onScrollNav = () => {
+            if (window.scrollY > 100) mainNav.classList.add('scrolled');
+            else mainNav.classList.remove('scrolled');
+        };
+        window.addEventListener('scroll', onScrollNav, { passive: true });
+        onScrollNav();
+
+        // ===== 新增：Hero 鼠标柔光 =====
+        const hero = document.getElementById('heroSection');
+        if (hero) {
+            let heroRaf = null;
+            let heroTargetX = 0, heroTargetY = 0;
+            let heroCurX = 0, heroCurY = 0;
+            hero.addEventListener('mousemove', (e) => {
+                const r = hero.getBoundingClientRect();
+                heroTargetX = e.clientX - r.left;
+                heroTargetY = e.clientY - r.top;
+                if (!heroRaf) heroRaf = requestAnimationFrame(tickHero);
+            });
+            function tickHero() {
+                heroCurX += (heroTargetX - heroCurX) * 0.12;
+                heroCurY += (heroTargetY - heroCurY) * 0.12;
+                hero.style.setProperty('--mx', heroCurX + 'px');
+                hero.style.setProperty('--my', heroCurY + 'px');
+                if (Math.abs(heroTargetX - heroCurX) > 0.5 || Math.abs(heroTargetY - heroCurY) > 0.5) {
+                    heroRaf = requestAnimationFrame(tickHero);
+                } else {
+                    heroRaf = null;
+                }
+            }
+        }
+
+        // ===== 新增：头像鼠标视差 =====
+        const profileContainer = document.getElementById('profileContainer');
+        if (profileContainer && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+            const aboutCard = profileContainer.closest('.about-card');
+            let raf = null, tx = 0, ty = 0, cx = 0, cy = 0;
+            if (aboutCard) {
+                aboutCard.addEventListener('mousemove', (e) => {
+                    const r = aboutCard.getBoundingClientRect();
+                    const nx = (e.clientX - r.left) / r.width - 0.5;
+                    const ny = (e.clientY - r.top) / r.height - 0.5;
+                    tx = nx * 12;
+                    ty = ny * 12;
+                    if (!raf) raf = requestAnimationFrame(tickProfile);
+                });
+                aboutCard.addEventListener('mouseleave', () => {
+                    tx = 0; ty = 0;
+                    if (!raf) raf = requestAnimationFrame(tickProfile);
+                });
+                function tickProfile() {
+                    cx += (tx - cx) * 0.12;
+                    cy += (ty - cy) * 0.12;
+                    profileContainer.style.transform = `translate(${cx}px, ${cy}px)`;
+                    if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1) {
+                        raf = requestAnimationFrame(tickProfile);
+                    } else {
+                        raf = null;
+                    }
+                }
+            }
+        }
+
+        // ===== 新增：项目卡片 3D Tilt =====
+        (function initTilt() {
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                card.classList.add('tilting');
+                let raf = null;
+                let targetRX = 0, targetRY = 0, targetLift = 0;
+                let curRX = 0, curRY = 0, curLift = 0;
+                let hovering = false;
+
+                const tick = () => {
+                    curRX += (targetRX - curRX) * 0.15;
+                    curRY += (targetRY - curRY) * 0.15;
+                    curLift += (targetLift - curLift) * 0.15;
+                    card.style.transform = `perspective(1000px) rotateX(${curRX}deg) rotateY(${curRY}deg) translateY(${curLift}px)`;
+                    if (Math.abs(targetRX - curRX) > 0.05 || Math.abs(targetRY - curRY) > 0.05 || Math.abs(targetLift - curLift) > 0.1) {
+                        raf = requestAnimationFrame(tick);
+                    } else {
+                        raf = null;
+                    }
+                };
+
+                card.addEventListener('mouseenter', () => {
+                    hovering = true;
+                    targetLift = -5;
+                    if (!raf) raf = requestAnimationFrame(tick);
+                });
+
+                card.addEventListener('mousemove', (e) => {
+                    if (!hovering) return;
+                    const r = card.getBoundingClientRect();
+                    const nx = (e.clientX - r.left) / r.width - 0.5;
+                    const ny = (e.clientY - r.top) / r.height - 0.5;
+                    targetRY = nx * 4;   // 左右倾
+                    targetRX = -ny * 4;  // 上下倾
+                    if (!raf) raf = requestAnimationFrame(tick);
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    hovering = false;
+                    targetRX = 0; targetRY = 0; targetLift = 0;
+                    if (!raf) raf = requestAnimationFrame(tick);
+                });
+            });
+        })();
+
+        // ===== 新增：时间轴生长 + 节点弹入 =====
+        (function initTimeline() {
+            const timelines = document.querySelectorAll('.timeline');
+            const items = document.querySelectorAll('.timeline-item');
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.35, rootMargin: '0px 0px -10% 0px' });
+            items.forEach(it => io.observe(it));
+
+            const tlIO = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('grown');
+                        tlIO.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            timelines.forEach(tl => tlIO.observe(tl));
+        })();
 
         // Bot 悬浮
         function toggleBotFloat() {
@@ -1033,6 +1340,19 @@
             }, 600);
         }
 
+        // ===== 新增：机器人眨眼 =====
+        (function botBlink() {
+            const avatar = document.getElementById('agentAvatar');
+            if (!avatar) return;
+            setInterval(() => {
+                avatar.style.transition = 'transform 0.18s ease-in-out';
+                avatar.style.transform = 'scaleY(0.15)';
+                setTimeout(() => {
+                    avatar.style.transform = 'scaleY(1)';
+                }, 160);
+            }, 5200);
+        })();
+
         function toggleTheme() {
             const body = document.body;
             const btn = document.getElementById('theme-btn');
@@ -1077,16 +1397,19 @@
             });
         }, { passive: true });
 
-        /* ===== 扇形 Cover Flow 逻辑 ===== */
+        /* ===== 扇形 Cover Flow 逻辑（含自动轮播增强） ===== */
         (function initCoverFlow() {
             const stage = document.getElementById('coverflowStage');
             const dotsWrap = document.getElementById('cfDots');
+            const coverflowEl = document.getElementById('coverflow');
             if (!stage) return;
 
             const items = Array.from(stage.querySelectorAll('.cf-item'));
             const total = items.length;
             let current = 0;
             let hoverTimer = null;
+            let autoTimer = null;
+            let autoEnabled = true;
 
             items.forEach((_, i) => {
                 const dot = document.createElement('button');
@@ -1141,10 +1464,35 @@
                 if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
             }
 
+            // ===== 新增：自动轮播 =====
+            function startAuto() {
+                stopAuto();
+                if (!autoEnabled) return;
+                autoTimer = setInterval(() => {
+                    if (document.hidden) return;
+                    if (window.innerWidth <= 768) return;
+                    current = (current + 1) % total;
+                    update();
+                }, 4200);
+            }
+            function stopAuto() {
+                if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+            }
+
+            if (coverflowEl) {
+                coverflowEl.addEventListener('mouseenter', () => { stopAuto(); clearHoverTimer(); });
+                coverflowEl.addEventListener('mouseleave', () => { clearHoverTimer(); startAuto(); });
+            }
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) stopAuto();
+                else startAuto();
+            });
+
             items.forEach((item, i) => {
                 item.addEventListener('click', () => {
                     clearHoverTimer();
                     if (i !== current) { current = i; update(); }
+                    startAuto();
                 });
 
                 item.addEventListener('mouseenter', () => {
@@ -1191,12 +1539,15 @@
             window.addEventListener('resize', () => {
                 if (window.innerWidth <= 768) {
                     items.forEach(it => { it.style.transform = ''; it.style.opacity = ''; it.style.zIndex = ''; });
+                    stopAuto();
                 } else {
                     update();
+                    startAuto();
                 }
             });
 
             update();
+            startAuto();
         })();
     </script>
 </body>
