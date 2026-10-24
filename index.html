@@ -15,6 +15,7 @@
             --text-main: #1B2B3A; 
             --text-sub: #5F7A8C;
             --accent: #4FB3E8; 
+            --accent-soft: #4FB3E8;
             --border: rgba(140, 200, 235, 0.5); 
             --timeline: rgba(140, 200, 235, 0.6);
             --grid-color: rgba(140, 200, 235, 0.18); 
@@ -50,6 +51,7 @@
             --text-main: #F5F5F7;
             --text-sub: #86868B;
             --accent: #00A8FF;
+            --accent-soft: #5CC2FF;
             --border: rgba(255, 255, 255, 0.1);
             --timeline: rgba(255, 255, 255, 0.15);
             --grid-color: transparent;
@@ -58,8 +60,6 @@
             --msg-bot-text: #FFFFFF;
             --nav-glow: rgba(255, 255, 255, 0.08);
             --glass-inner: rgba(255, 255, 255, 0.06);
-            /* 深色模式专用柔和 accent（用于日期等文字） */
-            --accent-soft: #5CC2FF;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -111,7 +111,7 @@
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid var(--border);
             box-shadow: 0 10px 30px rgba(79, 179, 232, 0.25), inset 0 1px 0 var(--glass-inner);
-            padding: 16px; display: flex; flex-direction: column; height: 380px;
+            padding: 16px; display: flex; flex-direction: column; height: 440px;
             opacity: 0; visibility: hidden;
             transform: translateY(12px) scale(0.96);
             transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
@@ -155,6 +155,26 @@
             background: var(--accent); color: #fff; align-self: flex-end;
             border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(79, 179, 232, 0.2);
         }
+
+        .bot-suggestions {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-top: 10px; flex-shrink: 0;
+        }
+        .bot-suggestion-chip {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 5px 11px; border-radius: 14px;
+            font-size: 0.72em; font-family: var(--font-round); font-weight: 700;
+            cursor: pointer; transition: 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+            white-space: nowrap; backdrop-filter: blur(8px);
+        }
+        [data-theme="dark"] .bot-suggestion-chip { background: rgba(255, 255, 255, 0.06); }
+        .bot-suggestion-chip:hover {
+            background: var(--accent); color: #fff; border-color: var(--accent);
+            transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 179, 232, 0.35);
+        }
+
         .bot-float-panel .chat-input-area { display: flex; gap: 8px; margin-top: 10px; flex-shrink: 0; }
         .bot-float-panel .chat-input {
             flex: 1; background: rgba(255, 255, 255, 0.6);
@@ -334,21 +354,12 @@
         .tl-title { font-size: 1.3em; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--text-main); text-shadow: var(--title-shadow); }
         [data-theme="dark"] .tl-title { text-shadow: var(--title-shadow-dark); }
 
-        /* ===== 修复：深色模式日期颜色 ===== */
         .tl-date { 
-            color: var(--accent); 
-            font-family: var(--font-round); 
-            font-size: 0.9em; 
-            text-transform: uppercase; 
-            font-weight: 800; 
-            margin-bottom: 10px; 
-            letter-spacing: 0.3px; 
-            text-shadow: var(--text-float);
+            color: var(--accent); font-family: var(--font-round); font-size: 0.9em;
+            text-transform: uppercase; font-weight: 800; margin-bottom: 10px;
+            letter-spacing: 0.3px; text-shadow: var(--text-float);
         }
-        [data-theme="dark"] .tl-date { 
-            color: var(--accent-soft); 
-            text-shadow: none; 
-        }
+        [data-theme="dark"] .tl-date { color: var(--accent-soft); text-shadow: none; }
 
         .tl-org { 
             color: var(--text-main); font-weight: 600; font-size: 1em; margin-bottom: 5px; max-width: 75%;
@@ -428,195 +439,157 @@
         .preview-hint { color: var(--text-sub); font-size: 0.82em; margin-top: 12px; font-family: var(--font-round); font-weight: 600; opacity: 0.75; }
 
         /* ============================================================
-           ===== Skills 3D 房间 =====
+           ===== Skills 可翻转卡片 =====
            ============================================================ */
-        .skills-room {
-            position: relative;
-            width: 100%;
-            height: 520px;
-            perspective: 1400px;
-            perspective-origin: 50% 45%;
-            overflow: hidden;
-            border-radius: 24px;
-            background: transparent;
+        .skills-flip-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
             margin-top: 10px;
         }
-        .room-floor {
-            position: absolute; left: -40%; right: -40%; bottom: -30%; height: 90%;
-            background-image:
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: rotateX(72deg); transform-origin: center top;
-            -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 75%);
-            mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 75%);
-            opacity: 0.9; pointer-events: none; transition: opacity 0.6s;
+        .flip-card {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            perspective: 1200px;
+            cursor: pointer;
+            outline: none;
         }
-        .room-wall {
-            position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 50% 40%, rgba(79,179,232,0.10), transparent 60%);
-            pointer-events: none; transition: background 0.6s;
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.75s cubic-bezier(0.34, 1.3, 0.64, 1);
+            border-radius: 18px;
         }
-
-        .room-zones {
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        /* 桌面端悬停翻转 */
+        @media (hover: hover) and (pointer: fine) {
+            .flip-card:hover .flip-card-inner {
+                transform: rotateY(180deg);
+            }
+        }
+        .flip-card-face {
             position: absolute;
             inset: 0;
-            pointer-events: none;
-        }
-        .room-zone {
-            position: absolute;
-            left: 50%; top: 50%;
-            width: 240px; height: 160px;
-            border-radius: 14px;
+            border-radius: 18px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             background: var(--card);
-            backdrop-filter: blur(18px) saturate(180%);
-            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid var(--border);
-            box-shadow: inset 0 1px 0 var(--glass-inner),
-                        0 10px 30px rgba(79, 179, 232, 0.12);
-            cursor: pointer;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
-                        box-shadow 0.4s, border-color 0.4s,
-                        background 0.4s, opacity 0.4s, visibility 0.4s;
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 18px;
-            user-select: none;
-            will-change: transform;
-            pointer-events: auto;
-            transform: translate(-50%, -50%);
+            box-shadow: 0 10px 30px rgba(79, 179, 232, 0.12),
+                        inset 0 1px 0 var(--glass-inner);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 26px;
+            overflow: hidden;
+            transition: border-color 0.4s, box-shadow 0.4s;
         }
-
-        .room-zone[data-zone="0"] {
-            transform: translate(calc(-50% - 220px), calc(-50% + 60px)) rotateY(18deg) rotateX(-3deg);
-            z-index: 4;
+        [data-theme="dark"] .flip-card-face {
+            box-shadow: inset 0 1px 0 var(--glass-inner);
         }
-        .room-zone[data-zone="1"] {
-            transform: translate(calc(-50% + 220px), calc(-50% + 60px)) rotateY(-18deg) rotateX(-3deg);
-            z-index: 4;
-        }
-        .room-zone[data-zone="2"] {
-            transform: translate(calc(-50% - 200px), calc(-50% - 110px)) rotateY(14deg) rotateX(2deg) scale(0.92);
-            z-index: 3;
-            opacity: 0.9;
-        }
-        .room-zone[data-zone="3"] {
-            transform: translate(calc(-50% + 200px), calc(-50% - 110px)) rotateY(-14deg) rotateX(2deg) scale(0.92);
-            z-index: 3;
-            opacity: 0.9;
-        }
-
-        .room-zone:hover {
+        .flip-card:hover .flip-card-face {
             border-color: var(--accent);
-            box-shadow: inset 0 1px 0 var(--glass-inner),
-                        0 18px 40px rgba(79, 179, 232, 0.28),
-                        0 0 30px rgba(79, 179, 232, 0.18);
-            background: rgba(255, 255, 255, 0.62);
-            z-index: 10;
-        }
-        [data-theme="dark"] .room-zone:hover { background: rgba(20, 20, 26, 0.7); }
-
-        .room-zone-icon { font-size: 26px; margin-bottom: 10px; filter: drop-shadow(0 2px 4px rgba(79, 179, 232, 0.25)); }
-        .room-zone-label { font-size: 0.78em; font-family: var(--font-round); font-weight: 800; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
-        [data-theme="dark"] .room-zone-label { color: var(--accent-soft); }
-        .room-zone-title { font-size: 1.05em; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em; text-shadow: var(--title-shadow); }
-        [data-theme="dark"] .room-zone-title { text-shadow: var(--title-shadow-dark); }
-        .room-zone-hint { font-size: 0.78em; font-family: var(--font-round); font-weight: 600; color: var(--text-sub); margin-top: 8px; opacity: 0.75; }
-
-        .room-zone.is-active {
-            border-color: var(--accent);
-            box-shadow: inset 0 1px 0 var(--glass-inner),
-                        0 0 0 1px var(--accent),
-                        0 22px 50px rgba(79, 179, 232, 0.35);
-            background: rgba(255, 255, 255, 0.72);
-        }
-        [data-theme="dark"] .room-zone.is-active { background: rgba(24, 24, 30, 0.82); }
-
-        .skills-room.zoomed .room-zone:not(.is-active) {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: translate(-50%, -50%) scale(0.3);
-        }
-        .skills-room.zoomed .room-zone.is-active {
-            transform: translate(-50%, -50%) scale(1.25);
-            opacity: 1;
-            pointer-events: none;
-            border-color: transparent;
-            box-shadow: none;
-            background: transparent;
-            z-index: 20;
-        }
-        .skills-room.zoomed .room-zone.is-active > * {
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-        .skills-room.zoomed .room-floor,
-        .skills-room.zoomed .room-wall {
-            opacity: 0;
+            box-shadow: 0 18px 40px rgba(79, 179, 232, 0.22),
+                        inset 0 1px 0 var(--glass-inner);
         }
 
-        .room-content {
-            position: absolute; inset: 0;
-            display: flex; align-items: center; justify-content: center;
-            padding: 30px;
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-                        visibility 0.5s;
-            pointer-events: none; z-index: 15;
+        /* 正面 */
+        .flip-card-front { }
+        .flip-card-front .fc-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 4px rgba(79, 179, 232, 0.25));
         }
-        .skills-room.zoomed .room-content {
-            opacity: 1; visibility: visible; pointer-events: auto;
+        .flip-card-front .fc-kicker {
+            font-size: 0.75em;
+            font-family: var(--font-round);
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
-        .room-content-inner {
-            position: relative;
-            max-width: 640px; width: 100%;
-            padding: 34px 36px;
-            border-radius: 20px;
-            background: var(--card);
-            backdrop-filter: blur(28px) saturate(180%);
-            -webkit-backdrop-filter: blur(28px) saturate(180%);
+        [data-theme="dark"] .flip-card-front .fc-kicker { color: var(--accent-soft); }
+        .flip-card-front .fc-title {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            text-shadow: var(--title-shadow);
+        }
+        [data-theme="dark"] .flip-card-front .fc-title { text-shadow: var(--title-shadow-dark); }
+        .flip-card-front .fc-hint {
+            font-size: 0.75em;
+            font-family: var(--font-round);
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-top: 10px;
+            opacity: 0.75;
+        }
+
+        /* 背面 */
+        .flip-card-back {
+            transform: rotateY(180deg);
+            justify-content: flex-start;
+        }
+        .flip-card-back .fc-back-kicker {
+            font-size: 0.72em;
+            font-family: var(--font-round);
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        [data-theme="dark"] .flip-card-back .fc-back-kicker { color: var(--accent-soft); }
+        .flip-card-back .fc-back-desc {
+            font-size: 0.92em;
+            color: var(--text-sub);
+            line-height: 1.65;
+            margin-bottom: 16px;
+            text-shadow: var(--text-float);
+        }
+        [data-theme="dark"] .flip-card-back .fc-back-desc { text-shadow: var(--text-float-dark); }
+        .flip-card-back .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+        .flip-card-back .tag {
+            background: rgba(255, 255, 255, 0.55);
             border: 1px solid var(--border);
-            box-shadow: 0 22px 60px rgba(79, 179, 232, 0.22), inset 0 1px 0 var(--glass-inner);
-            transform: translateY(14px);
-            transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.78em;
+            font-family: var(--font-round);
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
         }
-        .skills-room.zoomed .room-content-inner { transform: translateY(0); }
-        [data-theme="dark"] .room-content-inner {
-            box-shadow: 0 22px 60px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-inner);
+        [data-theme="dark"] .flip-card-back .tag { background: rgba(255,255,255,0.06); }
+        .flip-card-back .tag:hover {
+            background: rgba(79, 179, 232, 0.2);
+            border-color: var(--accent);
         }
-        .room-content-close {
-            position: absolute; top: 14px; right: 14px;
-            width: 32px; height: 32px; border-radius: 50%;
-            background: rgba(255,255,255,0.4); border: 1px solid var(--border);
-            cursor: pointer; color: var(--text-main); font-size: 16px;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.3s; z-index: 2;
-        }
-        [data-theme="dark"] .room-content-close { background: rgba(255,255,255,0.05); }
-        .room-content-close:hover { background: var(--accent); color: #fff; transform: rotate(90deg); }
-        .room-content-icon { font-size: 30px; margin-bottom: 10px; }
-        .room-content-kicker { font-size: 0.78em; font-family: var(--font-round); font-weight: 800; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
-        [data-theme="dark"] .room-content-kicker { color: var(--accent-soft); }
-        .room-content-title { font-size: 1.8em; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 14px; text-shadow: var(--title-shadow); }
-        [data-theme="dark"] .room-content-title { text-shadow: var(--title-shadow-dark); }
-        .room-content-desc { font-size: 1em; color: var(--text-sub); line-height: 1.75; margin-bottom: 18px; text-shadow: var(--text-float); }
-        [data-theme="dark"] .room-content-desc { text-shadow: var(--text-float-dark); }
-        .room-content .tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .room-content .tag {
-            background: rgba(255, 255, 255, 0.55); border: 1px solid var(--border);
-            color: var(--text-main); padding: 6px 14px; border-radius: 8px;
-            font-size: 0.82em; font-family: var(--font-round); font-weight: 700;
-            backdrop-filter: blur(8px); transition: 0.3s;
-        }
-        [data-theme="dark"] .room-content .tag { background: rgba(255,255,255,0.06); }
-        .room-content .tag:hover { background: rgba(79, 179, 232, 0.2); border-color: var(--accent); }
 
-        .room-hint-bar {
-            text-align: center; font-size: 0.85em; font-family: var(--font-round);
-            font-weight: 600; color: var(--text-sub); margin-top: 18px;
-            opacity: 0.75; transition: opacity 0.4s;
+        .skills-flip-hint {
+            text-align: center;
+            font-size: 0.82em;
+            font-family: var(--font-round);
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-top: 20px;
+            opacity: 0.7;
         }
-        .skills-room.zoomed ~ .room-hint-bar { opacity: 0; }
 
         .interests-block { margin-top: 30px; }
 
@@ -704,6 +677,7 @@
             .hero h1 .char { opacity: 1; transform: none; filter: none; }
             .timeline::before { transform: scaleY(1); }
             .timeline-item::before { transform: scale(1); }
+            .flip-card-inner { transition: none !important; }
         }
 
         @media (max-width: 768px) {
@@ -736,35 +710,11 @@
             .cf-dots { display: none; }
             .project-card::after { display: none; }
 
-            .skills-room { height: auto; perspective: none; overflow: visible; }
-            .room-floor, .room-wall { display: none; }
-            .room-zones {
-                position: relative; inset: auto;
-                display: grid; grid-template-columns: 1fr; gap: 12px;
-                pointer-events: auto;
+            .skills-flip-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
-            .room-zone {
-                position: relative; left: auto; top: auto;
-                margin: 0; width: 100%; height: auto; min-height: 100px;
-                transform: none !important; opacity: 1 !important; z-index: auto !important;
-            }
-            .room-zone.is-active { border-color: var(--accent); }
-            .skills-room.zoomed .room-zones { display: none; }
-            .skills-room.zoomed .room-zone.is-active > * { opacity: 1; }
-            .skills-room.zoomed .room-content {
-                position: relative; inset: auto;
-                opacity: 1; visibility: visible; transform: none;
-                pointer-events: auto; padding: 0;
-            }
-            .skills-room.zoomed .room-content-inner { max-width: 100%; }
-            .room-content {
-                position: relative; inset: auto; transform: none;
-                opacity: 0; visibility: hidden; padding: 0; pointer-events: none;
-            }
-            .skills-room.zoomed .room-content {
-                opacity: 1; visibility: visible; pointer-events: auto; margin-top: 0;
-            }
-            .room-hint-bar { font-size: 0.75em; }
+            .flip-card { height: 220px; }
         }
     </style>
 </head>
@@ -785,6 +735,17 @@
             <div class="chat-history" id="botFloatChatHistory">
                 <div class="msg msg-bot">Hi there! I'm Yiming's Bot. Ask me about Hometree, Rhythm Runner, or anything on this portfolio! (๑•̀ㅂ•́)و✧</div>
             </div>
+
+            <!-- ===== 新增：快捷问题引导 ===== -->
+            <div class="bot-suggestions" id="botSuggestions">
+                <button class="bot-suggestion-chip" data-q="Tell me about Hometree">Hometree?</button>
+                <button class="bot-suggestion-chip" data-q="How does Rhythm Runner use audio?">Rhythm Runner?</button>
+                <button class="bot-suggestion-chip" data-q="What did you study at CUHK?">CUHK / LDTE?</button>
+                <button class="bot-suggestion-chip" data-q="What is your design approach?">Design approach?</button>
+                <button class="bot-suggestion-chip" data-q="Tell me about your crochet and music hobbies">Hobbies?</button>
+                <button class="bot-suggestion-chip" data-q="What did you do at CLEAR internship?">CLEAR internship?</button>
+            </div>
+
             <div class="chat-input-area">
                 <input type="text" class="chat-input" id="botFloatInput" placeholder="Ask a question..." onkeypress="handleBotFloatKeyPress(event)">
                 <button class="chat-send" onclick="sendBotFloatMessage()">Send</button>
@@ -829,6 +790,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                 </a>
                 <a href="https://www.linkedin.com/in/myra-z-1a5299339/" target="_blank" class="btn-icon" title="LinkedIn">
+                    <!-- 原本的 LinkedIn 图标（描边版） -->
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
                         <rect x="2" y="9" width="4" height="12"></rect>
@@ -950,6 +912,9 @@
             </div>
         </div>
 
+        <!-- ============================================================
+             ===== Skills：可翻转卡片 =====
+             ============================================================ -->
         <div id="skills" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">04</span>
@@ -957,53 +922,96 @@
                 <div class="section-line"></div>
             </div>
 
-            <div class="skills-room reveal" id="skillsRoom">
-                <div class="room-wall"></div>
-                <div class="room-floor"></div>
-
-                <div class="room-zones" id="roomZones">
-                    <div class="room-zone" data-zone="0" role="button" tabindex="0" aria-label="Product and UX Design">
-                        <div class="room-zone-icon">📐</div>
-                        <div class="room-zone-label">Zone 01</div>
-                        <div class="room-zone-title">Product & UX</div>
-                        <div class="room-zone-hint">click to enter →</div>
-                    </div>
-                    <div class="room-zone" data-zone="1" role="button" tabindex="0" aria-label="Development and Data">
-                        <div class="room-zone-icon">💻</div>
-                        <div class="room-zone-label">Zone 02</div>
-                        <div class="room-zone-title">Development</div>
-                        <div class="room-zone-hint">click to enter →</div>
-                    </div>
-                    <div class="room-zone" data-zone="2" role="button" tabindex="0" aria-label="AI and Prompt Engineering">
-                        <div class="room-zone-icon">🤖</div>
-                        <div class="room-zone-label">Zone 03</div>
-                        <div class="room-zone-title">AI & Prompt</div>
-                        <div class="room-zone-hint">click to enter →</div>
-                    </div>
-                    <div class="room-zone" data-zone="3" role="button" tabindex="0" aria-label="Creative and Audio">
-                        <div class="room-zone-icon">🎨</div>
-                        <div class="room-zone-label">Zone 04</div>
-                        <div class="room-zone-title">Creative & Audio</div>
-                        <div class="room-zone-hint">click to enter →</div>
+            <div class="skills-flip-grid reveal">
+                <!-- Card 1 -->
+                <div class="flip-card" tabindex="0" role="button" aria-label="Product and UX Design, flip for details">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-face flip-card-front">
+                            <div class="fc-icon">📐</div>
+                            <div class="fc-kicker">Zone 01</div>
+                            <div class="fc-title">Product & UX</div>
+                            <div class="fc-hint">hover / tap to flip →</div>
+                        </div>
+                        <div class="flip-card-face flip-card-back">
+                            <div class="fc-back-kicker">Product & UX Design</div>
+                            <div class="fc-back-desc">From user persona analysis to high-fidelity prototyping and interaction design.</div>
+                            <div class="tags">
+                                <span class="tag">Figma</span>
+                                <span class="tag">Prototyping</span>
+                                <span class="tag">User Testing</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="room-content" id="roomContent">
-                    <div class="room-content-inner" id="roomContentInner">
-                        <button class="room-content-close" id="roomContentClose" aria-label="Close">✕</button>
-                        <div class="room-content-icon" id="rcIcon">📐</div>
-                        <div class="room-content-kicker" id="rcKicker">Zone 01</div>
-                        <div class="room-content-title" id="rcTitle">Product & UX Design</div>
-                        <div class="room-content-desc" id="rcDesc">From user persona analysis to high-fidelity prototyping and interaction design.</div>
-                        <div class="tags" id="rcTags">
-                            <span class="tag">Figma</span>
-                            <span class="tag">Prototyping</span>
-                            <span class="tag">User Testing</span>
+                <!-- Card 2 -->
+                <div class="flip-card" tabindex="0" role="button" aria-label="Development and Data, flip for details">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-face flip-card-front">
+                            <div class="fc-icon">💻</div>
+                            <div class="fc-kicker">Zone 02</div>
+                            <div class="fc-title">Development</div>
+                            <div class="fc-hint">hover / tap to flip →</div>
+                        </div>
+                        <div class="flip-card-face flip-card-back">
+                            <div class="fc-back-kicker">Development & Data</div>
+                            <div class="fc-back-desc">Building full-stack prototypes and utilizing data-driven insights.</div>
+                            <div class="tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">Java</span>
+                                <span class="tag">C</span>
+                                <span class="tag">MySQL</span>
+                                <span class="tag">HTML/CSS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="flip-card" tabindex="0" role="button" aria-label="AI and Prompt Engineering, flip for details">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-face flip-card-front">
+                            <div class="fc-icon">🤖</div>
+                            <div class="fc-kicker">Zone 03</div>
+                            <div class="fc-title">AI & Prompt</div>
+                            <div class="fc-hint">hover / tap to flip →</div>
+                        </div>
+                        <div class="flip-card-face flip-card-back">
+                            <div class="fc-back-kicker">AI & Prompt Engineering</div>
+                            <div class="fc-back-desc">Leveraging LLMs to accelerate research, coding, and content development.</div>
+                            <div class="tags">
+                                <span class="tag">OpenAI API</span>
+                                <span class="tag">ChatGPT</span>
+                                <span class="tag">Claude</span>
+                                <span class="tag">Copilot</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="flip-card" tabindex="0" role="button" aria-label="Creative and Audio, flip for details">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-face flip-card-front">
+                            <div class="fc-icon">🎨</div>
+                            <div class="fc-kicker">Zone 04</div>
+                            <div class="fc-title">Creative & Audio</div>
+                            <div class="fc-hint">hover / tap to flip →</div>
+                        </div>
+                        <div class="flip-card-face flip-card-back">
+                            <div class="fc-back-kicker">Creative & Audio</div>
+                            <div class="fc-back-desc">Audio-driven creative work: DSP feature extraction, rhythm systems, and experimental sound design.</div>
+                            <div class="tags">
+                                <span class="tag">Librosa</span>
+                                <span class="tag">DSP</span>
+                                <span class="tag">Godot</span>
+                                <span class="tag">Electronic Music</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="room-hint-bar" id="roomHintBar">↳ Click a zone to enter · ESC to exit</div>
+            <div class="skills-flip-hint">↳ Hover on desktop, tap on mobile to flip each card</div>
         </div>
 
         <div id="interests" style="margin-top: 120px;">
@@ -1227,79 +1235,37 @@
             timelines.forEach(tl => tlIO.observe(tl));
         })();
 
-        (function initSkillsRoom() {
-            const room = document.getElementById('skillsRoom');
-            const zones = document.querySelectorAll('.room-zone');
-            const content = document.getElementById('roomContent');
-            const closeBtn = document.getElementById('roomContentClose');
-            const rcIcon = document.getElementById('rcIcon');
-            const rcKicker = document.getElementById('rcKicker');
-            const rcTitle = document.getElementById('rcTitle');
-            const rcDesc = document.getElementById('rcDesc');
-            const rcTags = document.getElementById('rcTags');
-            if (!room || !zones.length) return;
-
-            const ZONE_DATA = [
-                { icon: '📐', kicker: 'Zone 01', title: 'Product & UX Design',
-                  desc: 'From user persona analysis to high-fidelity prototyping and interaction design.',
-                  tags: ['Figma', 'Prototyping', 'User Testing'] },
-                { icon: '💻', kicker: 'Zone 02', title: 'Development & Data',
-                  desc: 'Building full-stack prototypes and utilizing data-driven insights.',
-                  tags: ['Python', 'Java', 'C', 'MySQL', 'HTML/CSS'] },
-                { icon: '🤖', kicker: 'Zone 03', title: 'AI & Prompt Engineering',
-                  desc: 'Leveraging LLMs to accelerate research, coding, and content development.',
-                  tags: ['OpenAI API', 'ChatGPT', 'Claude', 'Copilot'] },
-                { icon: '🎨', kicker: 'Zone 04', title: 'Creative & Audio',
-                  desc: 'Audio-driven creative work: DSP feature extraction, rhythm systems, and experimental sound design.',
-                  tags: ['Librosa', 'DSP', 'Godot', 'Electronic Music'] }
-            ];
-
-            let activeIndex = -1;
-
-            function openZone(i) {
-                const data = ZONE_DATA[i];
-                if (!data) return;
-                activeIndex = i;
-                rcIcon.textContent = data.icon;
-                rcKicker.textContent = data.kicker;
-                rcTitle.textContent = data.title;
-                rcDesc.textContent = data.desc;
-                rcTags.innerHTML = data.tags.map(t => `<span class="tag">${t}</span>`).join('');
-
-                zones.forEach((z, idx) => z.classList.toggle('is-active', idx === i));
-                room.classList.add('zoomed');
-                haptic.zoneEnter();
-            }
-
-            function closeZone() {
-                activeIndex = -1;
-                room.classList.remove('zoomed');
-                zones.forEach(z => z.classList.remove('is-active'));
-                haptic.light();
-            }
-
-            zones.forEach((zone, i) => {
-                zone.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (activeIndex === i) { closeZone(); return; }
-                    openZone(i);
+        /* ===== Skills 翻转卡片：移动端点击翻转 ===== */
+        (function initFlipCards() {
+            const cards = document.querySelectorAll('.flip-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // 桌面端依赖 hover，移动端或键盘操作时切换
+                    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+                    card.classList.toggle('flipped');
+                    haptic.tap();
                 });
-                zone.addEventListener('keydown', (e) => {
+                card.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        zone.click();
+                        card.classList.toggle('flipped');
+                        haptic.tap();
                     }
                 });
             });
+        })();
 
-            closeBtn.addEventListener('click', closeZone);
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && activeIndex !== -1) closeZone();
-            });
-
-            content.addEventListener('click', (e) => {
-                if (e.target === content) closeZone();
+        /* ===== Bot 快捷问题引导 ===== */
+        (function initBotSuggestions() {
+            const chips = document.querySelectorAll('.bot-suggestion-chip');
+            const input = document.getElementById('botFloatInput');
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const q = chip.getAttribute('data-q');
+                    if (!q) return;
+                    input.value = q;
+                    sendBotFloatMessage();
+                });
             });
         })();
 
