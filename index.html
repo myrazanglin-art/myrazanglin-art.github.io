@@ -8,7 +8,7 @@
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/a.jpg">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
         :root {
             /* ===== 浅色模式：浅天蓝主题 ===== */
@@ -25,6 +25,8 @@
             --nav-glow: rgba(255, 255, 255, 0.8);
             --glass-inner: rgba(255, 255, 255, 0.45);
             --card: rgba(255, 255, 255, 0.45);
+            /* 圆润字体栈：日期/元信息用 */
+            --font-round: 'Nunito', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             /* 立体文字阴影：改为淡蓝光晕 */
             --title-shadow: 
                 0 1px 0 rgba(255,255,255,0.95),
@@ -327,7 +329,7 @@
         .nav-logo:hover::before { transform: scale(1.6); }
         
         .nav-links { display: flex; align-items: center; gap: 30px; font-size: 0.85em; font-weight: 600; color: var(--text-sub); }
-        .nav-links a { color: var(--text-sub); text-decoration: none; transition: color 0.2s; text-transform: uppercase; letter-spacing: 1px; position: relative;}
+        .nav-links a { color: var(--text-sub); text-decoration: none; transition: color 0.2s; text-transform: uppercase; letter-spacing: 1px; position: relative; font-family: var(--font-round);}
         .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
         .nav-links a::after {
@@ -372,7 +374,7 @@
 
         .section-header { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; margin-top: 80px; }
         .section-header:first-child { margin-top: 0; }
-        .section-number { color: var(--accent); font-family: monospace; font-weight: 700; font-size: 1em; text-shadow: var(--text-float);}
+        .section-number { color: var(--accent); font-family: var(--font-round); font-weight: 800; font-size: 1em; text-shadow: var(--text-float);}
         .section-title { 
             font-size: 2.5em; font-weight: 800; letter-spacing: -0.04em; 
             text-shadow: var(--title-shadow);
@@ -447,7 +449,7 @@
             text-shadow: var(--text-float);
         }
         [data-theme="dark"] .about-text p { text-shadow: var(--text-float-dark); }
-        .about-details { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-sub); font-size: 0.9em; font-family: monospace; text-shadow: var(--text-float);}
+        .about-details { display: flex; flex-wrap: wrap; gap: 20px; color: var(--text-sub); font-size: 0.9em; font-family: var(--font-round); font-weight: 600; text-shadow: var(--text-float);}
         [data-theme="dark"] .about-details { text-shadow: var(--text-float-dark); }
 
         .timeline { position: relative; border-left: none; margin-left: 10px; padding-left: 30px; display: flex; flex-direction: column; gap: 30px; }
@@ -491,7 +493,7 @@
             text-shadow: var(--title-shadow);
         }
         [data-theme="dark"] .tl-title { text-shadow: var(--title-shadow-dark); }
-        .tl-date { color: var(--accent); font-family: monospace; font-size: 0.85em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; text-shadow: var(--text-float);}
+        .tl-date { color: var(--accent); font-family: var(--font-round); font-size: 0.9em; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; letter-spacing: 0.3px; text-shadow: var(--text-float);}
         .tl-org { 
             color: var(--text-main); 
             font-weight: 600; 
@@ -513,7 +515,7 @@
         .tl-org a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); transition: 0.3s;}
         .tl-org a:hover { color: var(--accent); font-weight: 800; border-bottom-color: transparent; }
 
-        .sub-heading { color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; font-weight: 700; text-shadow: var(--text-float);}
+        .sub-heading { color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9em; margin: 40px 0 20px 40px; font-weight: 800; text-shadow: var(--text-float); font-family: var(--font-round);}
 
         .projects-grid { display: flex; flex-direction: column; gap: 30px; }
         .project-card { border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); position: relative; }
@@ -562,9 +564,9 @@
             content: attr(data-index);
             position: absolute;
             top: 18px; left: 22px;
-            font-family: monospace;
-            font-size: 0.8em;
-            font-weight: 700;
+            font-family: var(--font-round);
+            font-size: 0.85em;
+            font-weight: 800;
             color: var(--accent);
             letter-spacing: 1px;
             opacity: 0;
@@ -592,13 +594,13 @@
         .project-info { padding: 30px; position: relative; z-index: 1; }
         .project-title { font-size: 1.5em; font-weight: 800; margin-bottom: 10px; display: flex; justify-content: space-between; color: var(--text-main); text-shadow: var(--title-shadow);}
         [data-theme="dark"] .project-title { text-shadow: var(--title-shadow-dark); }
-        .project-title span { color: var(--accent); font-size: 0.6em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; align-self: center; border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; text-shadow: none;}
+        .project-title span { color: var(--accent); font-size: 0.62em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; align-self: center; border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; text-shadow: none; font-family: var(--font-round);}
         .project-desc { color: var(--text-sub); font-size: 1em; line-height: 1.7;}
-        .warning-text { color: #2E8BC0; font-size: 0.85em; margin-top: 15px; font-style: italic; font-family: monospace; }
-        .preview-hint { color: var(--text-sub); font-size: 0.78em; margin-top: 12px; font-family: monospace; opacity: 0.7; }
+        .warning-text { color: #2E8BC0; font-size: 0.88em; margin-top: 15px; font-style: italic; font-family: var(--font-round); font-weight: 600;}
+        .preview-hint { color: var(--text-sub); font-size: 0.82em; margin-top: 12px; font-family: var(--font-round); font-weight: 600; opacity: 0.75; }
 
         /* ============================================================
-           ===== 新增：Skills 3D 房间场景 =====
+           ===== Skills 3D 房间场景 =====
            ============================================================ */
         .skills-room {
             position: relative;
@@ -611,7 +613,6 @@
             background: transparent;
             margin-top: 10px;
         }
-        /* 房间地面网格 */
         .room-floor {
             position: absolute;
             left: -40%; right: -40%;
@@ -629,7 +630,6 @@
             pointer-events: none;
             transition: opacity 0.6s;
         }
-        /* 房间后墙 — 一块发光面 */
         .room-wall {
             position: absolute;
             inset: 0;
@@ -638,7 +638,6 @@
             pointer-events: none;
             transition: background 0.6s;
         }
-        /* 四个可点击区域（用 3D 平面摆成房间四壁的透视） */
         .room-zones {
             position: absolute;
             inset: 0;
@@ -664,32 +663,35 @@
                         box-shadow 0.4s,
                         border-color 0.4s,
                         background 0.4s,
-                        opacity 0.4s;
+                        opacity 0.4s,
+                        visibility 0.4s;
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 18px;
             user-select: none;
             will-change: transform;
+            /* ===== 修复：显式 z-index + pointer-events ===== */
+            pointer-events: auto;
         }
         /* 每个区域的位置（用 3D 变换围成房间） */
         .room-zone[data-zone="0"] {
-            /* 左前 */
             transform: translate3d(-260px, 20px, 60px) rotateY(28deg) rotateX(-4deg);
+            z-index: 4;
         }
         .room-zone[data-zone="1"] {
-            /* 右前 */
             transform: translate3d(260px, 20px, 60px) rotateY(-28deg) rotateX(-4deg);
+            z-index: 4;
         }
         .room-zone[data-zone="2"] {
-            /* 左后 */
             transform: translate3d(-240px, -110px, -180px) rotateY(22deg) rotateX(2deg) scale(0.92);
             opacity: 0.85;
+            z-index: 3;
         }
         .room-zone[data-zone="3"] {
-            /* 右后 */
             transform: translate3d(240px, -110px, -180px) rotateY(-22deg) rotateX(2deg) scale(0.92);
             opacity: 0.85;
+            z-index: 3;
         }
         .room-zone:hover {
             border-color: var(--accent);
@@ -697,6 +699,7 @@
                         0 18px 40px rgba(79, 179, 232, 0.28),
                         0 0 30px rgba(79, 179, 232, 0.18);
             background: rgba(255, 255, 255, 0.62);
+            z-index: 6;
         }
         [data-theme="dark"] .room-zone:hover {
             background: rgba(20, 20, 26, 0.7);
@@ -707,11 +710,11 @@
             filter: drop-shadow(0 2px 4px rgba(79, 179, 232, 0.25));
         }
         .room-zone-label {
-            font-size: 0.72em;
-            font-family: monospace;
-            font-weight: 700;
+            font-size: 0.78em;
+            font-family: var(--font-round);
+            font-weight: 800;
             color: var(--accent);
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 6px;
         }
@@ -724,8 +727,9 @@
         }
         [data-theme="dark"] .room-zone-title { text-shadow: var(--title-shadow-dark); }
         .room-zone-hint {
-            font-size: 0.72em;
-            font-family: monospace;
+            font-size: 0.78em;
+            font-family: var(--font-round);
+            font-weight: 600;
             color: var(--text-sub);
             margin-top: 8px;
             opacity: 0.75;
@@ -741,9 +745,10 @@
             background: rgba(24, 24, 30, 0.82);
         }
 
-        /* 点击后，整个房间视角飞向那个区域 */
+        /* ===== 修复：zoomed 时非 active 隐藏（visibility 而非仅 opacity），active 的文字隐藏 ===== */
         .skills-room.zoomed .room-zone:not(.is-active) {
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
             transform: translate3d(0, 0, 0) scale(0.4);
         }
@@ -755,12 +760,16 @@
             box-shadow: none;
             background: transparent;
         }
+        /* 关键：active Zone 的文本内容隐藏，避免与展开面板文字重影 */
+        .skills-room.zoomed .room-zone.is-active > * {
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
         .skills-room.zoomed .room-floor,
         .skills-room.zoomed .room-wall {
             opacity: 0;
         }
 
-        /* 展开的内容面板 */
         .room-content {
             position: absolute;
             inset: 0;
@@ -832,11 +841,11 @@
             margin-bottom: 10px;
         }
         .room-content-kicker {
-            font-size: 0.72em;
-            font-family: monospace;
-            font-weight: 700;
+            font-size: 0.78em;
+            font-family: var(--font-round);
+            font-weight: 800;
             color: var(--accent);
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 6px;
         }
@@ -864,9 +873,9 @@
             color: var(--text-main);
             padding: 6px 14px;
             border-radius: 8px;
-            font-size: 0.8em;
-            font-family: monospace;
-            font-weight: 600;
+            font-size: 0.82em;
+            font-family: var(--font-round);
+            font-weight: 700;
             backdrop-filter: blur(8px);
             transition: 0.3s;
         }
@@ -876,11 +885,11 @@
             border-color: var(--accent);
         }
 
-        /* 房间底部提示条 */
         .room-hint-bar {
             text-align: center;
-            font-size: 0.8em;
-            font-family: monospace;
+            font-size: 0.85em;
+            font-family: var(--font-round);
+            font-weight: 600;
             color: var(--text-sub);
             margin-top: 18px;
             opacity: 0.75;
@@ -1008,7 +1017,7 @@
         }
         [data-theme="dark"] .interests-text p { text-shadow: var(--text-float-dark); }
 
-        .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: monospace; font-weight: 500;}
+        .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: var(--font-round); font-weight: 600;}
 
         .hero { position: relative; }
         .hero::before {
@@ -1032,6 +1041,16 @@
         .hero h1 .char.space { width: 0.28em; }
         @keyframes charIn {
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* ===== 修复：暗色模式 Hero 副标题与段落不再发白发虚 ===== */
+        [data-theme="dark"] .hero h2 {
+            color: #A8B0BC !important;
+            text-shadow: none !important;
+        }
+        [data-theme="dark"] .hero p {
+            color: #9AA3AE !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1084,7 +1103,6 @@
             .cf-dots { display: none; }
             .project-card::after { display: none; }
 
-            /* 移动端：Skills 房间变成普通卡片列表（禁用 3D 透视，避免混乱） */
             .skills-room {
                 height: auto;
                 perspective: none;
@@ -1116,6 +1134,9 @@
             .skills-room.zoomed .room-zones {
                 display: none;
             }
+            .skills-room.zoomed .room-zone.is-active > * {
+                opacity: 1;
+            }
             .skills-room.zoomed .room-content {
                 position: relative;
                 inset: auto;
@@ -1143,7 +1164,7 @@
                 pointer-events: auto;
                 margin-top: 0;
             }
-            .room-hint-bar { font-size: 0.72em; }
+            .room-hint-bar { font-size: 0.75em; }
         }
     </style>
 </head>
@@ -1305,7 +1326,7 @@
             <div class="timeline">
                 <div class="timeline-item reveal">
                     <div class="tl-title">Research Intern</div>
-                    <div class="tl-date">Expected 2024 - Present</div>
+                    <div class="tl-date">May 2026 - Present</div>
                     <div class="tl-org">
                         <a href="https://clear.cuhk.edu.hk/web/" target="_blank">Centre for Learning Enhancement and Research (CLEAR)</a>, The Chinese University of Hong Kong
                     </div>
@@ -1330,9 +1351,6 @@
             </div>
         </div>
 
-        <!-- ============================================================
-             ===== Skills：3D 房间交互区 =====
-             ============================================================ -->
         <div id="skills" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">04</span>
@@ -1345,28 +1363,24 @@
                 <div class="room-floor"></div>
 
                 <div class="room-zones" id="roomZones">
-                    <!-- Zone 0: Product & UX -->
                     <div class="room-zone" data-zone="0" role="button" tabindex="0" aria-label="Product and UX Design">
                         <div class="room-zone-icon">📐</div>
                         <div class="room-zone-label">Zone 01</div>
                         <div class="room-zone-title">Product & UX</div>
                         <div class="room-zone-hint">click to enter →</div>
                     </div>
-                    <!-- Zone 1: Development -->
                     <div class="room-zone" data-zone="1" role="button" tabindex="0" aria-label="Development and Data">
                         <div class="room-zone-icon">💻</div>
                         <div class="room-zone-label">Zone 02</div>
                         <div class="room-zone-title">Development</div>
                         <div class="room-zone-hint">click to enter →</div>
                     </div>
-                    <!-- Zone 2: AI -->
                     <div class="room-zone" data-zone="2" role="button" tabindex="0" aria-label="AI and Prompt Engineering">
                         <div class="room-zone-icon">🤖</div>
                         <div class="room-zone-label">Zone 03</div>
                         <div class="room-zone-title">AI & Prompt</div>
                         <div class="room-zone-hint">click to enter →</div>
                     </div>
-                    <!-- Zone 3: Creative -->
                     <div class="room-zone" data-zone="3" role="button" tabindex="0" aria-label="Creative and Audio">
                         <div class="room-zone-icon">🎨</div>
                         <div class="room-zone-label">Zone 04</div>
@@ -1375,7 +1389,6 @@
                     </div>
                 </div>
 
-                <!-- 展开内容面板 -->
                 <div class="room-content" id="roomContent">
                     <div class="room-content-inner" id="roomContentInner">
                         <button class="room-content-close" id="roomContentClose" aria-label="Close">✕</button>
@@ -1437,7 +1450,7 @@
 
     <script>
         /* ============================================================
-           ===== 工具：移动端触觉反馈 =====
+           ===== 移动端触觉反馈 =====
            ============================================================ */
         const haptic = {
             enabled: ('vibrate' in navigator) && window.matchMedia('(pointer: coarse)').matches,
@@ -1632,7 +1645,6 @@
         (function initSkillsRoom() {
             const room = document.getElementById('skillsRoom');
             const zones = document.querySelectorAll('.room-zone');
-            const zonesWrap = document.getElementById('roomZones');
             const content = document.getElementById('roomContent');
             const closeBtn = document.getElementById('roomContentClose');
             const rcIcon = document.getElementById('rcIcon');
@@ -1679,8 +1691,6 @@
                 const data = ZONE_DATA[i];
                 if (!data) return;
                 activeIndex = i;
-
-                // 更新面板内容
                 rcIcon.textContent = data.icon;
                 rcKicker.textContent = data.kicker;
                 rcTitle.textContent = data.title;
@@ -1725,7 +1735,6 @@
                 }
             });
 
-            // 移动端：点击空白处关闭
             content.addEventListener('click', (e) => {
                 if (e.target === content) closeZone();
             });
@@ -1840,7 +1849,7 @@
             });
         }, { passive: true });
 
-        /* ===== Cover Flow 逻辑（含自动轮播） ===== */
+        /* ===== Cover Flow 逻辑 ===== */
         (function initCoverFlow() {
             const stage = document.getElementById('coverflowStage');
             const dotsWrap = document.getElementById('cfDots');
