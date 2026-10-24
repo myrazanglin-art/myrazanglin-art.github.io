@@ -89,19 +89,33 @@
         }
 
         .bot-float-container { position: fixed; bottom: 30px; left: 30px; z-index: 1000; }
+
         .bot-float-btn {
-            width: 55px; height: 55px; background: var(--card);
-            border: 1px solid var(--accent); border-radius: 50%;
+            width: 55px; height: 55px;
+            background: var(--card);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            cursor: pointer; color: var(--accent);
+            cursor: pointer;
             box-shadow: 0 4px 15px rgba(79, 179, 232, 0.3), inset 0 1px 0 var(--glass-inner);
             transition: 0.4s;
             backdrop-filter: blur(16px) saturate(180%);
             -webkit-backdrop-filter: blur(16px) saturate(180%);
             position: relative; z-index: 2;
+            overflow: hidden;
+            padding: 0;
         }
-        .bot-float-btn:hover { transform: scale(1.1) rotate(8deg); }
-        .bot-float-btn.active { background: var(--accent); color: #FFF; }
+        .bot-float-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+        }
+        .bot-float-btn:hover { transform: scale(1.1) rotate(8deg); box-shadow: 0 6px 22px rgba(79, 179, 232, 0.5), inset 0 1px 0 var(--glass-inner); }
+        .bot-float-btn.active { border-color: #FFF; box-shadow: 0 0 0 3px var(--accent), 0 6px 22px rgba(79, 179, 232, 0.5); }
 
         .bot-float-panel {
             position: absolute; bottom: 70px; left: 0; width: 340px;
@@ -125,11 +139,27 @@
             padding-bottom: 12px; border-bottom: 1px solid var(--border);
             margin-bottom: 12px; flex-shrink: 0;
         }
+
         .bot-float-panel .agent-avatar {
-            width: 36px; height: 36px; background: var(--accent);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 18px; box-shadow: 0 4px 10px rgba(79, 179, 232, 0.4);
+            width: 38px; height: 38px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 10px rgba(79, 179, 232, 0.4);
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1.5px solid var(--accent);
         }
+        .bot-float-panel .agent-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+        }
+
         .bot-float-panel .agent-name { font-weight: 700; font-size: 0.95em; color: var(--text-main); }
         .bot-float-panel .agent-status {
             font-size: 0.7em; color: #00C853;
@@ -466,7 +496,6 @@
         .flip-card.flipped .flip-card-inner {
             transform: rotateY(180deg);
         }
-        /* 桌面端悬停翻转 */
         @media (hover: hover) and (pointer: fine) {
             .flip-card:hover .flip-card-inner {
                 transform: rotateY(180deg);
@@ -500,8 +529,6 @@
                         inset 0 1px 0 var(--glass-inner);
         }
 
-        /* 正面 */
-        .flip-card-front { }
         .flip-card-front .fc-icon {
             font-size: 30px;
             margin-bottom: 12px;
@@ -534,7 +561,6 @@
             opacity: 0.75;
         }
 
-        /* 背面 */
         .flip-card-back {
             transform: rotateY(180deg);
             justify-content: flex-start;
@@ -579,16 +605,6 @@
         .flip-card-back .tag:hover {
             background: rgba(79, 179, 232, 0.2);
             border-color: var(--accent);
-        }
-
-        .skills-flip-hint {
-            text-align: center;
-            font-size: 0.82em;
-            font-family: var(--font-round);
-            font-weight: 600;
-            color: var(--text-sub);
-            margin-top: 20px;
-            opacity: 0.7;
         }
 
         .interests-block { margin-top: 30px; }
@@ -646,6 +662,32 @@
         .interests-text p { color: var(--text-sub); font-size: 1em; margin-bottom: 15px; line-height: 1.85; text-shadow: var(--text-float); }
         [data-theme="dark"] .interests-text p { text-shadow: var(--text-float-dark); }
 
+        /* ===== 全局 tag 样式（修复 Interests 底部标签） ===== */
+        .tag {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-family: var(--font-round);
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: letter-spacing 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                        background 0.35s, border-color 0.35s, transform 0.35s;
+            display: inline-block;
+        }
+        [data-theme="dark"] .tag {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .tag:hover {
+            letter-spacing: 0.06em;
+            background: rgba(79, 179, 232, 0.18);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
         .footer { text-align: center; color: var(--text-sub); font-size: 0.9em; border-top: 1px solid var(--border); padding-top: 40px; margin-top: 100px; font-family: var(--font-round); font-weight: 600;}
 
         .hero { position: relative; }
@@ -664,6 +706,17 @@
         }
         .hero h1 .char.space { width: 0.28em; }
         @keyframes charIn { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+
+        /* ===== Hero 顶部小标签（Hong Kong） ===== */
+        .hero-kicker {
+            color: var(--text-sub);
+            font-weight: 800;
+            letter-spacing: 2px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        [data-theme="dark"] .hero-kicker { color: #7A8794; }
 
         [data-theme="dark"] .hero h2 { color: #A8B0BC !important; text-shadow: none !important; }
         [data-theme="dark"] .hero p { color: #9AA3AE !important; text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important; }
@@ -726,7 +779,11 @@
     <div class="bot-float-container">
         <div class="bot-float-panel" id="botFloatPanel">
             <div class="agent-header">
-                <div class="agent-avatar" id="agentAvatar">🤖</div>
+                <div class="agent-avatar">
+                    <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/images.jpg"
+                         alt="Bot avatar"
+                         onerror="this.style.display='none'; this.parentElement.textContent='🤖'; this.parentElement.style.fontSize='18px';">
+                </div>
                 <div>
                     <div class="agent-name">Yiming's Bot</div>
                     <div class="agent-status">Online</div>
@@ -736,7 +793,6 @@
                 <div class="msg msg-bot">Hi there! I'm Yiming's Bot. Ask me about Hometree, Rhythm Runner, or anything on this portfolio! (๑•̀ㅂ•́)و✧</div>
             </div>
 
-            <!-- ===== 新增：快捷问题引导 ===== -->
             <div class="bot-suggestions" id="botSuggestions">
                 <button class="bot-suggestion-chip" data-q="Tell me about Hometree">Hometree?</button>
                 <button class="bot-suggestion-chip" data-q="How does Rhythm Runner use audio?">Rhythm Runner?</button>
@@ -751,13 +807,11 @@
                 <button class="chat-send" onclick="sendBotFloatMessage()">Send</button>
             </div>
         </div>
+
         <div class="bot-float-btn" id="botFloatBtn" onclick="toggleBotFloat()" title="Chat with my bot">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                <circle cx="8.5" cy="10.5" r="1"></circle>
-                <circle cx="12" cy="10.5" r="1"></circle>
-                <circle cx="15.5" cy="10.5" r="1"></circle>
-            </svg>
+            <img src="https://raw.githubusercontent.com/myrazanglin-art/myrazanglin-art.github.io/main/images/images.jpg"
+                 alt="Chat with Yiming's Bot"
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='💬'; this.parentElement.style.color='var(--accent)'; this.parentElement.style.fontSize='22px';">
         </div>
     </div>
 
@@ -776,7 +830,7 @@
     <div class="container">
         
         <div class="hero reveal active" id="heroSection" style="margin-bottom: 100px;">
-            <div style="color: var(--accent); font-weight: 800; letter-spacing: 2px; font-size: 0.9em; text-transform: uppercase; margin-bottom: 20px; text-shadow: var(--text-float);">Hong Kong</div>
+            <div class="hero-kicker">Hong Kong</div>
             <h1 id="heroTitle" style="font-size: 5em; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px; text-shadow: var(--title-shadow);">Yiming Zhao</h1>
             <h2 style="font-size: 2em; font-weight: 500; color: var(--text-sub); margin-bottom: 20px; text-shadow: var(--text-float);">Product Designer & Full-Stack Creator</h2>
             
@@ -790,7 +844,6 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                 </a>
                 <a href="https://www.linkedin.com/in/myra-z-1a5299339/" target="_blank" class="btn-icon" title="LinkedIn">
-                    <!-- 原本的 LinkedIn 图标（描边版） -->
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
                         <rect x="2" y="9" width="4" height="12"></rect>
@@ -912,9 +965,6 @@
             </div>
         </div>
 
-        <!-- ============================================================
-             ===== Skills：可翻转卡片 =====
-             ============================================================ -->
         <div id="skills" style="margin-top: 120px;">
             <div class="section-header reveal">
                 <span class="section-number">04</span>
@@ -923,7 +973,6 @@
             </div>
 
             <div class="skills-flip-grid reveal">
-                <!-- Card 1 -->
                 <div class="flip-card" tabindex="0" role="button" aria-label="Product and UX Design, flip for details">
                     <div class="flip-card-inner">
                         <div class="flip-card-face flip-card-front">
@@ -944,7 +993,6 @@
                     </div>
                 </div>
 
-                <!-- Card 2 -->
                 <div class="flip-card" tabindex="0" role="button" aria-label="Development and Data, flip for details">
                     <div class="flip-card-inner">
                         <div class="flip-card-face flip-card-front">
@@ -967,7 +1015,6 @@
                     </div>
                 </div>
 
-                <!-- Card 3 -->
                 <div class="flip-card" tabindex="0" role="button" aria-label="AI and Prompt Engineering, flip for details">
                     <div class="flip-card-inner">
                         <div class="flip-card-face flip-card-front">
@@ -989,7 +1036,6 @@
                     </div>
                 </div>
 
-                <!-- Card 4 -->
                 <div class="flip-card" tabindex="0" role="button" aria-label="Creative and Audio, flip for details">
                     <div class="flip-card-inner">
                         <div class="flip-card-face flip-card-front">
@@ -1011,7 +1057,6 @@
                     </div>
                 </div>
             </div>
-            <div class="skills-flip-hint">↳ Hover on desktop, tap on mobile to flip each card</div>
         </div>
 
         <div id="interests" style="margin-top: 120px;">
@@ -1235,12 +1280,10 @@
             timelines.forEach(tl => tlIO.observe(tl));
         })();
 
-        /* ===== Skills 翻转卡片：移动端点击翻转 ===== */
         (function initFlipCards() {
             const cards = document.querySelectorAll('.flip-card');
             cards.forEach(card => {
                 card.addEventListener('click', () => {
-                    // 桌面端依赖 hover，移动端或键盘操作时切换
                     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
                     card.classList.toggle('flipped');
                     haptic.tap();
@@ -1255,7 +1298,6 @@
             });
         })();
 
-        /* ===== Bot 快捷问题引导 ===== */
         (function initBotSuggestions() {
             const chips = document.querySelectorAll('.bot-suggestion-chip');
             const input = document.getElementById('botFloatInput');
@@ -1318,16 +1360,6 @@
                 haptic.light();
             }, 600);
         }
-
-        (function botBlink() {
-            const avatar = document.getElementById('agentAvatar');
-            if (!avatar) return;
-            setInterval(() => {
-                avatar.style.transition = 'transform 0.18s ease-in-out';
-                avatar.style.transform = 'scaleY(0.15)';
-                setTimeout(() => { avatar.style.transform = 'scaleY(1)'; }, 160);
-            }, 5200);
-        })();
 
         function toggleTheme() {
             haptic.light();
